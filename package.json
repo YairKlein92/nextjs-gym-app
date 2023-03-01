@@ -11,6 +11,7 @@
     "migrate": "dotenv ley"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "dotenv-cli": "^7.0.0",
     "dotenv-safe": "^8.2.0",
@@ -21,11 +22,13 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.58.3",
-    "sharp": "^0.31.3"
+    "sharp": "^0.31.3",
+    "zod": "^3.20.6"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.19.1",
     "@next/eslint-plugin-next": "13.2.1",
+    "@types/bcrypt": "^5.0.0",
     "@types/eslint": "8.21.1",
     "@types/node": "18.14.1",
     "@types/react": "18.0.28",
