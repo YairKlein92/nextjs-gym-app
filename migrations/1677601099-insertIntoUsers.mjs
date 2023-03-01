@@ -1,0 +1,40 @@
+const users = [
+  {
+    id: 1,
+    username: 'try',
+    password: 'try',
+    mail: 'try@try.com',
+    age: 99,
+    mobile: '+43123456789',
+    is_shredding: true,
+    is_bulking: false,
+    is_experienced: false,
+  },
+];
+export async function up(sql) {
+  await sql`
+INSERT INTO users
+${sql(
+  users,
+  'username',
+  'password',
+  'mail',
+  'age',
+  'mobile',
+  'is_shredding',
+  'is_bulking',
+  'is_experienced',
+)}
+-- VALUES
+--   ('try', 'try', 'try@try.com', 99, '+43123456789', true, false, false)
+`;
+}
+
+export async function down(sql) {
+  for (const user of users) {
+    await sql`
+DELETE FROM users
+WHERE id = ${user.id}
+`;
+  }
+}
