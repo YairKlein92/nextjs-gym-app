@@ -15,7 +15,7 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        const response = await fetch('/api/register', {
+        const response = await fetch('/api/login', {
           method: 'POST',
           body: JSON.stringify({
             username,
@@ -23,7 +23,7 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
           }),
         });
         const data: RegisterResponseBody = await response.json();
-
+        console.log('data:', data);
         if ('errors' in data) {
           setErrors(data.errors);
           return;

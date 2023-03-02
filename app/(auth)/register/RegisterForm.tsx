@@ -9,10 +9,11 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mail, setMail] = useState('');
+  const [age, setAge] = useState(0);
   const [mobile, setMobile] = useState('');
-  const [shredding, setShredding] = useState(false);
-  const [bulking, setBulking] = useState(false);
-  const [experienced, setExperienced] = useState(false);
+  const [isShredding, setIsShredding] = useState(Boolean(false));
+  const [isBulking, setIsBulking] = useState(Boolean(false));
+  const [isExperienced, setIsExperienced] = useState(Boolean(false));
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
 
@@ -26,21 +27,31 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
             username,
             password,
             mail,
+            age,
             mobile,
-            shredding,
-            bulking,
-            experienced,
+            isShredding,
+            isBulking,
+            isExperienced,
           }),
         });
         const data: RegisterResponseBody = await response.json();
-
+        console.log(data);
         if ('errors' in data) {
           setErrors(data.errors);
           return;
         }
 
-        router.push(`/profile/${data.user.username}}`);
+        if (
+          props.returnTo &&
+          !Array.isArray(props.returnTo) &&
+          // This is checking that the return to is a valid path in your application and not going to a different domain
+          /^\/[a-zA-Z0-9-?=/]*$/.test(props.returnTo)
+        ) {
+          router.push(props.returnTo);
+          return;
+        }
 
+        router.push(`/profile/${data.user.username}`);
         errors.map((error) => (
           <div key={`error-${error.message}`}>Error: {error.message}</div>
         ));
@@ -71,6 +82,14 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
           }}
         />
       </label>
+      <label htmlFor="age">
+        Age:
+        <input
+          onChange={(event) => {
+            setAge(Number(event.currentTarget.value));
+          }}
+        />
+      </label>
       <label htmlFor="mobile">
         Phone number:
         <input
@@ -83,7 +102,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
         Are you shredding?
         <input
           onChange={() => {
-            setShredding(!shredding);
+            setIsShredding(Boolean(!isShredding));
           }}
           type="checkbox"
         />
@@ -92,7 +111,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
         Are you bulking?
         <input
           onChange={() => {
-            setBulking(!bulking);
+            setIsBulking(Boolean(!isBulking));
           }}
           type="checkbox"
         />
@@ -101,12 +120,15 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
         Are you experienced?
         <input
           onChange={() => {
-            setExperienced(!experienced);
+            setIsExperienced(Boolean(!isExperienced));
           }}
           type="checkbox"
         />
       </label>
       <button>Register</button>
+      {errors.map((error) => (
+        <div key={`error-${error.message}`}>Error: {error.message}</div>
+      ))}
     </form>
   );
 }

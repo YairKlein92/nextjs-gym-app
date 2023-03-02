@@ -16,16 +16,27 @@ const userSchma = z.object({
 
 export type RegisterResponseBody =
   | {
-      error: { message: string }[];
+      errors: { message: string }[];
     }
-  | { user: { username: string } };
+  | {
+      user: {
+        username: string;
+        password: string;
+        mail: string;
+        age: number;
+        mobile: string;
+        isShredding: boolean;
+        isBulking: boolean;
+        isExperienced: boolean;
+      };
+    };
 
 export const POST = async (request: NextRequest) => {
   // Validating the data
   const body = await request.json();
-
+  console.log('body:', body);
   const result = userSchma.safeParse(body);
-
+  console.log('result:', result);
   if (!result.success) {
     // inside the if statement, result.error.issues there is more information about what is allowing you to create more specific error messages
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
@@ -61,6 +72,7 @@ export const POST = async (request: NextRequest) => {
     result.data.isBulking,
     result.data.isExperienced,
   );
+  console.log('newUser:', newUser);
   if (!newUser) {
     return NextResponse.json(
       {

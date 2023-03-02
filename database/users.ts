@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { sql } from './connect';
 
-type User = {
+export type User = {
   id: number;
   username: string;
   passwordHash: string;
@@ -37,7 +37,7 @@ export const getUserByUsernameWithPasswordHash = cache(
 );
 
 export const getUserByUsername = cache(async (username: string) => {
-  const [user] = await sql<User[]>`
+  const [user] = await sql<Omit<User, 'password'>[]>`
   SELECT * FROM
     users
     WHERE username = ${username}
@@ -48,7 +48,7 @@ export const getUserByUsername = cache(async (username: string) => {
 export const createUser = cache(
   async (
     username: string,
-    password_hash: string,
+    passwordHash: string,
     mail: string,
     age: number,
     mobile: string,
@@ -58,17 +58,17 @@ export const createUser = cache(
   ) => {
     // declaration for the query
     const [user] = await sql<Omit<User, 'password'>[]>`
-      INSERT INTO users (username, password_hash, mail, age, mobile, isShredding, isBulking, isExperienced)
-      VALUES (${username}, ${password_hash}, ${mail}, ${age}, ${mobile}, ${isShredding}, ${isBulking}, ${isExperienced})
+      INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced)
+      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${isShredding}, ${isBulking}, ${isExperienced})
       RETURNING
         id,
         username,
         mail,
         age,
         mobile,
-        isShredding,
-        isBulking,
-        isExperienced
+        is_shredding,
+        is_bulking,
+        is_experienced
       `;
     return user;
   },
