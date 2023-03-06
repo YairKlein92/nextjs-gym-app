@@ -1,7 +1,9 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { RegisterResponseBody } from '../../api/(auth)/register/route';
+import { useState } from 'react';
+import { getSafeReturnToPath } from '../../../utils/validation';
+import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
 
 // import styles from './page.module.scss';
 
@@ -34,24 +36,20 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
             isExperienced,
           }),
         });
-        const data: RegisterResponseBody = await response.json();
+        const data: RegisterResponseBodyPost = await response.json();
         console.log(data);
         if ('errors' in data) {
           setErrors(data.errors);
           return;
         }
-
-        if (
-          props.returnTo &&
-          !Array.isArray(props.returnTo) &&
-          // This is checking that the return to is a valid path in your application and not going to a different domain
-          /^\/[a-zA-Z0-9-?=/]*$/.test(props.returnTo)
-        ) {
-          router.push(props.returnTo);
+        const returnTo = getSafeReturnToPath(props.returnTo);
+        if (returnTo) {
+          router.push(returnTo);
           return;
         }
 
-        router.push(`/profile/${data.user.username}`);
+        router.replace(`/profile/${data.user.username}`);
+        router.refresh();
         errors.map((error) => (
           <div key={`error-${error.message}`}>Error: {error.message}</div>
         ));
@@ -71,7 +69,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
           onChange={(event) => {
             setPassword(event.currentTarget.value);
           }}
-          type="password"
+          // type="password"
         />
       </label>
       <label htmlFor="mail">

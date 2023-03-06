@@ -1,9 +1,9 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { RegisterResponseBody } from '../../api/(auth)/register/route';
 
-// import styles from './page.module.scss';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { getSafeReturnToPath } from '../../../utils/validation';
+import { LoginResponseBodyPost } from '../../api/(auth)/login/route';
 
 export default function LoginForm(props: { returnTo?: string | string[] }) {
   const [username, setUsername] = useState('');
@@ -15,52 +15,45 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+
         const response = await fetch('/api/login', {
           method: 'POST',
-          body: JSON.stringify({
-            username,
-            password,
-          }),
+          body: JSON.stringify({ username, password }),
         });
-        const data: RegisterResponseBody = await response.json();
-        console.log('data:', data);
+
+        const data: LoginResponseBodyPost = await response.json();
+
         if ('errors' in data) {
           setErrors(data.errors);
           return;
         }
 
-        if (
-          props.returnTo &&
-          !Array.isArray(props.returnTo) &&
-          // checking that the returnTo is a valid path in your application and is not going to a different domain
-          /^\/[a-zA-Z0-9-?=/]*$/.test(props.returnTo)
-        ) {
-          router.push(props.returnTo);
+        const returnTo = getSafeReturnToPath(props.returnTo);
+
+        if (returnTo) {
+          router.push(returnTo);
           return;
         }
 
-        router.push(`/profile/${data.user.username}`);
-
-        errors.map((error) => (
-          <div key={`error-${error.message}`}>Error: {error.message}</div>
-        ));
+        router.replace(`/profile/${data.user.username}`);
+        router.refresh();
       }}
     >
-      <label htmlFor="username">
-        Username:
+      {errors.map((error) => (
+        <div key={`error-${error.message}`}>Error: {error.message}</div>
+      ))}
+      <label>
+        username:
         <input
-          onChange={(event) => {
-            setUsername(event.currentTarget.value);
-          }}
+          value={username}
+          onChange={(event) => setUsername(event.currentTarget.value)}
         />
       </label>
-      <label htmlFor="password">
-        Password:
+      <label>
+        password:
         <input
-          onChange={(event) => {
-            setPassword(event.currentTarget.value);
-          }}
-          type="password"
+          value={password}
+          onChange={(event) => setPassword(event.currentTarget.value)}
         />
       </label>
       <button>Login</button>
