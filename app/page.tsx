@@ -13,17 +13,19 @@ export default async function Home() {
     ? undefined
     : await getUserBySessionToken(sessionToken.value);
   return (
-    <div className={styles.mainDiv}>
-      <a href="/register" className={styles.link}>
-        Register
-      </a>
-      <a href="/login" className={styles.link}>
-        Login
-      </a>
-      <Link href="/logout" className={styles.link} prefetch={false}>
-        Logout
-      </Link>
-      <span className={styles.username}>Welcome {user && user.username} !</span>
+    <div className={styles.head}>
+      {/* <span className={styles.username}>Welcome {user && user.username} !</span> */}
+      <div className={styles.mainDiv}>
+        <a href="/register" className={styles.link}>
+          Register
+        </a>
+        <Link href="/login" className={styles.link}>
+          Login
+        </Link>
+        <Link href="/logout" className={styles.link} prefetch={false}>
+          Logout
+        </Link>
+      </div>
     </div>
   );
 }

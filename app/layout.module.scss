@@ -1,0 +1,19 @@
+.positionCenter {
+  display: flex;
+  justify-content: space-evenly;
+}
+.headerDiv {
+  width: 22rem;
+}
+.headerLoggedIn {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 22rem;
+}
+.headerLoggedOut {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 22rem;
+}

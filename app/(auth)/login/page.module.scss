@@ -1,0 +1,58 @@
+.mainDiv {
+  display: flex;
+  justify-content: center;
+}
+.loginTextDiv {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.form {
+  border: 1px solid grey;
+  border-radius: 4rem;
+  width: 22rem;
+  height: 42rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  input {
+    margin: 0.3rem;
+    background: none;
+    color: inherit;
+    border: none;
+    border-bottom: 1px solid grey;
+    padding: 0.4rem;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+  .checkbox {
+    margin: 0.3rem;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0.4rem;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+  .button {
+    margin: 1rem;
+    background: none;
+    background-color: #f05d22;
+    color: inherit;
+    border: none;
+    border-radius: 1.2rem;
+    padding: 0.5rem;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    width: 8rem;
+  }
+  .buttonReg {
+    margin-top: 2rem;
+  }
+}

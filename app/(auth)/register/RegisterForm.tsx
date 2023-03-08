@@ -1,9 +1,12 @@
 'use client';
 
+// import bcrypt from 'bcrypt';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getSafeReturnToPath } from '../../../utils/validation';
 import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
+import styles from './page.module.scss';
 
 // import styles from './page.module.scss';
 
@@ -16,117 +19,170 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
   const [isShredding, setIsShredding] = useState(Boolean(false));
   const [isBulking, setIsBulking] = useState(Boolean(false));
   const [isExperienced, setIsExperienced] = useState(Boolean(false));
+  const [favouriteGym, setFavouriteGym] = useState('FitInn Johnstrasse');
+
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
 
-  return (
-    <form
-      onSubmit={async (event) => {
-        event.preventDefault();
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          body: JSON.stringify({
-            username,
-            password,
-            mail,
-            age,
-            mobile,
-            isShredding,
-            isBulking,
-            isExperienced,
-          }),
-        });
-        const data: RegisterResponseBodyPost = await response.json();
-        console.log(data);
-        if ('errors' in data) {
-          setErrors(data.errors);
-          return;
-        }
-        const returnTo = getSafeReturnToPath(props.returnTo);
-        if (returnTo) {
-          router.push(returnTo);
-          return;
-        }
+  const handleShreddingChange = () => {
+    setIsShredding(!isShredding);
+    setIsBulking(false);
+  };
 
-        router.replace(`/profile/${data.user.username}`);
-        router.refresh();
-        errors.map((error) => (
-          <div key={`error-${error.message}`}>Error: {error.message}</div>
-        ));
-      }}
-    >
-      <label htmlFor="username">
-        Username:
+  const handleBulkingChange = () => {
+    setIsBulking(!isBulking);
+    setIsShredding(false);
+  };
+  // console.log(await bcrypt.hash('abc', 12));
+
+  return (
+    <div className={styles.mainDiv}>
+      <form
+        className={styles.form}
+        onSubmit={async (event) => {
+          event.preventDefault();
+
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            body: JSON.stringify({
+              username,
+              password,
+              mail,
+              age,
+              mobile,
+              favouriteGym,
+              isShredding,
+              isBulking,
+              isExperienced,
+            }),
+          });
+          const data: RegisterResponseBodyPost = await response.json();
+          console.log(data);
+          if ('errors' in data) {
+            setErrors(data.errors);
+            return;
+          }
+          const returnTo = getSafeReturnToPath(props.returnTo);
+          if (returnTo) {
+            router.push(returnTo);
+            return;
+          }
+
+          router.replace(`/profile/${data.user.username}`);
+          router.refresh();
+          errors.map((error) => (
+            <div key={`error-${error.message}`}>Error: {error.message}</div>
+          ));
+        }}
+      >
+        <div className={styles.registerTextDiv}>Register</div>
+        <label htmlFor="username">
+          <input
+            placeholder="Username"
+            onChange={(event) => {
+              setUsername(event.currentTarget.value);
+            }}
+          />
+        </label>
+        <label htmlFor="password">
+          <input
+            placeholder="Password"
+            onChange={(event) => {
+              setPassword(event.currentTarget.value);
+            }}
+            // type="password"
+          />
+        </label>
+        <label htmlFor="mail">
+          <input
+            placeholder="Mail"
+            onChange={(event) => {
+              setMail(event.currentTarget.value);
+            }}
+          />
+        </label>
+        <label htmlFor="age">
+          <input
+            placeholder="Age"
+            onChange={(event) => {
+              setAge(Number(event.currentTarget.value));
+            }}
+          />
+        </label>
+        <label htmlFor="mobile">
+          <input
+            placeholder="Phone number"
+            onChange={(event) => {
+              setMobile(event.currentTarget.value);
+            }}
+          />
+        </label>
+        <label htmlFor="gym">
+          <select
+            value={favouriteGym}
+            onChange={(event) => setFavouriteGym(event.currentTarget.value)}
+          >
+            {props.gyms.map((gym) => (
+              <option key={gym.id} value={gym}>
+                {gym.gymName}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className={styles.goalDiv}>
+          {' '}
+          <label
+            htmlFor="shredding"
+            className={styles.checkboxLabel}
+            style={{ color: isShredding ? 'red' : 'inherit' }}
+          >
+            shredding
+          </label>{' '}
+          <input
+            className={styles.checkbox}
+            id="shredding"
+            onChange={handleShreddingChange}
+            type="checkbox"
+          />
+          <label
+            htmlFor="bulking"
+            className={styles.checkboxLabel}
+            style={{ color: isBulking ? 'red' : 'inherit' }}
+          >
+            bulking
+          </label>
+          <input
+            className={styles.checkbox}
+            id="bulking"
+            onChange={handleBulkingChange}
+            type="checkbox"
+          />
+        </div>
+        <label
+          htmlFor="experienced"
+          className={styles.checkboxLabel}
+          style={{ color: isExperienced ? 'red' : 'inherit' }}
+        >
+          experienced
+        </label>{' '}
         <input
-          onChange={(event) => {
-            setUsername(event.currentTarget.value);
-          }}
-        />
-      </label>
-      <label htmlFor="password">
-        Password:
-        <input
-          onChange={(event) => {
-            setPassword(event.currentTarget.value);
-          }}
-          // type="password"
-        />
-      </label>
-      <label htmlFor="mail">
-        Mail:
-        <input
-          onChange={(event) => {
-            setMail(event.currentTarget.value);
-          }}
-        />
-      </label>
-      <label htmlFor="age">
-        Age:
-        <input
-          onChange={(event) => {
-            setAge(Number(event.currentTarget.value));
-          }}
-        />
-      </label>
-      <label htmlFor="mobile">
-        Phone number:
-        <input
-          onChange={(event) => {
-            setMobile(event.currentTarget.value);
-          }}
-        />
-      </label>
-      <label htmlFor="shredding">
-        Are you shredding?
-        <input
-          onChange={() => {
-            setIsShredding(Boolean(!isShredding));
-          }}
-          type="checkbox"
-        />
-      </label>
-      <label htmlFor="bulking">
-        Are you bulking?
-        <input
-          onChange={() => {
-            setIsBulking(Boolean(!isBulking));
-          }}
-          type="checkbox"
-        />
-      </label>
-      <label htmlFor="experienced">
-        Are you experienced?
-        <input
+          className={styles.checkbox}
+          id="experienced"
           onChange={() => {
             setIsExperienced(Boolean(!isExperienced));
           }}
           type="checkbox"
         />
-      </label>
-      <button>Register</button>
-      {errors.map((error) => (
-        <div key={`error-${error.message}`}>Error: {error.message}</div>
-      ))}
-    </form>
+        <button className={`${styles.button} ${styles.buttonReg}`}>
+          Register
+        </button>
+        <div>
+          Already have an account? <Link href="/login">Log in!</Link>
+        </div>
+        {errors.map((error) => (
+          <div key={`error-${error.message}`}>Error: {error.message}</div>
+        ))}
+      </form>
+    </div>
   );
 }

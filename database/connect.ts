@@ -1,8 +1,8 @@
 import { config } from 'dotenv-safe';
 import postgres from 'postgres';
 
-if (!process.env.FLY_IO) config();
-
+config();
+// if (!process.env.FLY_IO)
 export const sql = postgres({
   transform: {
     ...postgres.camel,

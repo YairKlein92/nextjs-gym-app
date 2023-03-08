@@ -13,6 +13,7 @@ const userSchma = z.object({
   mail: z.string(),
   age: z.number(),
   mobile: z.string(),
+  favouriteGym: z.string(),
   isShredding: z.boolean(),
   isBulking: z.boolean(),
   isExperienced: z.boolean(),
@@ -29,6 +30,7 @@ export type RegisterResponseBodyPost =
         mail: string;
         age: number;
         mobile: string;
+        favouriteGym: string;
         isShredding: boolean;
         isBulking: boolean;
         isExperienced: boolean;
@@ -72,6 +74,7 @@ export const POST = async (request: NextRequest) => {
     result.data.mail,
     result.data.age,
     result.data.mobile,
+    result.data.favouriteGym,
     result.data.isShredding,
     result.data.isBulking,
     result.data.isExperienced,

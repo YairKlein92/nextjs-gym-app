@@ -8,10 +8,18 @@ export type User = {
   mail: string;
   age: number;
   mobile: string | null;
+  favouriteGym: string;
   isShredding: boolean | null;
   isBulking: boolean | null;
   isExperienced: boolean | null;
 };
+export type Gym = {
+  id: number;
+  gymName: string;
+  gymAddress: string;
+  gymPostalCode: string;
+};
+
 // get all users
 export const getUsers = cache(async () => {
   const users = await sql<User[]>`
@@ -20,10 +28,42 @@ export const getUsers = cache(async () => {
   return users;
 });
 
+// get all gyms
+
+export const getGyms = cache(async () => {
+  const gymsNames = await sql<Gym[]>`
+  SELECT * FROM gyms
+  `;
+  return gymsNames;
+});
+
 type UserWithPasswordHash = User & {
   passwordHash: string;
 };
+type UserWithGyms = {
+  usersId: number;
+  usersUsername: string;
+  gymsId: number;
+  gymsName: string;
+};
 
+export const getUserByIdWithGyms = cache(async (id: number) => {
+  const data = await sql<UserWithGyms[]>`
+  SELECT
+    users.id AS user_id,
+    users.username AS user_username,
+    gyms.id AS gym_id,
+    gyms.gym_name AS gym_name
+  FROM
+    users
+  INNER JOIN favourite_gyms ON
+  users.id = favourite_gyms.user_id
+  INNER JOIN gyms ON
+  favourite_gyms.gym_id = gyms.id
+  WHERE users.id = ${id}
+  `;
+  return data;
+});
 export const getUserBySessionToken = cache(async (token: string) => {
   const [user] = await sql<
     { id: number; username: string; csrfSecret: string }[]
@@ -74,20 +114,22 @@ export const createUser = cache(
     mail: string,
     age: number,
     mobile: string,
+    favouriteGym: string,
     isShredding: boolean,
     isBulking: boolean,
     isExperienced: boolean,
   ) => {
     // declaration for the query
     const [user] = await sql<Omit<User, 'password'>[]>`
-      INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced)
-      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${isShredding}, ${isBulking}, ${isExperienced})
+      INSERT INTO users (username, password_hash, mail, age, mobile, favourite_gym, is_shredding, is_bulking, is_experienced)
+      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${favouriteGym}, ${isShredding}, ${isBulking}, ${isExperienced})
       RETURNING
         id,
         username,
         mail,
         age,
         mobile,
+        favourite_gym,
         is_shredding,
         is_bulking,
         is_experienced
