@@ -34,7 +34,6 @@ export default async function RootLayout(props: Props) {
 
   // if user is not undefined, the person is logged in
   // if user is undefined, the person is logged out
-  console.log('user in layout:', user);
   return (
     <html lang="en">
       <head />
@@ -62,14 +61,15 @@ export default async function RootLayout(props: Props) {
                       />
                     </Link>
                     Hi, {user.username}!
-                    <Link href="/logout" prefetch={false}>
+                    <Link href={{ pathname: '/logout' }} prefetch={false}>
                       logout
                     </Link>
                   </div>
                 ) : (
                   <div className={styles.headerLoggedOut}>
-                    <Link href="/register">register</Link> &nbsp;
-                    <Link href="/login">login</Link>
+                    <Link href={{ pathname: '/register' }}>register</Link>{' '}
+                    &nbsp;
+                    <Link href={{ pathname: '/login' }}>login</Link>
                   </div>
                 )}
               </div>
@@ -77,7 +77,7 @@ export default async function RootLayout(props: Props) {
           </nav>
         </header>
         {props.children}
-        <footer></footer>
+        <footer>LoL</footer>
       </body>
     </html>
   );

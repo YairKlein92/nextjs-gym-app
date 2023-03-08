@@ -9,8 +9,11 @@ import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
 import styles from './page.module.scss';
 
 // import styles from './page.module.scss';
-
-export default function RegisterForm(props: { returnTo?: string | string[] }) {
+interface RegisterFormProps {
+  gyms: { id: number; gymName: string }[];
+  returnTo?: string | string[] | undefined;
+}
+export default function RegisterForm(props: RegisterFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mail, setMail] = useState('');
@@ -117,28 +120,30 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
             }}
           />
         </label>
-        <label htmlFor="gym">
+        <label htmlFor="favourite-gym-select">
+          Choose your favourite gym:
           <select
+            id="favourite-gym"
             value={favouriteGym}
             onChange={(event) => setFavouriteGym(event.currentTarget.value)}
           >
             {props.gyms.map((gym) => (
-              <option key={gym.id} value={gym}>
+              <option key={`user-${gym.id}`} value={gym.id}>
                 {gym.gymName}
               </option>
             ))}
           </select>
         </label>
         <div className={styles.goalDiv}>
-          {' '}
           <label
             htmlFor="shredding"
             className={styles.checkboxLabel}
             style={{ color: isShredding ? 'red' : 'inherit' }}
           >
             shredding
-          </label>{' '}
+          </label>
           <input
+            checked={isShredding}
             className={styles.checkbox}
             id="shredding"
             onChange={handleShreddingChange}
@@ -152,6 +157,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
             bulking
           </label>
           <input
+            checked={isBulking}
             className={styles.checkbox}
             id="bulking"
             onChange={handleBulkingChange}
@@ -166,6 +172,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
           experienced
         </label>{' '}
         <input
+          checked={isExperienced}
           className={styles.checkbox}
           id="experienced"
           onChange={() => {
@@ -177,7 +184,10 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
           Register
         </button>
         <div>
-          Already have an account? <Link href="/login">Log in!</Link>
+          Already have an account?{' '}
+          <Link href={{ pathname: '/login' }} as="/login">
+            Log in!
+          </Link>
         </div>
         {errors.map((error) => (
           <div key={`error-${error.message}`}>Error: {error.message}</div>

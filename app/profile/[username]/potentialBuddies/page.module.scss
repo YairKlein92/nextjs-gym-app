@@ -1,0 +1,33 @@
+.pageDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mainDiv {
+  background-color: beige;
+  width: 22rem;
+  height: 42rem;
+}
+.searchDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.infoDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.pictureDiv {
+  background-color: rgb(182, 72, 72);
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+}

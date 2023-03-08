@@ -8,7 +8,7 @@ import styles from './page.module.scss';
 
 type Props = { params: { username: string } };
 
-export default async function UserProfile({ params }: Props) {
+export default async function SearchProfile({ params }: Props) {
   console.log('on userprofile page', params);
 
   const user = await getUserByUsername(params.username);
@@ -16,9 +16,11 @@ export default async function UserProfile({ params }: Props) {
     notFound();
   }
   const users = await getUsers();
-  const listOfUsersWithoutMe = users.filter(
+  const potentialBuddie: User = users[1];
+  const listOfUsersWithoutMe: User[] = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
+
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
@@ -32,8 +34,11 @@ export default async function UserProfile({ params }: Props) {
           </div>
         </div>
         <div className={styles.potentialDiv}>
-          <div>X potencial gym buddies</div>
-          <Link className={styles.link} href="/profile/potentialBuddies">
+          <div>{listOfUsersWithoutMe.length} potencial gym buddies</div>
+          <Link
+            className={styles.link}
+            href={`/profile/${user.username}/potentialBuddies`}
+          >
             {' '}
             Watch them
           </Link>
@@ -47,13 +52,13 @@ export default async function UserProfile({ params }: Props) {
         </div>
         <div className={styles.potentialBuddyDiv}>
           <div className={styles.descriptionDiv}>
-            <div className={styles.buddyName}>{user.username}</div>
-            {user.age} years old
-            <div>{user.isBulking ? 'Bulking' : null}</div>
-            <div>{user.isShredding ? 'Cutting' : null}</div>
+            <div className={styles.buddyName}>{potentialBuddie.username}</div>
+            {potentialBuddie.age} years old
+            <div>{potentialBuddie.isBulking ? 'Bulking' : null}</div>
+            <div>{potentialBuddie.isShredding ? 'Cutting' : null}</div>
             <div>
-              {user.isExperienced ? 'Experienced' : null}
-              <div>{user.mail}</div>
+              {potentialBuddie.isExperienced ? 'Experienced' : null}
+              <div>{users[1].mail}</div>
             </div>
           </div>
         </div>
