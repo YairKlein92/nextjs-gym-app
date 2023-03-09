@@ -52,7 +52,7 @@ export default async function RootLayout(props: Props) {
                         width={24}
                       />
                     </Link>
-                    <Link href="/profile/dd">
+                    <Link href={`/profile/${user.username}`}>
                       <img
                         src="/profile2.png"
                         alt="back to profile page"

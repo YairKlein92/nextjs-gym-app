@@ -1,0 +1,78 @@
+// import { db } from './index';
+
+// export async function createUser(
+//   username: string,
+//   passwordHash: string,
+//   mail: string,
+//   age: number,
+//   mobile: string,
+//   favouriteGym: string,
+//   isShredding: boolean,
+//   isBulking: boolean,
+//   isExperienced: boolean,
+// ) {
+//   const queryResult = await db.query(
+//     `
+//       WITH new_user AS (
+//         INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced)
+//         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+//         RETURNING *
+//       ), new_favourite_gym AS (
+//         INSERT INTO user_favourite_gyms (user_id, gym_id)
+//         SELECT new_user.id, gyms.id
+//         FROM gyms
+//         WHERE gyms.name = $9
+//         RETURNING *
+//       )
+//       SELECT new_user.*, new_favourite_gym.gym_id AS favourite_gym_id
+//       FROM new_user
+//       LEFT JOIN new_favourite_gym ON true;
+//     `,
+//     [
+//       username,
+//       passwordHash,
+//       mail,
+//       age,
+//       mobile,
+//       isShredding,
+//       isBulking,
+//       isExperienced,
+//       favouriteGym,
+//     ],
+//   );
+
+//   const row = queryResult.rows[0];
+//   if (!row) {
+//     return null;
+//   }
+
+//   return {
+//     id: row.id,
+//     username: row.username,
+//     mail: row.mail,
+//     age: row.age,
+//     mobile: row.mobile,
+//     isShredding: row.is_shredding,
+//     isBulking: row.is_bulking,
+//     isExperienced: row.is_experienced,
+//     favouriteGymId: row.favourite_gym_id,
+//   };
+// }
+
+// MY WORKING CODE:
+//     // declaration for the query
+
+//     const [user] = await sql<Omit<User, 'password'>[]>`
+//       INSERT INTO users (username, password_hash, mail, age, mobile, favourite_gym, is_shredding, is_bulking, is_experienced)
+//       VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${favouriteGym}, ${isShredding}, ${isBulking}, ${isExperienced})
+//       RETURNING
+//         id,
+//         username,
+//         mail,
+//         age,
+//         mobile,
+//         favourite_gym,
+//         is_shredding,
+//         is_bulking,
+//         is_experienced
+//       `;

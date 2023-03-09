@@ -14,7 +14,7 @@ import styles from './page.module.scss';
 type Props = { params: { username: string } };
 export default async function PotentialBuddyProfile({ params }: Props) {
   const user = await getUserByUsername(params.username);
-  console.log('user', user);
+  console.log('user on PotentialBuddyPage', user.username);
 
   const users = await getUsers();
 

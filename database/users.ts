@@ -1,3 +1,4 @@
+import { Pool } from 'pg';
 import { cache } from 'react';
 import { sql } from './connect';
 
@@ -106,7 +107,13 @@ export const getUserByUsername = cache(async (username: string) => {
   `;
   return user;
 });
-
+const pool = new Pool({
+  user: 'nextjs_gym_app',
+  password: 'nextjs_gym_app',
+  host: 'localhost',
+  port: 5432,
+  database: 'nextjs_gym_app',
+});
 export const createUser = cache(
   async (
     username: string,
@@ -119,21 +126,62 @@ export const createUser = cache(
     isBulking: boolean,
     isExperienced: boolean,
   ) => {
-    // declaration for the query
-    const [user] = await sql<Omit<User, 'password'>[]>`
-      INSERT INTO users (username, password_hash, mail, age, mobile, favourite_gym, is_shredding, is_bulking, is_experienced)
-      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${favouriteGym}, ${isShredding}, ${isBulking}, ${isExperienced})
-      RETURNING
-        id,
-        username,
-        mail,
-        age,
-        mobile,
-        favourite_gym,
-        is_shredding,
-        is_bulking,
-        is_experienced
-      `;
-    return user;
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      // Insert into the users table
+      const userInsertResult = await client.query<Omit<User, 'password'>>({
+        text: `
+          INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          RETURNING id, username, mail, age, mobile, is_shredding, is_bulking, is_experienced
+        `,
+        values: [
+          username,
+          passwordHash,
+          mail,
+          age,
+          mobile,
+          isShredding,
+          isBulking,
+          isExperienced,
+        ],
+      });
+      const user = userInsertResult.rows[0];
+
+      // Insert into the favourite_gyms join table
+      await client.query({
+        text: `
+          INSERT INTO favourite_gyms (user_id, gym_id)
+          VALUES ($1, $2)
+        `,
+        values: [user.id, favouriteGym],
+      });
+
+      await client.query('COMMIT');
+      return user;
+    } catch (e) {
+      await client.query('ROLLBACK');
+      throw e;
+    } finally {
+      client.release();
+    }
   },
 );
+
+export const getFavouriteGymsByUserId = cache(async (id: number) => {
+  const [gym] = await sql<Gym[]>`
+  SELECT
+    gyms.*
+  FROM
+    users
+  JOIN
+    favourite_gyms ON favourite_gyms.user_id = users.id
+  JOIN
+    gyms ON gyms.id = favourite_gyms.gym_id
+  WHERE
+    users.id = ${id};
+  `;
+  return gym;
+});
