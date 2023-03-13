@@ -40,9 +40,7 @@ export type RegisterResponseBodyPost =
 export const POST = async (request: NextRequest) => {
   // Validating the data
   const body = await request.json();
-  console.log('body:', body);
   const result = userSchma.safeParse(body);
-  console.log('result:', result);
   if (!result.success) {
     // inside the if statement, result.error.issues there is more information about what is allowing you to create more specific error messages
     return NextResponse.json({ error: result.error.issues }, { status: 400 });

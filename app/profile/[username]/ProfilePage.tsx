@@ -1,12 +1,10 @@
 'use client';
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
-import { getValidSessionByToken } from '../../../database/sessions';
-import { getUsers, User } from '../../../database/users';
-import Profile from './page';
+import { notFound } from 'next/navigation'; // redirect taken out
+// import favouriteGym from './ProfilePage';
+import { User } from '../../../database/users';
 import styles from './page.module.scss';
-import favouriteGym from './ProfilePage';
 
 export default function ProfilePage(props: User) {
   const user = props.user;
@@ -29,10 +27,10 @@ export default function ProfilePage(props: User) {
         <div className={styles.filterDiv}>
           <div className={styles.line}>Goals</div>
           <div className={styles.line}>Exp</div>
+
           <div className={styles.gymFilterDiv}>
             <div className={styles.line}>{favouriteGym.gymName}</div>
             <div className={styles.line}>{favouriteGym.gymAddress}</div>
-            <div>afternoons</div>
           </div>
         </div>
         <div className={styles.potentialDiv}>

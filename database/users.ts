@@ -1,6 +1,14 @@
-import { Pool } from 'pg';
+import { Client, Pool } from 'pg';
 import { cache } from 'react';
 import { sql } from './connect';
+
+const db = new Client({
+  user: 'nextjs_gym_app',
+  password: 'nextjs_gym_app',
+  host: 'localhost',
+  port: 5432,
+  database: 'nextjs_gym_app',
+});
 
 export type User = {
   id: number;
@@ -114,6 +122,7 @@ const pool = new Pool({
   port: 5432,
   database: 'nextjs_gym_app',
 });
+
 export const createUser = cache(
   async (
     username: string,
@@ -170,18 +179,32 @@ export const createUser = cache(
   },
 );
 
-export const getFavouriteGymsByUserId = cache(async (id: number) => {
-  const [gym] = await sql<Gym[]>`
-  SELECT
-    gyms.*
-  FROM
-    users
-  JOIN
-    favourite_gyms ON favourite_gyms.user_id = users.id
-  JOIN
-    gyms ON gyms.id = favourite_gyms.gym_id
-  WHERE
-    users.id = ${id};
+export type UserUpdate = {
+  username: string;
+  mail: string;
+  age: number;
+  mobile: string;
+  favouriteGym: string;
+  isShredding: boolean;
+  isBulking: boolean;
+  isExperienced: boolean;
+};
+export async function updateUser(user: UserUpdate) {
+  const query = `
+    UPDATE users
+    SET mail = $1, age = $2, mobile = $3, favourite_gym = $4,
+        is_shredding = $5, is_bulking = $6, is_experienced = $7
+    WHERE username = $8
   `;
-  return gym;
-});
+  const values = [
+    user.mail,
+    user.age,
+    user.mobile,
+    user.favouriteGym,
+    user.isShredding,
+    user.isBulking,
+    user.isExperienced,
+    user.username,
+  ];
+  await db.query(query, values);
+}

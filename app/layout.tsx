@@ -1,4 +1,4 @@
-// import './global.scss';
+// import './globals.css';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { getUserBySessionToken } from '../database/users';
@@ -40,43 +40,51 @@ export default async function RootLayout(props: Props) {
       <body>
         <header>
           <nav>
-            <div className={styles.positionCenter}>
-              <div className={styles.headerDiv}>
-                {user ? (
-                  <div className={styles.headerLoggedIn}>
-                    <Link href="/">
-                      <img
-                        src="/backArrow.png"
-                        alt="back to homepage"
-                        height={24}
-                        width={24}
-                      />
-                    </Link>
-                    <Link href={`/profile/${user.username}`}>
-                      <img
-                        src="/profile2.png"
-                        alt="back to profile page"
-                        height={24}
-                        width={24}
-                      />
-                    </Link>
-                    Hi, {user.username}!
-                    <Link href={{ pathname: '/logout' }} prefetch={false}>
-                      logout
-                    </Link>
-                  </div>
-                ) : (
-                  <div className={styles.headerLoggedOut}>
-                    <Link href={{ pathname: '/register' }}>register</Link>{' '}
-                    &nbsp;
-                    <Link href={{ pathname: '/login' }}>login</Link>
-                  </div>
-                )}
+            {user ? (
+              <div className={styles.positionCenter}>
+                <div> Hi {user.username}!</div>{' '}
+                <Link href={`/profile/${user.username}/edit`}>
+                  <img
+                    src="/edit.png"
+                    alt="back to homepage"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
               </div>
-            </div>
+            ) : (
+              <div>&nbsp;</div>
+            )}
           </nav>
         </header>
+
         {props.children}
+        <div className={styles.positionCenter}>
+          <div className={styles.headerDiv}>
+            {user ? (
+              <div className={styles.headerLoggedIn}>
+                <Link href="/">
+                  <img
+                    src="/backArrow.png"
+                    alt="back to homepage"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
+                <Link href={`/profile/${user.username}`}>
+                  <img
+                    src="/profile2.png"
+                    alt="back to profile page"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
+              </div>
+            ) : (
+              <div>&nbsp;</div>
+            )}
+          </div>
+        </div>
         <footer>LoL</footer>
       </body>
     </html>

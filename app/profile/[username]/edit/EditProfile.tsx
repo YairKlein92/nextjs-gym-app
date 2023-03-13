@@ -1,32 +1,27 @@
 'use client';
-
-// import bcrypt from 'bcrypt';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { getSafeReturnToPath } from '../../../utils/validation';
-import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
+import { getUserByUsername } from '../../../../database/users';
+import { getSafeReturnToPath } from '../../../../utils/validation';
+import { UpdateProfileResponseBodyPost } from '../../../api/update/route';
 import styles from './page.module.scss';
 
-// import styles from './page.module.scss';
-interface RegisterFormProps {
-  gyms: { id: number; gymName: string }[];
-  returnTo?: string | string[] | undefined;
-}
-export default function RegisterForm(props: RegisterFormProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [mail, setMail] = useState('');
-  const [age, setAge] = useState(0);
-  const [mobile, setMobile] = useState('');
-  const [isShredding, setIsShredding] = useState(Boolean(false));
-  const [isBulking, setIsBulking] = useState(Boolean(false));
-  const [isExperienced, setIsExperienced] = useState(Boolean(false));
-  const [favouriteGym, setFavouriteGym] = useState('FitInn Johnstrasse');
-
+export default function EditProfile(props) {
+  const user = props.user;
+  const gym = props.favouriteGym;
+  const gyms = props.gyms;
+  const [username, setUsername] = useState(user.username);
+  const [mail, setMail] = useState(user.mail);
+  const [age, setAge] = useState(user.age);
+  const [mobile, setMobile] = useState(user.mobile);
+  const [isShredding, setIsShredding] = useState(Boolean(user.isShredding));
+  const [isBulking, setIsBulking] = useState(Boolean(user.isBulking));
+  const [isExperienced, setIsExperienced] = useState(
+    Boolean(user.isExperienced),
+  );
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
-
+  const [favouriteGym, setFavouriteGym] = useState(gym.gymName);
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);
@@ -36,8 +31,6 @@ export default function RegisterForm(props: RegisterFormProps) {
     setIsBulking(!isBulking);
     setIsShredding(false);
   };
-  // console.log(await bcrypt.hash('abc', 12));
-
   return (
     <div className={styles.mainDiv}>
       <form
@@ -45,11 +38,10 @@ export default function RegisterForm(props: RegisterFormProps) {
         onSubmit={async (event) => {
           event.preventDefault();
 
-          const response = await fetch('/api/register', {
+          const response: any = await fetch('/api/update', {
             method: 'POST',
             body: JSON.stringify({
               username,
-              password,
               mail,
               age,
               mobile,
@@ -58,9 +50,23 @@ export default function RegisterForm(props: RegisterFormProps) {
               isBulking,
               isExperienced,
             }),
-          });
-          const data: RegisterResponseBodyPost = await response.json();
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error('Response was not ok');
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+
+          const data: UpdateProfileResponseBodyPost = await response.json();
           console.log(data);
+
           if ('errors' in data) {
             setErrors(data.errors);
             return;
@@ -78,27 +84,18 @@ export default function RegisterForm(props: RegisterFormProps) {
           ));
         }}
       >
-        <div className={styles.registerTextDiv}>Register</div>
+        <div className={styles.registerTextDiv}>Update Profile</div>
         <label htmlFor="username">
           <input
-            placeholder="Username"
+            placeholder={user.username}
             onChange={(event) => {
               setUsername(event.currentTarget.value);
             }}
           />
         </label>
-        <label htmlFor="password">
-          <input
-            placeholder="Password"
-            onChange={(event) => {
-              setPassword(event.currentTarget.value);
-            }}
-            // type="password"
-          />
-        </label>
         <label htmlFor="mail">
           <input
-            placeholder="Mail"
+            placeholder={user.mail}
             onChange={(event) => {
               setMail(event.currentTarget.value);
             }}
@@ -106,7 +103,7 @@ export default function RegisterForm(props: RegisterFormProps) {
         </label>
         <label htmlFor="age">
           <input
-            placeholder="Age"
+            placeholder={user.age}
             onChange={(event) => {
               setAge(Number(event.currentTarget.value));
             }}
@@ -114,26 +111,24 @@ export default function RegisterForm(props: RegisterFormProps) {
         </label>
         <label htmlFor="mobile">
           <input
-            placeholder="Phone number"
+            placeholder={user.mobile}
             onChange={(event) => {
               setMobile(event.currentTarget.value);
             }}
           />
         </label>
-        <label htmlFor="favourite-gym-select">
-          Gym:
-          <select
-            id="favourite-gym"
-            value={favouriteGym}
-            onChange={(event) => setFavouriteGym(event.currentTarget.value)}
-          >
-            {props.gyms.map((gym) => (
-              <option key={`user-${gym.id}`} value={gym.id}>
-                {gym.gymName}
-              </option>
-            ))}
-          </select>
-        </label>
+        <select
+          title="favourite-gym"
+          id="favourite-gym"
+          value={favouriteGym}
+          onChange={(event) => setFavouriteGym(event.currentTarget.value)}
+        >
+          {gyms.map((g) => (
+            <option key={`user-${g.id}`} value={g.id}>
+              {g.gymName}
+            </option>
+          ))}
+        </select>
         <div className={styles.goalDiv}>
           <label
             htmlFor="shredding"
@@ -181,17 +176,8 @@ export default function RegisterForm(props: RegisterFormProps) {
           type="checkbox"
         />
         <button className={`${styles.button} ${styles.buttonReg}`}>
-          Register
+          Update
         </button>
-        <div>
-          Already have an account?{' '}
-          <Link href={{ pathname: '/login' }} as="/login">
-            Log in!
-          </Link>
-        </div>
-        {errors.map((error) => (
-          <div key={`error-${error.message}`}>Error: {error.message}</div>
-        ))}
       </form>
     </div>
   );

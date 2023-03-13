@@ -7,7 +7,8 @@
 .mainDiv {
   background-color: beige;
   width: 22rem;
-  height: 42rem;
+  height: 41rem;
+  overflow: auto;
 }
 .searchDiv {
   display: flex;

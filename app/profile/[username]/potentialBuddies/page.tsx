@@ -1,49 +1,56 @@
-import Link from 'next/link';
 // 'use client';
 // import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { notFound } from 'next/navigation';
+import { addMatch } from '../../../../database/matches';
 // import styles from '../page.module.scss';
 // import { Component } from 'react';
 import { getUserByUsername, getUsers, User } from '../../../../database/users';
-import styles from './page.module.scss';
+import Button from './Button';
+import PotentialBuddyProfile from './PotentialBuddies';
 
 // import { useParams } from 'react-router-dom';
 // const param = useParams();
 // console.log('params', params);
 
 type Props = { params: { username: string } };
-export default async function PotentialBuddyProfile({ params }: Props) {
-  const user = await getUserByUsername(params.username);
+export default async function PotentialBuddyPage({ params }: Props) {
+  const user: any = await getUserByUsername(params.username);
   console.log('user on PotentialBuddyPage', user.username);
 
-  const users = await getUsers();
+  const users: any = await getUsers();
 
   if (!user) {
     notFound();
   }
-  const listOfUsersWithoutMe = users.filter(
+  const listOfUsersWithoutMe: any = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
+
+  const Button: React.FC<ButtonProps> = ({ label, user1_id, user2_id }) => {
+    async function handleButtonClick() {
+      const result = await addMatch(user1_id, user2_id, false);
+      if (result.success) {
+        console.log(result.message);
+      } else {
+        console.error(result.message);
+      }
+    }
+
+    return <button onClick={handleButtonClick}>{label}</button>;
+  };
+
   return (
-    <div className={styles.pageDiv}>
-      <div className={styles.mainDiv}>
-        {listOfUsersWithoutMe.map((buddy) => {
-          return (
-            <div key={`user-${buddy.id}`} className={styles.searchDiv}>
-              <div className={styles.infoDiv}>
-                <div>{buddy.username}</div>
-                <div>{buddy.age}</div>
-                <div>
-                  {buddy.isBulking ? 'Bulking' : null}
-                  {buddy.isShredding ? 'Cutting' : null}
-                </div>
-                <Link href={`/profile/${buddy.username}`}>Profile</Link>
-              </div>
-              <div className={styles.pictureDiv}>.</div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <>
+      {/* <Button
+        key={`user-${user.id}`}
+        label="Add Buddy"
+        user1_id={user.id}
+        user2_id={user.id}
+      /> */}
+      <PotentialBuddyProfile
+        user={user}
+        listOfUsersWithoutMe={listOfUsersWithoutMe}
+      />
+    </>
   );
 }
