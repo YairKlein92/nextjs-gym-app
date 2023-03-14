@@ -1,8 +1,7 @@
 'use client';
 // import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { notFound } from 'next/navigation'; // redirect taken out
-// import favouriteGym from './ProfilePage';
+import { notFound } from 'next/navigation';
 import { User } from '../../../database/users';
 import styles from './page.module.scss';
 
@@ -37,7 +36,7 @@ export default function ProfilePage(props: User) {
           <div>{listOfUsersWithoutMe.length} potencial gym buddies</div>
           <Link
             className={styles.link}
-            href={`/profile/${user.username}/potentialBuddies`}
+            href={`/profile/${user.username}/potential-buddies`}
           >
             {' '}
             Watch them

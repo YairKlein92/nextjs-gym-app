@@ -6,6 +6,47 @@ import { getSafeReturnToPath } from '../../../../utils/validation';
 import { UpdateProfileResponseBodyPost } from '../../../api/update/route';
 import styles from './page.module.scss';
 
+async function eventHandler(
+  event: React.FormEvent<HTMLFormElement>,
+  username: string,
+  mail: string,
+  age: number,
+  mobile: number,
+  favouriteGym: string,
+  isShredding: boolean,
+  isBulking: boolean,
+  isExperienced: boolean,
+) {
+  event.preventDefault();
+
+  await fetch('/api/update', {
+    method: 'PUT',
+
+    body: JSON.stringify({
+      username,
+      mail,
+      age,
+      mobile,
+      favouriteGym,
+      isShredding,
+      isBulking,
+      isExperienced,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
 export default function EditProfile(props) {
   const user = props.user;
   const gym = props.favouriteGym;
@@ -35,54 +76,71 @@ export default function EditProfile(props) {
     <div className={styles.mainDiv}>
       <form
         className={styles.form}
-        onSubmit={async (event) => {
-          event.preventDefault();
+        onSubmit={
+          // async (event) => {
+          //   event.preventDefault();
+          //   await eventHandler(
+          //     event,
+          //     username,
+          //     mail,
+          //     age,
+          //     mobile,
+          //     favouriteGym,
+          //     isShredding,
+          //     isBulking,
+          //     isExperienced,
+          //   );
+          // }
+          async (event) => {
+            event.preventDefault();
 
-          const response: any = await fetch('/api/update', {
-            method: 'POST',
-            body: JSON.stringify({
-              username,
-              mail,
-              age,
-              mobile,
-              favouriteGym,
-              isShredding,
-              isBulking,
-              isExperienced,
-            }),
-          })
-            .then((res) => {
-              if (!res.ok) {
-                throw new Error('Response was not ok');
-              }
-              return response.json();
+            await fetch('/api/update', {
+              method: 'PUT',
+              body: JSON.stringify({
+                username,
+                mail,
+                age,
+                mobile,
+                favouriteGym,
+                isShredding,
+                isBulking,
+                isExperienced,
+              }),
             })
-            .then((data) => {
-              console.log(data);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error('Response was not ok');
+                }
+                console.log(response);
+                return response.json();
+              })
+              .then((data) => {
+                console.log(data);
+              })
+              .catch((err) => {
+                console.error(err);
+              });
 
-          const data: UpdateProfileResponseBodyPost = await response.json();
-          console.log(data);
+            const data: UpdateProfileResponseBodyPost = await response.json();
+            console.log(data);
 
-          if ('errors' in data) {
-            setErrors(data.errors);
-            return;
+            if ('errors' in data) {
+              setErrors(data.errors);
+              return;
+            }
+            const returnTo = getSafeReturnToPath(props.returnTo);
+            if (returnTo) {
+              router.push(returnTo);
+              return;
+            }
+
+            router.replace(`/profile/${data.user.username}`);
+            router.refresh();
+            errors.map((error) => (
+              <div key={`error-${error.message}`}>Error: {error.message}</div>
+            ));
           }
-          const returnTo = getSafeReturnToPath(props.returnTo);
-          if (returnTo) {
-            router.push(returnTo);
-            return;
-          }
-
-          router.replace(`/profile/${data.user.username}`);
-          router.refresh();
-          errors.map((error) => (
-            <div key={`error-${error.message}`}>Error: {error.message}</div>
-          ));
-        }}
+        }
       >
         <div className={styles.registerTextDiv}>Update Profile</div>
         <label htmlFor="username">

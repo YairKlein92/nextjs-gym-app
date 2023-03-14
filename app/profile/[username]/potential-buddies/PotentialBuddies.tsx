@@ -37,6 +37,7 @@ async function addMatchButtonHandler(
 }
 
 type Props = { user: any; listOfUsersWithoutMe: any };
+
 export default function PotentialBuddyProfile(props: Props) {
   const user = props.user;
   console.log('props.user -> user', user.username);

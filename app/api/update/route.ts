@@ -1,9 +1,9 @@
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
-  getUserByUsername,
+  getUserBySessionToken,
   updateUser,
-  User,
   UserUpdate,
 } from '../../../database/users';
 
@@ -35,10 +35,12 @@ export type UpdateProfileResponseBodyPost =
       };
     };
 
-export const POST = async (request: NextRequest) => {
+export const PUT = async (request: NextRequest) => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('sessionToken');
+
   const body = await request.json();
   const result = userSchema.safeParse(body);
-
   if (!result.success) {
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
@@ -53,17 +55,24 @@ export const POST = async (request: NextRequest) => {
     isBulking: result.data.isBulking,
     isExperienced: result.data.isExperienced,
   };
+  const existingUser = token && (await getUserBySessionToken(token.value));
 
-  const existingUser = await getUserByUsername(user.username);
   if (!existingUser) {
     return NextResponse.json(
       { error: [{ message: 'User not found' }] },
       { status: 404 },
     );
+  } else {
+    console.log(
+      'existingUser.id value for the update func ->   ',
+      existingUser.id,
+    );
   }
 
   try {
-    await updateUser(user);
+    console.log('user with updated info in the updateUser function ->', user);
+    await updateUser(user, Number(existingUser.id));
+
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
     console.error(error);

@@ -43,7 +43,7 @@ export default async function RootLayout(props: Props) {
             {user ? (
               <div className={styles.positionCenter}>
                 <div> Hi {user.username}!</div>{' '}
-                <Link href={`/profile/${user.username}/edit`}>
+                <Link href={`/profile/${user.username}/edit-profile`}>
                   <img
                     src="/edit.png"
                     alt="back to homepage"

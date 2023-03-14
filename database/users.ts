@@ -189,14 +189,15 @@ export type UserUpdate = {
   isBulking: boolean;
   isExperienced: boolean;
 };
-export async function updateUser(user: UserUpdate) {
+export async function updateUser(user: UserUpdate, id: number) {
   const query = `
     UPDATE users
-    SET mail = $1, age = $2, mobile = $3, favourite_gym = $4,
-        is_shredding = $5, is_bulking = $6, is_experienced = $7
-    WHERE username = $8
+    SET username= $2, mail = $3, age = $4, mobile = $5, favourite_gym = $6, is_shredding = $7, is_bulking = $8, is_experienced = $9
+    WHERE id = $1::integer
   `;
   const values = [
+    id,
+    user.username,
     user.mail,
     user.age,
     user.mobile,
@@ -204,7 +205,9 @@ export async function updateUser(user: UserUpdate) {
     user.isShredding,
     user.isBulking,
     user.isExperienced,
-    user.username,
   ];
   await db.query(query, values);
 }
+// UPDATE users
+// SET username= 'rr', mail = 'rrr', age = 45, mobile = '+1111111', favourite_gym = 7, is_shredding = true, is_bulking = false, is_experienced = false
+// WHERE id = 7
