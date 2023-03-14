@@ -107,14 +107,6 @@ export const getUserByUsernameWithPasswordHash = cache(
   },
 );
 
-export const getUserByUsername = cache(async (username: string) => {
-  const [user] = await sql<Omit<User, 'password'>[]>`
-  SELECT * FROM
-    users
-    WHERE username = ${username}
-  `;
-  return user;
-});
 const pool = new Pool({
   user: 'nextjs_gym_app',
   password: 'nextjs_gym_app',
@@ -189,25 +181,52 @@ export type UserUpdate = {
   isBulking: boolean;
   isExperienced: boolean;
 };
-export async function updateUser(user: UserUpdate, id: number) {
-  const query = `
+// export async function updateUser(user: UserUpdate, id: number) {
+//   const query = `
+//     UPDATE users
+//     SET username= $2, mail = $3, age = $4, mobile = $5, favourite_gym = $6, is_shredding = $7, is_bulking = $8, is_experienced = $9
+//     WHERE id = $1::integer
+//   `;
+//   const values = [
+//     id,
+//     user.username,
+//     user.mail,
+//     user.age,
+//     user.mobile,
+//     user.favouriteGym,
+//     user.isShredding,
+//     user.isBulking,
+//     user.isExperienced,
+//   ];
+//   await db.query(query, values);
+// }
+
+export const updateUser = cache(
+  async (
+    username: string,
+    mail: string,
+    age: number,
+    mobile: string,
+    favouriteGym: string,
+    isShredding: boolean,
+    isBulking: boolean,
+    isExperienced: boolean,
+  ) => {
+    const [userUpdate] = await sql<Omit<User, 'password'>[]>`
     UPDATE users
-    SET username= $2, mail = $3, age = $4, mobile = $5, favourite_gym = $6, is_shredding = $7, is_bulking = $8, is_experienced = $9
-    WHERE id = $1::integer
+    SET username= ${username}, mail = ${mail}, age = ${age}, mobile = ${mobile}, favourite_gym = ${favouriteGym}, is_shredding = ${isShredding}, is_bulking = ${isBulking}, is_experienced = ${isExperienced}
+    WHERE username = ${username}
+    RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced
   `;
-  const values = [
-    id,
-    user.username,
-    user.mail,
-    user.age,
-    user.mobile,
-    user.favouriteGym,
-    user.isShredding,
-    user.isBulking,
-    user.isExperienced,
-  ];
-  await db.query(query, values);
-}
-// UPDATE users
-// SET username= 'rr', mail = 'rrr', age = 45, mobile = '+1111111', favourite_gym = 7, is_shredding = true, is_bulking = false, is_experienced = false
-// WHERE id = 7
+    console.log('userUpdate', userUpdate);
+    return userUpdate;
+  },
+);
+export const getUserByUsername = cache(async (username: string) => {
+  const [user] = await sql<Omit<User, 'password'>[]>`
+  SELECT * FROM
+    users
+    WHERE username = ${username}
+  `;
+  return user;
+});

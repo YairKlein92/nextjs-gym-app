@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { getUserBySessionToken, User } from '../../../database/users';
+import { getUserBySessionToken, User } from '../../../../../database/users';
 
 export type ProfileResponseBodyGet =
   | {
@@ -10,9 +10,18 @@ export type ProfileResponseBodyGet =
       user: User;
     };
 
-export async function GET(): Promise<NextResponse<ProfileResponseBodyGet>> {
+export async function GET({
+  params,
+}: {
+  params: {
+    userId: string;
+  };
+}): Promise<NextResponse<ProfileResponseBodyGet>> {
+  console.log('params:', params);
   // this is a protected Route Handler
   // 1. get the session token from the cookie
+  // const { userId } = request.params as { userId: string };
+
   const cookieStore = cookies();
   const token = cookieStore.get('sessionToken');
 
@@ -20,7 +29,7 @@ export async function GET(): Promise<NextResponse<ProfileResponseBodyGet>> {
   // 3. get the user profile matching the session
   const user = token && (await getUserBySessionToken(token.value));
 
-  if (!user) {
+  if (!user || user.id !== parseInt(params.userId, 10)) {
     return NextResponse.json({ error: 'user not found' });
   }
   // 4. return the user profile

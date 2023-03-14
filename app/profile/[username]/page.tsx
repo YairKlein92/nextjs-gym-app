@@ -10,18 +10,6 @@ import ProfilePage from './ProfilePage';
 type Props = { params: { username: string } };
 
 export default async function Profile({ params }: Props) {
-  // console.log('on userprofile page', params);
-  // if (!user) {
-  //   notFound();
-  // }
-
-  // const user = await getUserByUsername(params.username);
-  // console.log('user: ', user);
-
-  // const favouriteGym = getFavouriteGymsByUserId(user.id);
-  // console.log('favouriteGym: ', user.id);
-  // const users = await getUsers();
-
   const user = await getUserByUsername(params.username);
   if (!user) {
     notFound();
