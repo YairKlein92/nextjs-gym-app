@@ -76,6 +76,7 @@ export async function PUT(
   try {
     console.log('user with updated info in the updateUser function ->', user);
     await updateUser(
+      existingUser.id,
       user.username,
       user.mail,
       user.age,

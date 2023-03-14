@@ -203,6 +203,7 @@ export type UserUpdate = {
 
 export const updateUser = cache(
   async (
+    id: number,
     username: string,
     mail: string,
     age: number,
@@ -215,8 +216,8 @@ export const updateUser = cache(
     const [userUpdate] = await sql<Omit<User, 'password'>[]>`
     UPDATE users
     SET username= ${username}, mail = ${mail}, age = ${age}, mobile = ${mobile}, favourite_gym = ${favouriteGym}, is_shredding = ${isShredding}, is_bulking = ${isBulking}, is_experienced = ${isExperienced}
-    WHERE username = ${username}
-    RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced
+    WHERE id = ${id}
+    RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced, id
   `;
     console.log('userUpdate', userUpdate);
     return userUpdate;
