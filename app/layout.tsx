@@ -42,10 +42,46 @@ export default async function RootLayout(props: Props) {
           <nav>
             {user ? (
               <div className={styles.positionCenter}>
-                <div> Hi {user.username}!</div>{' '}
+                <Link href="/">
+                  <img
+                    src="/backArrow.png"
+                    alt="Back to the homepage"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
+                <Link href={`/profile/${user.username}`}>
+                  <img
+                    src="/profile.png"
+                    alt="Back to your profile"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
+                <Link href={`/profile/${user.username}/matches`}>
+                  <img
+                    src="/matches.png"
+                    alt="See your matches"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
+                <div className={styles.greetingUser}> Hi {user.username}!</div>
                 <Link href={`/profile/${user.username}/edit-profile`}>
                   <img
                     src="/edit.png"
+                    alt="back to homepage"
+                    height={24}
+                    width={24}
+                  />
+                </Link>
+                <Link
+                  href={{ pathname: '/logout' }}
+                  className={styles.link}
+                  prefetch={false}
+                >
+                  <img
+                    src="/logout.png"
                     alt="back to homepage"
                     height={24}
                     width={24}
@@ -62,30 +98,13 @@ export default async function RootLayout(props: Props) {
         <div className={styles.positionCenter}>
           <div className={styles.headerDiv}>
             {user ? (
-              <div className={styles.headerLoggedIn}>
-                <Link href="/">
-                  <img
-                    src="/backArrow.png"
-                    alt="back to homepage"
-                    height={24}
-                    width={24}
-                  />
-                </Link>
-                <Link href={`/profile/${user.username}`}>
-                  <img
-                    src="/profile2.png"
-                    alt="back to profile page"
-                    height={24}
-                    width={24}
-                  />
-                </Link>
-              </div>
+              <div className={styles.headerLoggedIn}></div>
             ) : (
               <div>&nbsp;</div>
             )}
           </div>
         </div>
-        <footer>LoL</footer>
+        <footer></footer>
       </body>
     </html>
   );

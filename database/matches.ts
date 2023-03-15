@@ -1,6 +1,8 @@
-import pg from 'pg';
+import pg, { Pool } from 'pg';
+import { cache } from 'react';
+import { sql } from './connect';
 
-const client = new pg.Client({
+const pool = new Pool({
   user: process.env.PGUSERNAME,
   password: process.env.PGPASSWORD,
   host: process.env.PGHOST,
@@ -12,7 +14,7 @@ export async function addMatch(
   user_pending_id: number,
   is_accepted: boolean,
 ) {
-  await client.connect();
+  const client = await pool.connect();
 
   try {
     const result = await client.query(
@@ -24,6 +26,17 @@ export async function addMatch(
     console.error('Error adding match', err);
     return { success: false, message: 'Error adding match' };
   } finally {
-    await client.end();
+    client.release();
   }
 }
+
+export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
+  const matches = await sql`
+    SELECT m.id, m.user_requesting_id, m.user_pending_id
+    FROM matches m
+    WHERE m.user_requesting_id = ${userId};
+  `;
+  return matches;
+});
+
+// export const getMatches = cache(async (userId: number) => {});

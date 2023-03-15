@@ -22,10 +22,15 @@ export default function ProfilePage(props: User) {
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
-        <div className={styles.headerDiv}>I am looking for...</div>
+        <div className={styles.headerDiv}>My potential buddy is...</div>
         <div className={styles.filterDiv}>
-          <div className={styles.line}>Goals</div>
-          <div className={styles.line}>Exp</div>
+          <ul>
+            <li>
+              {' '}
+              Somebody who is {user.isShredding ? 'shredding' : 'bulking'}
+            </li>
+            <li> With {user.isExperienced ? 'experience' : 'no experience'}</li>
+          </ul>
 
           <div className={styles.gymFilterDiv}>
             <div className={styles.line}>{favouriteGym.gymName}</div>
@@ -34,16 +39,12 @@ export default function ProfilePage(props: User) {
         </div>
         <div className={styles.potentialDiv}>
           <div>{listOfUsersWithoutMe.length} potencial gym buddies</div>
-          <Link
-            className={styles.link}
-            href={`/profile/${user.username}/potential-buddies`}
-          >
-            {' '}
-            Watch them
+          <Link href={`/profile/${user.username}/potential-buddies`}>
+            <img src="/check-out.png" alt="Check potential matches" />
           </Link>
         </div>
         <div className={styles.potentialDiv}>
-          <div>Recommended for you</div>
+          <div>Best match for you:</div>
           <Link className={styles.linkAccept} href="/">
             {' '}
             Yes!

@@ -37,19 +37,26 @@ export type UpdateProfileResponseBodyPost =
 
 export async function PUT(
   request: NextRequest,
-): Promise<NextResponse<UpdateProfileResponseBodyPut>> {
+): Promise<NextResponse<number, UpdateProfileResponseBodyPut>> {
   const cookieStore = cookies();
   const token = cookieStore.get('sessionToken');
 
   const body = await request.json();
-  console.log('body in api route', body);
   const result = userSchema.safeParse(body);
-  console.log('result in api route', result);
   if (!result.success) {
     return NextResponse.json({ errors: result.error.issues }, { status: 400 });
   }
 
-  const user: UserUpdate = {
+  const existingUser = token && (await getUserBySessionToken(token.value));
+  if (!existingUser) {
+    return NextResponse.json(
+      { errors: [{ message: 'User not found' }] },
+      { status: 404 },
+    );
+  }
+
+  const user: UserUpdate & { id: number } = {
+    id: existingUser.id,
     username: result.data.username,
     mail: result.data.mail,
     age: result.data.age,
@@ -59,22 +66,15 @@ export async function PUT(
     isBulking: result.data.isBulking,
     isExperienced: result.data.isExperienced,
   };
-  const existingUser = token && (await getUserBySessionToken(token.value));
-  console.log('existingUser in api route', existingUser);
-  // if (!existingUser) {
-  //   return NextResponse.json(
-  //     { errors: [{ message: 'User not found' }] },
-  //     { status: 404 },
-  //   );
-  // } else if (existingUser.id !== existingUser.id) {
-  //   return NextResponse.json(
-  //     { errors: [{ message: 'Unauthorized' }] },
-  //     { status: 401 },
-  //   );
-  // }
+
+  if (existingUser.id !== user.id) {
+    return NextResponse.json(
+      { errors: [{ message: 'Unauthorized' }] },
+      { status: 401 },
+    );
+  }
 
   try {
-    console.log('user with updated info in the updateUser function ->', user);
     await updateUser(
       existingUser.id,
       user.username,

@@ -6,7 +6,33 @@ import { getSafeReturnToPath } from '../../../../utils/validation';
 import { UpdateProfileResponseBodyPost } from '../../../api/users/[userId]/route';
 import styles from './page.module.scss';
 
-export default function EditProfile(props) {
+export type Props = {
+  favouriteGym: {
+    id: number;
+    gymName: string;
+    gymAddress: string;
+    gymPostalCode: string;
+  };
+  gyms: {
+    id: number;
+    gymName: string;
+    gymAddress: string;
+    gymPostalCode: string;
+  }[];
+  user: {
+    id: number;
+    username: string;
+    mail: string;
+    age: number;
+    mobile: string;
+    isShredding: boolean;
+    isBulking: boolean;
+    isExperienced: boolean;
+  };
+  returnTo: string;
+};
+export default function EditProfile(props: Props) {
+  console.log('props on EditProfile ->', props);
   const user = props.user;
   console.log(user);
   const gym = props.favouriteGym;
@@ -101,7 +127,7 @@ export default function EditProfile(props) {
         <div className={styles.registerTextDiv}>Update Profile</div>
         <label htmlFor="username">
           <input
-            placeholder={user.username}
+            placeholder="Username"
             onChange={(event) => {
               setUsername(event.currentTarget.value);
             }}
@@ -109,7 +135,7 @@ export default function EditProfile(props) {
         </label>
         <label htmlFor="mail">
           <input
-            placeholder={user.mail}
+            placeholder="Email"
             onChange={(event) => {
               setMail(event.currentTarget.value);
             }}
@@ -117,7 +143,7 @@ export default function EditProfile(props) {
         </label>
         <label htmlFor="age">
           <input
-            placeholder={user.age}
+            placeholder="Age"
             onChange={(event) => {
               setAge(Number(event.currentTarget.value));
             }}
@@ -125,7 +151,7 @@ export default function EditProfile(props) {
         </label>
         <label htmlFor="mobile">
           <input
-            placeholder={user.mobile}
+            placeholder="Phone number"
             onChange={(event) => {
               setMobile(event.currentTarget.value);
             }}
@@ -192,6 +218,9 @@ export default function EditProfile(props) {
         <button className={`${styles.button} ${styles.buttonReg}`}>
           Update
         </button>
+        <div>
+          Need a new password? Reset it <a href="/">here</a>{' '}
+        </div>
       </form>
     </div>
   );

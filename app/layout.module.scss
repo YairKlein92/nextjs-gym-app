@@ -1,7 +1,7 @@
 .positionCenter {
   display: flex;
   justify-content: center;
-  gap: 3rem;
+  gap: 2.2rem;
 }
 .headerDiv {
   width: 22rem;
@@ -17,4 +17,8 @@
   justify-content: space-around;
   align-items: center;
   width: 22rem;
+}
+.greetingUser {
+  font-size: 1.5rem;
+  font-weight: 600;
 }

@@ -38,7 +38,6 @@ export const getUsers = cache(async () => {
 });
 
 // get all gyms
-
 export const getGyms = cache(async () => {
   const gymsNames = await sql<Gym[]>`
   SELECT * FROM gyms
@@ -55,6 +54,21 @@ type UserWithGyms = {
   gymsId: number;
   gymsName: string;
 };
+export const getUserById = cache(async (id: number) => {
+  const [user] = await sql<User[]>`
+  SELECT * FROM users WHERE id = ${id}
+  `;
+  return user;
+});
+
+export const getUsersByIds = cache(async (ids: number[]) => {
+  const users = await sql`
+    SELECT *
+    FROM users
+    WHERE id IN ${sql(ids)};
+  `;
+  return users;
+});
 
 export const getUserByIdWithGyms = cache(async (id: number) => {
   const data = await sql<UserWithGyms[]>`

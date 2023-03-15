@@ -77,7 +77,6 @@ export const POST = async (request: NextRequest) => {
     result.data.isBulking,
     result.data.isExperienced,
   );
-  console.log('newUser:', newUser);
   if (!newUser) {
     return NextResponse.json(
       {
@@ -97,7 +96,6 @@ export const POST = async (request: NextRequest) => {
   const csrfSecret = createCsrfSecret();
   // 4. create a session
   const session = await createSession(token, newUser.id, csrfSecret);
-  console.log('session: ', session);
   if (!session) {
     return NextResponse.json(
       {
