@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getUserByUsername } from '../../../../database/users';
@@ -219,7 +220,13 @@ export default function EditProfile(props: Props) {
           Update
         </button>
         <div>
-          Need a new password? Reset it <a href="/">here</a>{' '}
+          Need a new password? Reset it <a href="/picture">here</a>{' '}
+        </div>
+        <div>
+          Upload/Change a profile picture{' '}
+          <Link href={`/profile/${user.username}/edit-profile/picture`}>
+            here
+          </Link>
         </div>
       </form>
     </div>

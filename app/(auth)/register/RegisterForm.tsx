@@ -93,7 +93,7 @@ export default function RegisterForm(props: RegisterFormProps) {
             onChange={(event) => {
               setPassword(event.currentTarget.value);
             }}
-            // type="password"
+            type="password"
           />
         </label>
         <label htmlFor="mail">

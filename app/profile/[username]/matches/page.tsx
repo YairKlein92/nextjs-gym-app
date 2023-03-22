@@ -1,10 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getMatchesIdByLoggedInUserId } from '../../../../database/matches';
-import {
-  getUserById,
-  getUserByUsername,
-  getUsersByIds,
-} from '../../../../database/users';
+import { getUserByUsername, getUsersByIds } from '../../../../database/users';
 import MatchesPage from './MatchesPage';
 
 export type Props = { params: { username: string } };

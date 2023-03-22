@@ -7,9 +7,7 @@ import styles from './page.module.scss';
 
 export default function ProfilePage(props: User) {
   const user = props.user;
-  console.log('clientside user: ', user);
   const users = props.users;
-  console.log('clientside users: ', users);
   if (!user) {
     notFound();
   }
@@ -55,7 +53,7 @@ export default function ProfilePage(props: User) {
             <div className={styles.buddyName}>{potentialBuddie.username}</div>
             {potentialBuddie.age} years old
             <div>{potentialBuddie.isBulking ? 'Bulking' : null}</div>
-            <div>{potentialBuddie.isShredding ? 'Cutting' : null}</div>
+            <div>{potentialBuddie.isShredding ? 'Shredding' : null}</div>
             <div>
               {potentialBuddie.isExperienced ? 'Experienced' : null}
               <div>{users[1].mail}</div>

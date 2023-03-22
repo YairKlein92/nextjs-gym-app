@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { addMatch } from '../../../database/matches';
+import { addComment } from '../../../../database/comments';
 
 const userSchma = z.object({
-  userRequestingId: z.number(),
-  userPendingId: z.number(),
-  isAccepted: z.boolean(),
+  userId: z.number(),
+  matchId: z.number(),
+  comment: z.string(),
 });
 
-export type RegisterResponseBodyPost =
+export type CommentResponseBodyPost =
   | {
       errors: { message: string }[];
     }
   | {
-      match: {
-        userRequestingId: string;
-        userPendingId: string;
-        isAccepted: boolean;
+      message: {
+        userId: string;
+        matchId: string;
+        comment: string;
       };
     };
 
@@ -30,12 +30,12 @@ export const POST = async (request: NextRequest) => {
   }
 
   // create the match
-  const newMatch = await addMatch(
-    result.data.userRequestingId,
-    result.data.userPendingId,
-    result.data.isAccepted,
+  const newComment = await addComment(
+    result.data.userId,
+    result.data.matchId,
+    result.data.comment,
   );
-  console.log('new match:', newMatch);
+  console.log('new match:', newComment);
   // return the new username
-  return NextResponse.json({ match: { isAccepted: true } });
+  return NextResponse.json({ comment: { isAccepted: true } });
 };

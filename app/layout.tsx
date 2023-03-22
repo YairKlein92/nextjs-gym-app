@@ -42,14 +42,14 @@ export default async function RootLayout(props: Props) {
           <nav>
             {user ? (
               <div className={styles.positionCenter}>
-                <Link href="/">
+                {/* <Link href="/">
                   <img
                     src="/backArrow.png"
                     alt="Back to the homepage"
                     height={24}
                     width={24}
                   />
-                </Link>
+                </Link> */}
                 <Link href={`/profile/${user.username}`}>
                   <img
                     src="/profile.png"

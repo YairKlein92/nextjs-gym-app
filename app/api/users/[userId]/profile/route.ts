@@ -17,7 +17,6 @@ export async function GET({
     userId: string;
   };
 }): Promise<NextResponse<ProfileResponseBodyGet>> {
-  console.log('params:', params);
   // this is a protected Route Handler
   // 1. get the session token from the cookie
   // const { userId } = request.params as { userId: string };

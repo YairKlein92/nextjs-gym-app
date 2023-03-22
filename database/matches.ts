@@ -1,4 +1,4 @@
-import pg, { Pool } from 'pg';
+import { Pool } from 'pg';
 import { cache } from 'react';
 import { sql } from './connect';
 
@@ -39,4 +39,11 @@ export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
   return matches;
 });
 
-// export const getMatches = cache(async (userId: number) => {});
+export const getUserMatchesFromDatabase = async (userId: number) => {
+  const matches = await sql`
+    SELECT m.id, m.user_requesting_id, m.user_pending_id, m.is_accepted
+    FROM matches m
+    WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
+  `;
+  return matches;
+};
