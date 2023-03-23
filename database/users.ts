@@ -1,15 +1,18 @@
-import { Client, Pool } from 'pg';
+import { Pool } from 'pg'; // Client
 import { cache } from 'react';
 import { sql } from './connect';
 
-const db = new Client({
-  user: 'nextjs_gym_app',
-  password: 'nextjs_gym_app',
-  host: 'localhost',
-  port: 5432,
-  database: 'nextjs_gym_app',
-});
-
+// const db = new Client({
+//   user: 'nextjs_gym_app',
+//   password: 'nextjs_gym_app',
+//   host: 'localhost',
+//   port: 5432,
+//   database: 'nextjs_gym_app',
+// });
+export type Props = {
+  params: { username: string };
+  searchParams: { username: string };
+};
 export type User = {
   id: number;
   username: string;
@@ -21,13 +24,23 @@ export type User = {
   isShredding: boolean | null;
   isBulking: boolean | null;
   isExperienced: boolean | null;
+  profilePicture: string;
 };
-export type Gym = {
+export type UserWithoutPassword = Omit<User, 'password'>;
+
+export type Users = {
   id: number;
-  gymName: string;
-  gymAddress: string;
-  gymPostalCode: string;
-};
+  username: string;
+  passwordHash: string;
+  mail: string;
+  age: number;
+  mobile: string | null;
+  favouriteGym: string;
+  isShredding: boolean | null;
+  isBulking: boolean | null;
+  isExperienced: boolean | null;
+  profilePicture: string;
+}[];
 
 // get all users
 export const getUsers = cache(async () => {
@@ -35,14 +48,6 @@ export const getUsers = cache(async () => {
   SELECT * FROM users
   `;
   return users;
-});
-
-// get all gyms
-export const getGyms = cache(async () => {
-  const gymsNames = await sql<Gym[]>`
-  SELECT * FROM gyms
-  `;
-  return gymsNames;
 });
 
 type UserWithPasswordHash = User & {
@@ -140,6 +145,7 @@ export const createUser = cache(
     isShredding: boolean,
     isBulking: boolean,
     isExperienced: boolean,
+    profilePicture: string,
   ) => {
     const client = await pool.connect();
     try {
@@ -148,9 +154,9 @@ export const createUser = cache(
       // Insert into the users table
       const userInsertResult = await client.query<Omit<User, 'password'>>({
         text: `
-          INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-          RETURNING id, username, mail, age, mobile, is_shredding, is_bulking, is_experienced
+          INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          RETURNING id, username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture
         `,
         values: [
           username,
@@ -161,6 +167,7 @@ export const createUser = cache(
           isShredding,
           isBulking,
           isExperienced,
+          profilePicture,
         ],
       });
       const user = userInsertResult.rows[0];
@@ -171,7 +178,7 @@ export const createUser = cache(
           INSERT INTO favourite_gyms (user_id, gym_id)
           VALUES ($1, $2)
         `,
-        values: [user.id, favouriteGym],
+        values: [user?.id, favouriteGym],
       });
 
       await client.query('COMMIT');
@@ -185,36 +192,6 @@ export const createUser = cache(
   },
 );
 
-export type UserUpdate = {
-  username: string;
-  mail: string;
-  age: number;
-  mobile: string;
-  favouriteGym: string;
-  isShredding: boolean;
-  isBulking: boolean;
-  isExperienced: boolean;
-};
-// export async function updateUser(user: UserUpdate, id: number) {
-//   const query = `
-//     UPDATE users
-//     SET username= $2, mail = $3, age = $4, mobile = $5, favourite_gym = $6, is_shredding = $7, is_bulking = $8, is_experienced = $9
-//     WHERE id = $1::integer
-//   `;
-//   const values = [
-//     id,
-//     user.username,
-//     user.mail,
-//     user.age,
-//     user.mobile,
-//     user.favouriteGym,
-//     user.isShredding,
-//     user.isBulking,
-//     user.isExperienced,
-//   ];
-//   await db.query(query, values);
-// }
-
 export const updateUser = cache(
   async (
     id: number,
@@ -226,15 +203,28 @@ export const updateUser = cache(
     isShredding: boolean,
     isBulking: boolean,
     isExperienced: boolean,
+    profilePicture: string,
   ) => {
     const [userUpdate] = await sql<Omit<User, 'password'>[]>`
     UPDATE users
-    SET username= ${username}, mail = ${mail}, age = ${age}, mobile = ${mobile}, favourite_gym = ${favouriteGym}, is_shredding = ${isShredding}, is_bulking = ${isBulking}, is_experienced = ${isExperienced}
+    SET username= ${username}, mail = ${mail}, age = ${age}, mobile = ${mobile}, favourite_gym = ${favouriteGym}, is_shredding = ${isShredding}, is_bulking = ${isBulking}, is_experienced = ${isExperienced}, profile_picture = ${profilePicture}
     WHERE id = ${id}
-    RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced, id
+    RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture, id
   `;
     console.log('userUpdate', userUpdate);
     return userUpdate;
+  },
+);
+export const updateProfilePicture = cache(
+  async (id: number, profilePicture: string) => {
+    const [userProfilePictureUpdate] = await sql<Omit<User, 'password'>[]>`
+    UPDATE users
+    SET  profile_picture = ${profilePicture}
+    WHERE id = ${id}
+    RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture, id
+  `;
+    console.log('userProfilePictureUpdate', userProfilePictureUpdate);
+    return userProfilePictureUpdate;
   },
 );
 export const getUserByUsername = cache(async (username: string) => {

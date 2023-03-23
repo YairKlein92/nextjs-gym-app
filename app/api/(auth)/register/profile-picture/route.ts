@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
   getUserBySessionToken,
-  updateUser,
+  updateProfilePicture,
   User,
-} from '../../../../database/users';
+} from '../../../../../database/users';
 
 const userSchema = z.object({
   username: z.string(),
@@ -25,14 +25,7 @@ export type UpdateProfileResponseBodyPost =
     }
   | {
       user: {
-        username: string;
-        mail: string;
-        age: number;
-        mobile: string;
-        favouriteGym: string;
-        isShredding: boolean;
-        isBulking: boolean;
-        isExperienced: boolean;
+        profilePicture: string;
       };
     };
 
@@ -58,14 +51,6 @@ export async function PUT(
 
   const user: User = {
     id: existingUser.id,
-    username: result.data.username,
-    mail: result.data.mail,
-    age: result.data.age,
-    mobile: result.data.mobile,
-    favouriteGym: result.data.favouriteGym,
-    isShredding: result.data.isShredding,
-    isBulking: result.data.isBulking,
-    isExperienced: result.data.isExperienced,
     profilePicture: result.data.profilePicture,
   };
 
@@ -77,18 +62,7 @@ export async function PUT(
   }
 
   try {
-    await updateUser(
-      existingUser.id,
-      user.username,
-      user.mail,
-      user.age,
-      user.mobile,
-      user.favouriteGym,
-      user.isShredding,
-      user.isBulking,
-      user.isExperienced,
-      user.profilePicture,
-    );
+    await updateProfilePicture(existingUser.id, user.profilePicture);
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {

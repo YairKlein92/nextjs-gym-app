@@ -10,6 +10,7 @@ const gymbuddies = [
     is_shredding: true,
     is_bulking: false,
     is_experienced: true,
+    profile_picture: '',
   },
   {
     username: 'Arnie Schwarzenegger',
@@ -21,6 +22,8 @@ const gymbuddies = [
     is_shredding: true,
     is_bulking: false,
     is_experienced: false,
+    profile_picture: '',
+
   },
   {
     username: 'Markus Rühl',
@@ -32,6 +35,8 @@ const gymbuddies = [
     is_shredding: false,
     is_bulking: true,
     is_experienced: true,
+    profile_picture: '',
+
   },
   {
     username: 'Denis Cyplenkov',
@@ -43,6 +48,8 @@ const gymbuddies = [
     is_shredding: false,
     is_bulking: true,
     is_experienced: false,
+    profile_picture: '',
+
   },
   {
     username: 'Michaela Berenson',
@@ -54,6 +61,8 @@ const gymbuddies = [
     is_shredding: true,
     is_bulking: false,
     is_experienced: false,
+    profile_picture: '',
+
   },
   {
     username: 'Viktoria Kurz',
@@ -65,6 +74,8 @@ const gymbuddies = [
     is_shredding: false,
     is_bulking: true,
     is_experienced: false,
+    profile_picture: '',
+
   },
 ];
 
@@ -81,6 +92,7 @@ export async function up(sql) {
     'is_shredding',
     'is_bulking',
     'is_experienced',
+
   )}
   `;
 }

@@ -1,17 +1,30 @@
 'use client';
 import { useState } from 'react';
+import { Comment } from '../../../../../database/comments';
 import { CommentResponseBodyPost } from '../../../../api/matches/comments/route';
 
-export default function CommentsPage(props: any) {
-  const [comment, setComment] = useState('');
+export type CommentProps = {
+  comments: {
+    id: number;
+    userId: number;
+    matchId: number;
+    comment: string;
+  }[];
+  match: { id: number; username: string };
+  user: { id: number; username: string };
+};
+export default function CommentsPage(props: CommentProps) {
+  const [commentInput, setCommentInput] = useState('');
   console.log(props);
-  const match = props.match;
   const user = props.user;
+  const match = props.match;
+  const comments = props.comments;
   const userId = user.id;
   const matchId = match.id;
-  const [errors, setErrors] = useState([]);
+  // const [errors, setErrors] = useState([]);
   // const router = useRouter();
   // const { username } = router.query;
+
   return (
     <>
       <div>{match.username}</div>
@@ -25,27 +38,33 @@ export default function CommentsPage(props: any) {
             body: JSON.stringify({
               userId,
               matchId,
-              comment,
+              commentInput,
             }),
           });
           const data: CommentResponseBodyPost = await response.json();
           console.log(data);
-          if ('errors' in data) {
-            setErrors(data.errors);
-            return;
-          }
+          // if ('errors' in data) {
+          //   setErrors(data.errors);
+          //   return;
+          // }
         }}
       >
         <label htmlFor="comment">Your comment:</label>
         <input
           id="comment"
           onChange={(event) => {
-            setComment(event.currentTarget.value);
+            setCommentInput(event.currentTarget.value);
           }}
         />
-        <button>Send</button>
+        <button>Add comment</button>
       </form>
-      {comment}
+      {comments.map((comment: Comment) => {
+        return (
+          <div key={`user-${comment.id}`}>
+            <div>{comment.comment}</div>
+          </div>
+        );
+      })}
     </>
   );
 }

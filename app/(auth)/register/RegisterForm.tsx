@@ -23,6 +23,9 @@ export default function RegisterForm(props: RegisterFormProps) {
   const [isBulking, setIsBulking] = useState(Boolean(false));
   const [isExperienced, setIsExperienced] = useState(Boolean(false));
   const [favouriteGym, setFavouriteGym] = useState('FitInn Johnstrasse');
+  const [imageSrc, setImageSrc] = useState();
+  const [uploadData, setUploadData] = useState();
+  const [profilePicture, setProfilePicture] = useState();
 
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
@@ -36,14 +39,65 @@ export default function RegisterForm(props: RegisterFormProps) {
     setIsBulking(!isBulking);
     setIsShredding(false);
   };
+  const handleOnChange = (changeEvent: React.ChangeEvent<HTMLFormElement>) => {
+    const reader = new FileReader();
+
+    reader.onload = function (onLoadEvent) {
+      setImageSrc(onLoadEvent.target.result);
+      setUploadData(undefined);
+    };
+
+    reader.readAsDataURL(changeEvent.target.files[0]);
+  };
   // console.log(await bcrypt.hash('abc', 12));
 
   return (
     <div className={styles.mainDiv}>
       <form
         className={styles.form}
+        onChange={handleOnChange}
+        //  ONSUBMIT
+
         onSubmit={async (event) => {
           event.preventDefault();
+          // FIRST ACTION - SETTIN THE URL LINK
+          const form = event.currentTarget;
+          const fileInput = Array.from(form.elements).find(
+            ({ name }) => name === 'file',
+          );
+          console.log(fileInput);
+          const formData = new FormData();
+          for (const file of fileInput.files) {
+            formData.append('file', file);
+          }
+          formData.append('upload_preset', 'my-uploads');
+
+          const dataPicture = await fetch(
+            'https://api.cloudinary.com/v1_1/dvbgjm0xm/image/upload',
+            {
+              method: 'POST',
+              body: formData,
+            },
+          ).then((response) => response.json());
+          setImageSrc(dataPicture.secure_url);
+          setUploadData(dataPicture);
+
+          setProfilePicture(dataPicture.secure_url);
+
+          // const responsePicture = await fetch('/api/profile-picture', {
+          //   method: 'POST',
+          //   body: JSON.stringify({ link: profilePicture }), // Change the userId field as necessary
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          // });
+          // if (responsePicture.ok) {
+          //   console.log('Profile picture saved to database.');
+          // } else {
+          //   console.error('Failed to upload profile picture:', responsePicture.status);
+          // }
+
+          // SECOND ACTION - REGISTERING
 
           const response = await fetch('/api/register', {
             method: 'POST',
@@ -57,6 +111,7 @@ export default function RegisterForm(props: RegisterFormProps) {
               isShredding,
               isBulking,
               isExperienced,
+              profilePicture,
             }),
           });
           const data: RegisterResponseBodyPost = await response.json();
@@ -180,6 +235,16 @@ export default function RegisterForm(props: RegisterFormProps) {
           }}
           type="checkbox"
         />
+        <label htmlFor="picture">Profile picture</label>{' '}
+        <div>
+          <input id="picture" type="file" name="file" />
+        </div>
+        {/* <img src={imageSrc} alt="Profile picture" /> */}
+        {imageSrc && !uploadData && (
+          <div>
+            <button>Upload picture</button>
+          </div>
+        )}
         <button className={`${styles.button} ${styles.buttonReg}`}>
           Register
         </button>

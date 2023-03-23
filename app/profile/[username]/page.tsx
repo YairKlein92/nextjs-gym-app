@@ -2,7 +2,7 @@
 // 'use client';
 // import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { notFound } from 'next/navigation';
-import { getFavouriteGymsByUserId } from '../../../database/gyms';
+import { getFavouriteGymsByUserId, Gym } from '../../../database/gyms';
 // import { Component } from 'react';
 import { getUserByUsername, getUsers } from '../../../database/users';
 import ProfilePage from './ProfilePage';

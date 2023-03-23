@@ -5,7 +5,7 @@ import { addComment } from '../../../../database/comments';
 const userSchma = z.object({
   userId: z.number(),
   matchId: z.number(),
-  comment: z.string(),
+  commentInput: z.string(),
 });
 
 export type CommentResponseBodyPost =
@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
   const newComment = await addComment(
     result.data.userId,
     result.data.matchId,
-    result.data.comment,
+    result.data.commentInput,
   );
   console.log('new match:', newComment);
   // return the new username

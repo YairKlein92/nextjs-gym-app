@@ -3,7 +3,12 @@ import {
   addMatch,
   getUserMatchesFromDatabase,
 } from '../../../../database/matches';
-import { getUserByUsername, getUsers, User } from '../../../../database/users';
+import {
+  getUserByUsername,
+  getUsers,
+  User,
+  Users,
+} from '../../../../database/users';
 import PotentialBuddyProfile from './PotentialBuddies';
 
 type Props = { params: { username: string } };
@@ -16,15 +21,15 @@ export default async function PotentialBuddyPage({ params }: Props) {
   if (!user) {
     notFound();
   }
-  const listOfUsersWithoutMe: any = users.filter(
+  const listOfUsersWithoutMe: Users = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
   const myMatchesFromDatabase = await getUserMatchesFromDatabase(user.id);
   console.log('matchesFromDatabase', myMatchesFromDatabase);
 
-  for (const user in listOfUsersWithoutMe) {
+  for (const userInList in listOfUsersWithoutMe) {
     for (const match in myMatchesFromDatabase) {
-      if (user.id === match.userPendingId) {
+      if (userInList.id === match.userPendingId) {
         listOfUsersWithoutMe.splice(user, 1);
       }
     }

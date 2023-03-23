@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getGyms } from '../../../database/gyms';
 import { getValidSessionByToken } from '../../../database/sessions';
-import { getGyms } from '../../../database/users';
 import RegisterForm from './RegisterForm';
 
 type Props = { searchParams: { returnTo?: string | string[] } };

@@ -17,6 +17,7 @@ const userSchma = z.object({
   isShredding: z.boolean(),
   isBulking: z.boolean(),
   isExperienced: z.boolean(),
+  profilePicture: z.string(),
 });
 
 export type RegisterResponseBodyPost =
@@ -34,6 +35,7 @@ export type RegisterResponseBodyPost =
         isShredding: boolean;
         isBulking: boolean;
         isExperienced: boolean;
+        profilePicture: string;
       };
     };
 
@@ -76,6 +78,7 @@ export const POST = async (request: NextRequest) => {
     result.data.isShredding,
     result.data.isBulking,
     result.data.isExperienced,
+    result.data.profilePicture,
   );
   if (!newUser) {
     return NextResponse.json(

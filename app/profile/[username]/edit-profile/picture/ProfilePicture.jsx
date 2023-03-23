@@ -2,26 +2,14 @@
 import { useRouter } from 'next/router';
 import react, { useState } from 'react';
 
-export type User = {
-  id: number;
-  passwordHash: string;
-  username: string;
-  mail: string;
-  age: number;
-  mobile: string;
-  isShredding: boolean;
-  isBulking: boolean;
-  isExperienced: boolean;
-};
-export type Props = {
-  user: User;
-};
-
-export default function ProfilePicture(props: Props) {
+export default function ProfilePicture(props) {
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
-  console.log(props.user);
-  const handleOnChange = (changeEvent: React.ChangeEvent<HTMLFormElement>) => {
+  const [link, setLink] = useState();
+  const user = props.user;
+
+  const handleOnChange = (changeEvent) => {
+    // React.ChangeEvent<HTMLFormElement>
     const reader = new FileReader();
 
     reader.onload = function (onLoadEvent) {
@@ -31,7 +19,7 @@ export default function ProfilePicture(props: Props) {
 
     reader.readAsDataURL(changeEvent.target.files[0]);
   };
-  const handleOnSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     const fileInput = Array.from(form.elements).find(
@@ -54,7 +42,23 @@ export default function ProfilePicture(props: Props) {
     setImageSrc(data.secure_url);
     setUploadData(data);
 
-    console.log('data', data);
+    setLink(data.secure_url);
+
+    const response = await fetch(
+      `/api/users/${user.id}/profile/update/profile-picture`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ link: link, userId: user.id }), // Change the userId field as necessary
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (response.ok) {
+      console.log('Profile picture saved to database.');
+    } else {
+      console.error('Failed to upload profile picture:', response.status);
+    }
   };
 
   return (

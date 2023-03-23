@@ -10,7 +10,8 @@ mobile VARCHAR(50) NOT NULL,
 favourite_gym VARCHAR(50),
 is_shredding BOOLEAN NOT NULL,
 is_bulking BOOLEAN NOT NULL,
-is_experienced BOOLEAN NOT NULL
+is_experienced BOOLEAN NOT NULL,
+profile_picture VARCHAR(250)
 )
 `;
 }

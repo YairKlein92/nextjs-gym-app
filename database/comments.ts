@@ -1,12 +1,19 @@
 import { Pool } from 'pg';
+import { cache } from 'react';
+import { sql } from './connect';
 
+export type Comment = {
+  id: number;
+  userId: number;
+  matchId: number;
+  comment: string;
+};
 const pool = new Pool({
   user: process.env.PGUSERNAME,
   password: process.env.PGPASSWORD,
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
 });
-
 export async function addComment(
   user_id: number,
   match_id: number,
@@ -27,3 +34,15 @@ export async function addComment(
     client.release();
   }
 }
+export const getUserCommentsByMatchId = cache(
+  async (user_id: number, match_id: number) => {
+    const comments = await sql<Comment[]>`
+    SELECT
+      *
+    FROM
+      comments
+      WHERE user_id = ${user_id} AND match_id = ${match_id}
+    `;
+    return comments;
+  },
+);

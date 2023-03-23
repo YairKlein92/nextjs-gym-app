@@ -16,7 +16,7 @@ export const metadata = {
   },
 };
 
-type Props = {
+export type Props = {
   children: React.ReactNode;
 };
 
@@ -98,13 +98,13 @@ export default async function RootLayout(props: Props) {
         <div className={styles.positionCenter}>
           <div className={styles.headerDiv}>
             {user ? (
-              <div className={styles.headerLoggedIn}></div>
+              <div className={styles.headerLoggedIn}>.</div>
             ) : (
               <div>&nbsp;</div>
             )}
           </div>
         </div>
-        <footer></footer>
+        <footer>.</footer>
       </body>
     </html>
   );

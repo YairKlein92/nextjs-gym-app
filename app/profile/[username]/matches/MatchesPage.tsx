@@ -12,6 +12,7 @@ export type User = {
   isShredding: boolean;
   isBulking: boolean;
   isExperienced: boolean;
+  profilePicture: string;
 };
 export type Props = {
   user: User;
