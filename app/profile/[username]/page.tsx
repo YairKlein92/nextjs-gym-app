@@ -23,20 +23,3 @@ export default async function Profile({ params }: Props) {
 
   return <ProfilePage user={user} users={users} favouriteGym={favouriteGym} />;
 }
-
-// export default GoogleApiWrapper({
-//   apiKey: 'apikey',
-// })(MapContainer);
-
-// class MapContainer extends Component {
-//   render() {
-//     return (
-//       <Map
-//         google={this.props.google}
-//         style={{ width: '15%', height: '30%' }}
-//         zoom={14}
-//         initialCenter={{ lat: 48.192956, lng: 16.315233 }}
-//       />
-//     );
-//   }
-// }

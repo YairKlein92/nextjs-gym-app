@@ -40,6 +40,7 @@ export default function RegisterForm(props: RegisterFormProps) {
     setIsShredding(false);
   };
   const handleOnChange = (changeEvent: React.ChangeEvent<HTMLFormElement>) => {
+    console.log('changeEvent', changeEvent);
     const reader = new FileReader();
 
     reader.onload = function (onLoadEvent) {
@@ -83,19 +84,6 @@ export default function RegisterForm(props: RegisterFormProps) {
           setUploadData(dataPicture);
 
           setProfilePicture(dataPicture.secure_url);
-
-          // const responsePicture = await fetch('/api/profile-picture', {
-          //   method: 'POST',
-          //   body: JSON.stringify({ link: profilePicture }), // Change the userId field as necessary
-          //   headers: {
-          //     'Content-Type': 'application/json',
-          //   },
-          // });
-          // if (responsePicture.ok) {
-          //   console.log('Profile picture saved to database.');
-          // } else {
-          //   console.error('Failed to upload profile picture:', responsePicture.status);
-          // }
 
           // SECOND ACTION - REGISTERING
 
@@ -235,21 +223,18 @@ export default function RegisterForm(props: RegisterFormProps) {
           }}
           type="checkbox"
         />
-        <label htmlFor="picture">Profile picture</label>{' '}
-        <div>
-          <input id="picture" type="file" name="file" />
-        </div>
-        {/* <img src={imageSrc} alt="Profile picture" /> */}
+        <label htmlFor="picture">Profile picture</label>
+        <input id="picture" type="file" name="file" />
         {imageSrc && !uploadData && (
           <div>
             <button>Upload picture</button>
+            <button className={`${styles.button} ${styles.buttonReg}`}>
+              Register
+            </button>
           </div>
         )}
-        <button className={`${styles.button} ${styles.buttonReg}`}>
-          Register
-        </button>
         <div>
-          Already have an account?{' '}
+          Already have an account?
           <Link href={{ pathname: '/login' }} as="/login">
             Log in!
           </Link>

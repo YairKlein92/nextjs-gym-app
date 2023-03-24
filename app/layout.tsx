@@ -95,6 +95,7 @@ export default async function RootLayout(props: Props) {
         </header>
 
         {props.children}
+
         <div className={styles.positionCenter}>
           <div className={styles.headerDiv}>
             {user ? (

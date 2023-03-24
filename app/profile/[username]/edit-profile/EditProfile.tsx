@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { getUserByUsername } from '../../../../database/users';
+// import { getUserByUsername } from '../../../../database/users';
 import { getSafeReturnToPath } from '../../../../utils/validation';
-import { UpdateProfileResponseBodyPost } from '../../../api/users/[userId]/route';
+// import { UpdateProfileResponseBodyPost } from '../../../api/users/[userId]/route';
 import styles from './page.module.scss';
 
 export type Props = {
@@ -109,6 +109,7 @@ export default function EditProfile(props: Props) {
               console.log(data);
               if ('errors' in data) {
                 setErrors(data.errors);
+                console.log(errors);
                 return;
               }
               const returnTo = getSafeReturnToPath(props.returnTo);
