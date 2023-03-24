@@ -20,7 +20,7 @@ export default async function Home() {
           <div>.</div>
         ) : (
           <>
-            <div className={styles.mainText}>Find your gym </div>
+            <div className={styles.mainText}>Let your buddy sweat </div>
             <div className={styles.subText}>
               {/* Connect with a gym buddy <br /> Get the support you need! */}
             </div>

@@ -47,6 +47,10 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
           <div key={`error-${error.message}`}>Error: {error.message}</div>
         ))}
         <div className={styles.loginTextDiv}>Login</div>
+        <div className={styles.subText}>
+          No more excuses
+          <br /> Get the support you need!
+        </div>
         <label>
           <input
             placeholder="username"

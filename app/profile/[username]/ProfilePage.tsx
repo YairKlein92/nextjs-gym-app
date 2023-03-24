@@ -10,6 +10,7 @@ export type Props = {
   user: User;
   users: Users;
   favouriteGym: Gym;
+  gymLink: string;
 };
 export default function ProfilePage(props: Props) {
   const user = props.user;
@@ -33,8 +34,15 @@ export default function ProfilePage(props: Props) {
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
-        <div className={styles.potentialDiv}>
-          <div className={styles.headerDiv}>Your profile:</div>
+        <div className={styles.headerDiv}>Your profile</div>{' '}
+        <div>
+          <img
+            className={styles.profilePicture}
+            src={user.profilePicture}
+            alt="Your profile"
+            height="100"
+            width="100"
+          />{' '}
         </div>
         <div className={styles.potentialBuddyDiv}>
           <div className={styles.descriptionDiv}>
@@ -46,23 +54,22 @@ export default function ProfilePage(props: Props) {
               <div>
                 {user.isExperienced ? 'Experienced' : null}
                 <div>{user.mail}</div>
+                <div>
+                  {' '}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={favouriteGym.gymLink}
+                  >
+                    {favouriteGym.gymName}
+                  </a>{' '}
+                </div>
               </div>
-            </div>
-
-            <div>
-              <img
-                className={styles.profilePicture}
-                src={user.profilePicture}
-                alt="Your profile"
-                height="100"
-                width="100"
-              />{' '}
             </div>
           </div>
         </div>
-
         <div className={styles.filterDiv}>
-          <div>My potential buddy is...</div>
+          <div>Choose your preferences</div>
 
           <label
             htmlFor="bulking"

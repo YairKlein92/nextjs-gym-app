@@ -9,11 +9,11 @@ import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
 import styles from './page.module.scss';
 
 // import styles from './page.module.scss';
-interface RegisterFormProps {
-  gyms: { id: number; gymName: string }[];
-  returnTo?: string | string[] | undefined;
-}
-export default function RegisterForm(props: RegisterFormProps) {
+// interface RegisterFormProps {
+//   gyms: { id: number; gymName: string }[];
+//   returnTo?: string | string[] | undefined;
+// }
+export default function RegisterForm(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mail, setMail] = useState('');
@@ -40,6 +40,7 @@ export default function RegisterForm(props: RegisterFormProps) {
     setIsShredding(false);
   };
   const handleOnChange = (changeEvent: React.ChangeEvent<HTMLFormElement>) => {
+    //
     console.log('changeEvent', changeEvent);
     const reader = new FileReader();
 
@@ -102,7 +103,7 @@ export default function RegisterForm(props: RegisterFormProps) {
               profilePicture,
             }),
           });
-          const data: RegisterResponseBodyPost = await response.json();
+          const data = await response.json(); // : RegisterResponseBodyPost
           console.log(data);
           if ('errors' in data) {
             setErrors(data.errors);
@@ -227,7 +228,6 @@ export default function RegisterForm(props: RegisterFormProps) {
         <input id="picture" type="file" name="file" />
         {imageSrc && !uploadData && (
           <div>
-            <button>Upload picture</button>
             <button className={`${styles.button} ${styles.buttonReg}`}>
               Register
             </button>
