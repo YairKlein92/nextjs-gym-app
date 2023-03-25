@@ -119,7 +119,7 @@ export default function RegisterForm(props: any) {
             if ('errors' in data) {
               // Show error message using react-hot-toast
               data.errors.forEach((error) => {
-                toast.error(error.message);
+                console.error(error.message);
               });
               return;
             }
@@ -186,7 +186,7 @@ export default function RegisterForm(props: any) {
             value={favouriteGym}
             onChange={(event) => setFavouriteGym(event.currentTarget.value)}
           >
-            {props.gyms.map((gym) => (
+            {props.gyms.map((gym: any) => (
               <option key={`user-${gym.id}`} value={gym.id}>
                 {gym.gymName}
               </option>

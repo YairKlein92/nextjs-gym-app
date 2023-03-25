@@ -6,12 +6,14 @@ export type Gym = {
   gymName: string;
   gymAddress: string;
   gymPostalCode: string;
+  gymLink: string;
 };
 export type Gyms = {
   id: number;
   gymName: string;
   gymAddress: string;
   gymPostalCode: string;
+  gymLink: string;
 }[];
 
 // get all gyms

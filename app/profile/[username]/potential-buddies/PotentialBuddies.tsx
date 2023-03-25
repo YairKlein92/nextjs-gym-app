@@ -12,6 +12,7 @@ export type Match = {
   isAccepted: boolean;
 };
 export default function PotentialBuddyProfile(props: Props) {
+  console.log('props hopefully with filtered array', props);
   const user = props.user;
   const listOfUsersWithoutMe: Users = props.listOfUsersWithoutMe;
   console.log(

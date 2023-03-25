@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Gym } from '../../../database/gyms';
 import { User, Users } from '../../../database/users';
+// import PotentialBuddies from '../[username]';
 import styles from './page.module.scss';
 
 export type Props = {
@@ -11,10 +12,12 @@ export type Props = {
   users: Users;
   favouriteGym: Gym;
   gymLink: string;
+  pendingRequests: any;
 };
 export default function ProfilePage(props: Props) {
   const user = props.user;
   const users = props.users;
+  const pendingRequests = props.pendingRequests;
   const [isShredding, setIsShredding] = useState(false);
   const [isBulking, setIsBulking] = useState(false);
   const [isExperienced, setIsExperienced] = useState(false);
@@ -26,6 +29,8 @@ export default function ProfilePage(props: Props) {
   const listOfUsersWithoutMe: User[] = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
+  // pending requests function
+
   useEffect(() => {
     const filteredBuddies = listOfUsersWithoutMe.filter((buddy: User) => {
       switch (true) {
@@ -83,6 +88,11 @@ export default function ProfilePage(props: Props) {
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <Link href={`/profile/${user.username}/requests`}>
+            <div>Ypu have {pendingRequests.length} pending request(s)</div>
+          </Link>
         </div>
         <div className={styles.filterDiv}>
           <div>Choose your preferences</div>
@@ -143,6 +153,7 @@ export default function ProfilePage(props: Props) {
             <img src="/check-out.png" alt="Check potential matches" />
           </Link>
         </div>
+        {/* <PotentialBuddies potentialBuddies={potentialBuddies} /> */}
       </div>
     </div>
   );

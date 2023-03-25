@@ -47,3 +47,14 @@ export const getUserMatchesFromDatabase = async (userId: number) => {
   `;
   return matches;
 };
+export const getMatchRequestById = async (userId: number) => {
+  const pendingRequests = await sql`
+  SELECT
+  *
+  FROM
+  matches
+  WHERE
+  user_pending_id = ${userId}
+  `;
+  return pendingRequests;
+};
