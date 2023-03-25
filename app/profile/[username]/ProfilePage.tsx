@@ -1,7 +1,7 @@
 'use client';
 // import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Gym } from '../../../database/gyms';
 import { User, Users } from '../../../database/users';
 import styles from './page.module.scss';
@@ -18,19 +18,35 @@ export default function ProfilePage(props: Props) {
   const [isShredding, setIsShredding] = useState(false);
   const [isBulking, setIsBulking] = useState(false);
   const [isExperienced, setIsExperienced] = useState(false);
+  const [potentialBuddies, setPotentialBuddies] = useState(
+    users.filter((buddy: User) => buddy.id !== user.id),
+  );
   const [click, setClick] = useState(false);
   const favouriteGym = props.favouriteGym;
   const listOfUsersWithoutMe: User[] = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
-  const potentialBuddies = listOfUsersWithoutMe.filter((buddy: User) => {
-    return (
-      buddy.isBulking === user.isBulking &&
-      buddy.isShredding === user.isShredding &&
-      buddy.isExperienced === user.isExperienced
-      // && !userMatches.some((match: Match) => match.userPendingId === buddy.id)
-    );
-  });
+  useEffect(() => {
+    const filteredBuddies = listOfUsersWithoutMe.filter((buddy: User) => {
+      switch (true) {
+        case isShredding && !isBulking && !isExperienced:
+          return buddy.isShredding;
+        case !isShredding && isBulking && !isExperienced:
+          return buddy.isBulking;
+        case isShredding && isBulking && !isExperienced:
+          return buddy.isShredding || buddy.isBulking;
+        case !isShredding && !isBulking && isExperienced:
+          return buddy.isExperienced;
+        case !isShredding && isBulking && isExperienced:
+          return buddy.isBulking && buddy.isExperienced;
+        case isShredding && !isBulking && isExperienced:
+          return buddy.isShredding && buddy.isExperienced;
+        default:
+          return false;
+      }
+    });
+    setPotentialBuddies(filteredBuddies);
+  }, [isBulking, isShredding, isExperienced]);
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>

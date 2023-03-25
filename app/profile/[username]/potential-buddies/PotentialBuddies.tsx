@@ -1,7 +1,6 @@
 'use client';
 
-// // import '../../../globals.css';
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { User, Users } from '../../../../database/users';
 import styles from './page.module.scss';
 
@@ -32,10 +31,9 @@ export default function PotentialBuddyProfile(props: Props) {
   const handleAddMatch = async (
     event: React.MouseEvent<HTMLButtonElement>,
     buddyId: number,
-    matchDivId: string,
+    matchDivRef: React.RefObject<HTMLDivElement>,
   ) => {
     event.preventDefault();
-
     try {
       const response = await fetch('/api/matches', {
         method: 'POST',
@@ -50,9 +48,8 @@ export default function PotentialBuddyProfile(props: Props) {
       }
       const data = await response.json();
       console.log(data);
-      const matchDiv = document.getElementById(matchDivId);
-      if (matchDiv) {
-        matchDiv.remove();
+      if (matchDivRef.current) {
+        matchDivRef.current.remove();
       }
     } catch (error) {
       console.error(error);
@@ -63,9 +60,11 @@ export default function PotentialBuddyProfile(props: Props) {
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
         {potentialBuddies.map((buddy: User) => {
+          const matchDivRef = useRef<HTMLDivElement>(null);
           const matchDivId = `match-${buddy.id}`;
           return (
             <div
+              ref={matchDivRef}
               key={`user-${buddy.id}`}
               className={styles.searchDiv}
               id={matchDivId}
@@ -79,10 +78,9 @@ export default function PotentialBuddyProfile(props: Props) {
                 </div>
                 <div>{buddy.isExperienced ? 'Experienced' : null}</div>
                 <button
-                  onClick={(event) =>
-                    handleAddMatch(event, buddy.id, matchDivId)
-                  }
+                  onClick={(e) => handleAddMatch(e, buddy.id, matchDivRef)}
                 >
+                  {' '}
                   Add Match
                 </button>
               </div>

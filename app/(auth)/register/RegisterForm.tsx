@@ -3,17 +3,13 @@
 // import bcrypt from 'bcrypt';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+// import toast, { Toaster } from 'react-hot-toast';
 import { getSafeReturnToPath } from '../../../utils/validation';
 import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
 import styles from './page.module.scss';
 
-// import styles from './page.module.scss';
-// interface RegisterFormProps {
-//   gyms: { id: number; gymName: string }[];
-//   returnTo?: string | string[] | undefined;
-// }
-export default function RegisterForm(props) {
+export default function RegisterForm(props: any) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mail, setMail] = useState('');
@@ -29,7 +25,7 @@ export default function RegisterForm(props) {
 
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
-
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);
@@ -39,17 +35,26 @@ export default function RegisterForm(props) {
     setIsBulking(!isBulking);
     setIsShredding(false);
   };
-  const handleOnChange = (changeEvent: React.ChangeEvent<HTMLFormElement>) => {
-    //
-    console.log('changeEvent', changeEvent);
-    const reader = new FileReader();
+  // const handleOnChange = (event: React.ChangeEvent<HTMLFormElement>) => {
+  //   const reader = new FileReader();
 
-    reader.onload = function (onLoadEvent) {
-      setImageSrc(onLoadEvent.target.result);
-      setUploadData(undefined);
-    };
+  //   reader.onload = (onLoadEvent) => {
+  //     setImageSrc(onLoadEvent.target.result);
+  //     setUploadData(undefined);
+  //   };
 
-    reader.readAsDataURL(changeEvent.target.files[0]);
+  //   reader.readAsDataURL(event.target.files[0]);
+  // };
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageSrc(e.target?.result as string);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    } else {
+      setImageSrc(null);
+    }
   };
   // console.log(await bcrypt.hash('abc', 12));
 
@@ -64,63 +69,73 @@ export default function RegisterForm(props) {
           event.preventDefault();
           // FIRST ACTION - SETTIN THE URL LINK
           const form = event.currentTarget;
-          const fileInput = Array.from(form.elements).find(
-            ({ name }) => name === 'file',
-          );
-          console.log(fileInput);
-          const formData = new FormData();
-          for (const file of fileInput.files) {
-            formData.append('file', file);
-          }
-          formData.append('upload_preset', 'my-uploads');
+          const fileInput = Array.from(form.elements)
+            .filter(
+              (element) =>
+                element instanceof HTMLInputElement && element.type === 'file',
+            )
+            .pop() as HTMLInputElement | undefined;
+          if (fileInput) {
+            const formData = new FormData();
+            if (fileInput.files !== null) {
+              for (const file of fileInput.files) {
+                formData.append('file', file);
+              }
+            }
 
-          const dataPicture = await fetch(
-            'https://api.cloudinary.com/v1_1/dvbgjm0xm/image/upload',
-            {
+            formData.append('upload_preset', 'my-uploads');
+
+            const dataPicture = await fetch(
+              'https://api.cloudinary.com/v1_1/dvbgjm0xm/image/upload',
+              {
+                method: 'POST',
+                body: formData,
+              },
+            ).then((response) => response.json());
+
+            setImageSrc(dataPicture.secure_url);
+            setUploadData(dataPicture);
+
+            setProfilePicture(dataPicture.secure_url);
+
+            // SECOND ACTION - REGISTERING
+
+            const response = await fetch('/api/register', {
               method: 'POST',
-              body: formData,
-            },
-          ).then((response) => response.json());
-          setImageSrc(dataPicture.secure_url);
-          setUploadData(dataPicture);
+              body: JSON.stringify({
+                username,
+                password,
+                mail,
+                age,
+                mobile,
+                favouriteGym,
+                isShredding,
+                isBulking,
+                isExperienced,
+                profilePicture: dataPicture.secure_url || '/public/profile.png',
+              }),
+            });
+            const data: RegisterResponseBodyPost = await response.json();
+            if ('errors' in data) {
+              // Show error message using react-hot-toast
+              data.errors.forEach((error) => {
+                toast.error(error.message);
+              });
+              return;
+            }
+            const returnTo = getSafeReturnToPath(props.returnTo);
+            if (returnTo) {
+              router.push(returnTo);
+              return;
+            }
 
-          setProfilePicture(dataPicture.secure_url);
-
-          // SECOND ACTION - REGISTERING
-
-          const response = await fetch('/api/register', {
-            method: 'POST',
-            body: JSON.stringify({
-              username,
-              password,
-              mail,
-              age,
-              mobile,
-              favouriteGym,
-              isShredding,
-              isBulking,
-              isExperienced,
-              profilePicture,
-            }),
-          });
-          const data = await response.json(); // : RegisterResponseBodyPost
-          console.log(data);
-          if ('errors' in data) {
-            setErrors(data.errors);
-            return;
+            router.replace(`/profile/${data.user.username}`);
+            router.refresh();
+            errors.map((error) => (
+              <div key={`error-${error.message}`}>Error: {error.message}</div>
+            ));
           }
-          const returnTo = getSafeReturnToPath(props.returnTo);
-          if (returnTo) {
-            router.push(returnTo);
-            return;
-          }
-
-          router.replace(`/profile/${data.user.username}`);
-          router.refresh();
-          errors.map((error) => (
-            <div key={`error-${error.message}`}>Error: {error.message}</div>
-          ));
-        }}
+        }} // end of if(fileInput)
       >
         <div className={styles.registerTextDiv}>Register</div>
         <label htmlFor="username">
@@ -226,13 +241,11 @@ export default function RegisterForm(props) {
         />
         <label htmlFor="picture">Profile picture</label>
         <input id="picture" type="file" name="file" />
-        {imageSrc && !uploadData && (
-          <div>
-            <button className={`${styles.button} ${styles.buttonReg}`}>
-              Register
-            </button>
-          </div>
-        )}
+        <div>
+          <button className={`${styles.button} ${styles.buttonReg}`}>
+            Register
+          </button>
+        </div>
         <div>
           Already have an account?
           <Link href={{ pathname: '/login' }} as="/login">
