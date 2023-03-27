@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { addMatch } from '../../../database/matches';
+import { denyMatchInDatabase } from '../../../../../../../database/matches';
 
-const userSchma = z.object({
+const matchSchema = z.object({
   userRequestingId: z.number(),
   userPendingId: z.number(),
   isRequested: z.boolean(),
   isAccepted: z.boolean(),
 });
 
-export type RegisterResponseBodyPost =
+export type AcceptDenyMatchResponseBody =
   | {
       errors: { message: string }[];
     }
@@ -22,23 +22,21 @@ export type RegisterResponseBodyPost =
       };
     };
 
-export const POST = async (request: NextRequest) => {
-  // Validating the data
+export const PUT = async (request: NextRequest) => {
   const body = await request.json();
-  const result = userSchma.safeParse(body);
+  const result = matchSchema.safeParse(body);
   if (!result.success) {
     // inside the if statement, result.error.issues there is more information about what is allowing you to create more specific error messages
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
-  // create the match
-  const newMatch = await addMatch(
+  // create deny
+  const newMatch = await denyMatchInDatabase(
     result.data.userRequestingId,
     result.data.userPendingId,
-    result.data.isRequested,
-    result.data.isAccepted,
   );
-  console.log('new match:', newMatch);
-  // return the new username
-  return NextResponse.json({ match: { isAccepted: true } });
+  console.log(newMatch);
+  return NextResponse.json({
+    match: { isRequested: false, isAccepted: false },
+  });
 };

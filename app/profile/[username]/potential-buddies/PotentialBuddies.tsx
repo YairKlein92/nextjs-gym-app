@@ -9,12 +9,13 @@ export type Match = {
   id: number;
   userRequestingId: number;
   userPendingId: number;
+  isRequested: boolean;
   isAccepted: boolean;
 };
 export default function PotentialBuddyProfile(props: Props) {
   console.log('props hopefully with filtered array', props);
   const user = props.user;
-  const listOfUsersWithoutMe: Users = props.listOfUsersWithoutMe;
+  const listOfUsersWithoutMe: any = props.listOfUsersWithoutMe;
   console.log(
     'listOfUsersWithoutMe on PotentialBuddyProfile',
     listOfUsersWithoutMe,
@@ -41,7 +42,8 @@ export default function PotentialBuddyProfile(props: Props) {
         body: JSON.stringify({
           userRequestingId: user.id,
           userPendingId: buddyId,
-          isAccepted: true,
+          isRequested: true,
+          isAccepted: false,
         }),
       });
       if (!response.ok) {

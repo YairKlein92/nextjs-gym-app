@@ -12,15 +12,17 @@ const pool = new Pool({
 export async function addMatch(
   user_requesting_id: number,
   user_pending_id: number,
+  is_requested: boolean,
   is_accepted: boolean,
 ) {
   const client = await pool.connect();
 
   try {
     const result = await client.query(
-      'INSERT INTO matches (user_requesting_id, user_pending_id, is_accepted) VALUES ($1, $2, $3)',
-      [user_requesting_id, user_pending_id, is_accepted],
+      'INSERT INTO matches (user_requesting_id, user_pending_id, is_requested, is_accepted) VALUES ($1, $2, $3, $4)',
+      [user_requesting_id, user_pending_id, is_requested, is_accepted],
     );
+    console.log(result);
     return { success: true, message: 'Match added successfully' };
   } catch (err) {
     console.error('Error adding match', err);
@@ -50,11 +52,52 @@ export const getUserMatchesFromDatabase = async (userId: number) => {
 export const getMatchRequestById = async (userId: number) => {
   const pendingRequests = await sql`
   SELECT
-  *
-  FROM
-  matches
-  WHERE
-  user_pending_id = ${userId}
+      matches.id,
+      users.*
+    FROM
+      matches
+      JOIN users ON matches.user_requesting_id = users.id
+    WHERE
+      matches.user_pending_id = ${userId};
   `;
   return pendingRequests;
 };
+
+// export const getMatchRequestByIdforAcceptOrDeny = async (
+//   userRequestingId: number,
+//   userPendingId: number,
+// ) => {
+//   const pendingRequests = await sql`
+//   SELECT
+//       matches.id,
+//     FROM
+//       matches
+//     WHERE
+//       matches.user_requesting_id = ${userRequestingId} AND matches.user_pending_id = ${userPendingId}
+//   `;
+//   return pendingRequests;
+// };
+
+export async function acceptMatchInDatabase(
+  userRequestingId: number,
+  userPendingingId: number,
+) {
+  const query = await sql`
+    UPDATE matches
+    SET is_requested = FALSE, is_accepted = TRUE
+    WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+  `;
+  return query;
+}
+
+export async function denyMatchInDatabase(
+  userRequestingId: number,
+  userPendingingId: number,
+) {
+  const query = await sql`
+    UPDATE matches
+    SET is_requested = FALSE, is_accepted = FALSE
+    WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+  `;
+  return query;
+}

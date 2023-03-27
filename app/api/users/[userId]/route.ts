@@ -9,6 +9,7 @@ import {
 
 const userSchema = z.object({
   username: z.string(),
+  passwordHash: z.string(),
   mail: z.string(),
   age: z.number(),
   mobile: z.string(),
@@ -26,6 +27,7 @@ export type UpdateProfileResponseBodyPost =
   | {
       user: {
         username: string;
+        passwordHash: string;
         mail: string;
         age: number;
         mobile: string;
@@ -59,6 +61,7 @@ export async function PUT(
   const user: User = {
     id: existingUser.id,
     username: result.data.username,
+    passwordHash: result.data.passwordHash,
     mail: result.data.mail,
     age: result.data.age,
     mobile: result.data.mobile,
