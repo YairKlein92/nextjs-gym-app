@@ -55,7 +55,6 @@ export default function ProfilePicture(props) {
       },
     );
     if (response.ok) {
-      console.log('Profile picture saved to database.');
     } else {
       console.error('Failed to upload profile picture:', response.status);
     }

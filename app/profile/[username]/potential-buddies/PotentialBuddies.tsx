@@ -13,13 +13,8 @@ export type Match = {
   isAccepted: boolean;
 };
 export default function PotentialBuddyProfile(props: Props) {
-  console.log('props hopefully with filtered array', props);
   const user = props.user;
   const listOfUsersWithoutMe: any = props.listOfUsersWithoutMe;
-  console.log(
-    'listOfUsersWithoutMe on PotentialBuddyProfile',
-    listOfUsersWithoutMe,
-  );
 
   const potentialBuddies = listOfUsersWithoutMe.filter((buddy: User) => {
     return (
@@ -50,7 +45,6 @@ export default function PotentialBuddyProfile(props: Props) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      console.log(data);
       if (matchDivRef.current) {
         matchDivRef.current.remove();
       }

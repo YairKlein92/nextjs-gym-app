@@ -62,7 +62,9 @@ export default function RegisterForm(props: any) {
     <div className={styles.mainDiv}>
       <form
         className={styles.form}
-        onChange={handleOnChange}
+        onChange={(event) => {
+          handleOnChange(event);
+        }}
         //  ONSUBMIT
 
         onSubmit={async (event) => {

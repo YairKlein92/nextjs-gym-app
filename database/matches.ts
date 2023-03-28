@@ -22,7 +22,6 @@ export async function addMatch(
       'INSERT INTO matches (user_requesting_id, user_pending_id, is_requested, is_accepted) VALUES ($1, $2, $3, $4)',
       [user_requesting_id, user_pending_id, is_requested, is_accepted],
     );
-    console.log(result);
     return { success: true, message: 'Match added successfully' };
   } catch (err) {
     console.error('Error adding match', err);
@@ -43,7 +42,7 @@ export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
 
 export const getUserMatchesFromDatabase = async (userId: number) => {
   const matches = await sql`
-    SELECT m.id, m.user_requesting_id, m.user_pending_id, m.is_accepted
+    SELECT m.id, m.user_requesting_id, m.user_pending_id,m.is_requested, m.is_accepted
     FROM matches m
     WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
   `;
@@ -62,22 +61,73 @@ export const getMatchRequestById = async (userId: number) => {
   `;
   return pendingRequests;
 };
-
-// export const getMatchRequestByIdforAcceptOrDeny = async (
-//   userRequestingId: number,
-//   userPendingId: number,
-// ) => {
-//   const pendingRequests = await sql`
-//   SELECT
-//       matches.id,
-//     FROM
-//       matches
-//     WHERE
-//       matches.user_requesting_id = ${userRequestingId} AND matches.user_pending_id = ${userPendingId}
-//   `;
-//   return pendingRequests;
-// };
-
+export const getAnsweredMatchRequestById = async (userId: number) => {
+  const pendingRequests = await sql`
+SELECT
+  matches.id,
+  users.*
+FROM
+  matches
+  JOIN users ON (
+    (matches.user_requesting_id = users.id AND matches.user_pending_id != ${userId})
+    OR (matches.user_pending_id = users.id AND matches.user_requesting_id != ${userId})
+  )
+WHERE
+  (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+  AND matches.is_requested = FALSE;
+    `;
+  return pendingRequests;
+};
+export const getPositivelyAnsweredMatchRequestById = async (userId: number) => {
+  const match = await sql`
+SELECT
+  matches.id,
+  users.*
+FROM
+  matches
+  JOIN users ON (
+    matches.user_requesting_id = users.id
+    OR matches.user_pending_id = users.id
+  )
+WHERE
+  (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+  AND matches.is_requested = FALSE
+  AND matches.is_accepted = TRUE
+  AND users.id != ${userId};
+  `;
+  return match;
+};
+export const getNegativelyAnsweredMatchRequestById = async (userId: number) => {
+  const match = await sql`
+  SELECT
+  matches.id,
+  users.*
+FROM
+  matches
+  JOIN users ON (
+    matches.user_requesting_id = users.id
+    OR matches.user_pending_id = users.id
+  )
+WHERE
+  (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+  AND matches.is_requested = FALSE
+  AND matches.is_accepted = FALSE;
+  `;
+  return match;
+};
+export const getUnAnsweredMatchRequestById = async (userId: number) => {
+  const pendingRequests = await sql`
+  SELECT
+      matches.id,
+      users.*
+    FROM
+      matches
+      JOIN users ON matches.user_requesting_id = users.id
+    WHERE
+      matches.user_pending_id = ${userId} AND matches.is_requested = TRUE ;
+  `;
+  return pendingRequests;
+};
 export async function acceptMatchInDatabase(
   userRequestingId: number,
   userPendingingId: number,

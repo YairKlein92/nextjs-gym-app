@@ -13,8 +13,6 @@ export default async function Comments(props: Props) {
   if (!user) {
     console.error('User not found');
   }
-  console.log('props', props.params.username);
   const comments = await getUserCommentsByMatchId(user.id, match.id);
-  console.log('comments', comments);
   return <CommentsPage match={match} user={user} comments={comments} />;
 }

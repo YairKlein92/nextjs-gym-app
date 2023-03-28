@@ -9,7 +9,6 @@ export default async function ProfilePicturePage(props: Props) {
   const username = props.params.username;
 
   const user = await getUserByUsername(username);
-  console.log('user on ProfilePicturePage ->', user);
 
   return <ProfilePicture user={user} />;
 }

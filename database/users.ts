@@ -211,7 +211,6 @@ export const updateUser = cache(
     WHERE id = ${id}
     RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture, id
   `;
-    console.log('userUpdate', userUpdate);
     return userUpdate;
   },
 );
@@ -223,7 +222,6 @@ export const updateProfilePicture = cache(
     WHERE id = ${id}
     RETURNING username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture, id
   `;
-    console.log('userProfilePictureUpdate', userProfilePictureUpdate);
     return userProfilePictureUpdate;
   },
 );

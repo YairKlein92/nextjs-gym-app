@@ -33,9 +33,7 @@ export type Props = {
   returnTo: string;
 };
 export default function EditProfile(props: Props) {
-  console.log('props on EditProfile ->', props);
   const user = props.user;
-  console.log(user);
   const gym = props.favouriteGym;
   const gyms = props.gyms;
   const [username, setUsername] = useState(user.username);
@@ -102,14 +100,11 @@ export default function EditProfile(props: Props) {
               if (!response.ok) {
                 throw new Error('Response was not ok');
               }
-              console.log(response);
               return response.json();
             })
             .then((data) => {
-              console.log(data);
               if ('errors' in data) {
                 setErrors(data.errors);
-                console.log(errors);
                 return;
               }
               const returnTo = getSafeReturnToPath(props.returnTo);
@@ -175,7 +170,7 @@ export default function EditProfile(props: Props) {
           <label
             htmlFor="shredding"
             className={styles.checkboxLabel}
-            style={{ color: isShredding ? 'red' : 'inherit' }}
+            style={{ color: isShredding ? '#c44500' : 'inherit' }}
           >
             shredding
           </label>
@@ -189,7 +184,7 @@ export default function EditProfile(props: Props) {
           <label
             htmlFor="bulking"
             className={styles.checkboxLabel}
-            style={{ color: isBulking ? 'red' : 'inherit' }}
+            style={{ color: isBulking ? '#c44500' : 'inherit' }}
           >
             bulking
           </label>
@@ -204,7 +199,7 @@ export default function EditProfile(props: Props) {
         <label
           htmlFor="experienced"
           className={styles.checkboxLabel}
-          style={{ color: isExperienced ? 'red' : 'inherit' }}
+          style={{ color: isExperienced ? '#c44500' : 'inherit' }}
         >
           experienced
         </label>{' '}

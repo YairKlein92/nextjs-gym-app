@@ -2,7 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #3b3d3f;
+  // color: #358a87;
+  color: #3c4d65;
 }
 
 .mainDiv {
@@ -10,16 +11,21 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 1px solid grey;
-  border-radius: 4rem;
-  width: 22rem;
-  height: 42rem;
-  background: linear-gradient(to top, #f5f5f5, #e9e9e9);
+  width: 100vw;
+  height: 97.2vh;
+  background-image: linear-gradient(to right, #c7b198, #e9e9e9);
+}
+.headerProfile {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
 }
 .headerDiv {
   // box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   // background-color: rgb(245, 245, 245);
-  width: 18rem;
+  // width: 100vw;
   padding: 0.5rem;
   text-align: center;
   font-size: x-large;
@@ -27,50 +33,87 @@
 }
 .potentialBuddyDiv {
   margin: 2rem;
-  width: 22rem;
+  width: 100vw;
   height: 6rem;
 }
 .descriptionDiv {
   display: flex;
-  // justify-content: space-around;
+  justify-content: space-around;
+  // gap: 1.5rem;
   align-items: center;
-  height: 10rem;
-  // background-color: #18dcb1;
+}
+.profileDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 6rem;
+  padding: 1rem;
 }
 .filterDiv {
-  background: linear-gradient(to top, #f5f5f5, #e9e9e9);
   // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   text-align: center;
-  width: 22rem;
-  height: 8rem;
-  margin: 1.5rem;
-  border-top: 0.1rem dotted grey;
-  border-bottom: 0.1rem dotted grey;
+  width: 30vw;
+  height: 10rem;
+  // border: 0.1rem dotted grey;
+  // border: 0.1rem dotted grey;
 }
 .gymFilterDiv {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.5rem;
 }
 .potentialDiv {
   display: flex;
   flex-direction: column;
-  width: 22rem;
+  width: 100vw;
+  padding: 1rem;
   justify-content: space-between;
   align-items: center;
+  button {
+    margin-top: 1rem;
+    background: none;
+    color: #358a87;
+    border: 5px solid #2cd3ceaa;
+    border-radius: 0.5rem;
+    padding: 0.4rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    font-size: 0.8rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    outline: inherit;
+    transition: 0.5s;
+    &:hover {
+      box-shadow: 0 0.5px 2px 0 #15f4ee inset, 0 0.5px 2px 0 #15f4ee,
+        0 0.5px 2px 0 #15f4ee inset, 0 0.5px 2px 0 #15f4ee;
+      text-shadow: 0 0 0.5px #15f4edaa, 0 0 0.5px #15f4edaa;
+    }
+  }
 }
 
 .checkbox {
   display: none;
 }
-.username {
-  font-size: larger;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
+
 .profilePicture {
-  border-radius: 35%;
+  border-radius: 50%;
+}
+.button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  color: #358a87;
+  a {
+    text-decoration: none;
+  }
+}
+.username {
+  font-size: smaller;
 }

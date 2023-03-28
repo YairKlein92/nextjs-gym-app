@@ -2,8 +2,11 @@
 // 'use client';
 // import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { notFound } from 'next/navigation';
-import { getFavouriteGymsByUserId, Gym } from '../../../database/gyms';
-import { getMatchRequestById } from '../../../database/matches';
+import { getFavouriteGymsByUserId } from '../../../database/gyms';
+import {
+  getAnsweredMatchRequestById,
+  getUnAnsweredMatchRequestById,
+} from '../../../database/matches';
 // import { Component } from 'react';
 import { getUserByUsername, getUsers } from '../../../database/users';
 import ProfilePage from './ProfilePage';
@@ -15,13 +18,14 @@ export default async function Profile({ params }: Props) {
   if (!user) {
     notFound();
   }
-
   const favouriteGym = await getFavouriteGymsByUserId(user.id);
-  console.log('favouriteGym: ', favouriteGym);
-  // console.log('favouriteGym: ', favouriteGym);
   const users = await getUsers();
-  const pendingRequests = await getMatchRequestById(user.id);
-  console.log(pendingRequests);
+  const matchArray = await getAnsweredMatchRequestById(user.id);
+  console.log('matches for matches length', matchArray.length);
+  const matchCount = matchArray.length;
+
+  const pendingRequests = await getUnAnsweredMatchRequestById(user.id);
+  // const matches = await;
 
   return (
     <ProfilePage
@@ -29,6 +33,7 @@ export default async function Profile({ params }: Props) {
       users={users}
       favouriteGym={favouriteGym}
       pendingRequests={pendingRequests}
+      matchCount={matchCount}
     />
   );
 }

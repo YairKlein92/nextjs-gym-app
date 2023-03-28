@@ -13,10 +13,13 @@ export type Props = {
   favouriteGym: Gym;
   gymLink: string;
   pendingRequests: any;
+  realPendingRequests: any;
+  matchCount: number;
 };
 export default function ProfilePage(props: Props) {
   const user = props.user;
   const users = props.users;
+  // const pendingRequests = props.pendingRequests;
   const pendingRequests = props.pendingRequests;
   const [isShredding, setIsShredding] = useState(false);
   const [isBulking, setIsBulking] = useState(false);
@@ -55,44 +58,50 @@ export default function ProfilePage(props: Props) {
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
-        <div className={styles.headerDiv}>Your profile</div>{' '}
-        <div>
-          <img
-            className={styles.profilePicture}
-            src={user.profilePicture}
-            alt="Your profile"
-            height="100"
-            width="100"
-          />{' '}
+        <div className={styles.headerProfile}>
+          {' '}
+          <div className={styles.headerDiv}>
+            Your profile
+            <br />{' '}
+            <span className={styles.username}>
+              {user.username} ({user.age}y)
+            </span>
+          </div>{' '}
+          <div>
+            <img
+              className={styles.profilePicture}
+              src={user.profilePicture}
+              alt="Your profile"
+              height="100"
+              width="100"
+            />{' '}
+          </div>
         </div>
+
         <div className={styles.potentialBuddyDiv}>
           <div className={styles.descriptionDiv}>
-            <div>
-              <div className={styles.username}>{user.username}</div>
-              {user.age} years old
-              <div>{user.isBulking ? 'Bulking' : null}</div>
-              <div>{user.isShredding ? 'Shredding' : null}</div>
+            <div className={styles.profileDiv}>
+              {' '}
               <div>
-                {user.isExperienced ? 'Experienced' : null}
-                <div>{user.mail}</div>
-                <div>
-                  {' '}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={favouriteGym.gymLink}
-                  >
-                    {favouriteGym.gymName}
-                  </a>{' '}
-                </div>
+                <Link href={`/profile/${user.username}/requests`}>
+                  <button className={styles.button}>
+                    {props.matchCount} matches
+                  </button>
+                </Link>
+              </div>
+              <Link href={`/profile/${user.username}/requests`}>
+                <button className={styles.button}>
+                  <div>{pendingRequests.length} pending request(s)</div>
+                </button>
+              </Link>
+              <div>
+                {' '}
+                <a target="_blank" rel="noreferrer" href={favouriteGym.gymLink}>
+                  {favouriteGym.gymName}
+                </a>{' '}
               </div>
             </div>
           </div>
-        </div>
-        <div>
-          <Link href={`/profile/${user.username}/requests`}>
-            <div>Ypu have {pendingRequests.length} pending request(s)</div>
-          </Link>
         </div>
         <div className={styles.filterDiv}>
           <div>Choose your preferences</div>
@@ -150,7 +159,7 @@ export default function ProfilePage(props: Props) {
         <div className={styles.potentialDiv}>
           <div>{potentialBuddies.length} potencial gym buddies</div>
           <Link href={`/profile/${user.username}/potential-buddies`}>
-            <img src="/check-out.png" alt="Check potential matches" />
+            <button>Let's Go!</button>
           </Link>
         </div>
         {/* <PotentialBuddies potentialBuddies={potentialBuddies} /> */}

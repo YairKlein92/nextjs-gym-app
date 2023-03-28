@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { acceptMatchInDatabase } from '../../../../../../../database/matches';
+import { acceptMatchInDatabase } from '../../../database/matches';
 
 const matchSchema = z.object({
   userRequestingId: z.number(),

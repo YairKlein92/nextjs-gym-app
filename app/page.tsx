@@ -1,4 +1,4 @@
-// import './globals.css';
+import './globals.css';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { getUserBySessionToken } from '../database/users';
@@ -21,16 +21,14 @@ export default async function Home() {
         ) : (
           <>
             <div className={styles.mainText}>Let your buddy sweat </div>
-            <div className={styles.subText}>
-              {/* Connect with a gym buddy <br /> Get the support you need! */}
-            </div>
+            <div className={styles.pictureDiv}></div>
             <div className={styles.linkDiv}>
-              <Link href={{ pathname: '/register' }}>
+              <Link href={{ pathname: '/register' }} className={styles.link}>
                 <button className={styles.buttonLog}>
                   <span className={styles.linkText}>Register</span>
                 </button>
               </Link>
-              <Link href={{ pathname: '/login' }}>
+              <Link href={{ pathname: '/login' }} className={styles.link}>
                 <button className={styles.buttonReg}>
                   <span className={styles.linkText}>Login</span>
                 </button>

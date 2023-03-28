@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Comment } from '../../../../../database/comments';
 import { CommentResponseBodyPost } from '../../../../api/matches/comments/route';
+import styles from './page.module.scss';
 
 export type CommentProps = {
   comments: {
@@ -15,7 +16,6 @@ export type CommentProps = {
 };
 export default function CommentsPage(props: CommentProps) {
   const [commentInput, setCommentInput] = useState('');
-  console.log(props);
   const user = props.user;
   const match = props.match;
   const comments = props.comments;
@@ -26,45 +26,49 @@ export default function CommentsPage(props: CommentProps) {
   // const { username } = router.query;
 
   return (
-    <>
-      <div>{match.username}</div>
-      <form
-        action=""
-        onSubmit={async (event) => {
-          event.preventDefault();
+    <div className={styles.pageDiv}>
+      <div className={styles.mainDiv}>
+        <div className={styles.username}>{match.username}</div>
+        <div className={styles.formDiv}>
+          <form
+            className={styles.form}
+            action=""
+            onSubmit={async (event) => {
+              event.preventDefault();
 
-          const response = await fetch('/api/matches/comments', {
-            method: 'POST',
-            body: JSON.stringify({
-              userId,
-              matchId,
-              commentInput,
-            }),
-          });
-          const data: CommentResponseBodyPost = await response.json();
-          console.log(data);
-          // if ('errors' in data) {
-          //   setErrors(data.errors);
-          //   return;
-          // }
-        }}
-      >
-        <label htmlFor="comment">Your comment:</label>
-        <input
-          id="comment"
-          onChange={(event) => {
-            setCommentInput(event.currentTarget.value);
-          }}
-        />
-        <button>Add comment</button>
-      </form>
-      {comments.map((comment: Comment) => {
-        return (
-          <div key={`user-${comment.id}`}>
-            <div>{comment.comment}</div>
+              const response = await fetch('/api/matches/comments', {
+                method: 'POST',
+                body: JSON.stringify({
+                  userId,
+                  matchId,
+                  commentInput,
+                }),
+              });
+              const data: CommentResponseBodyPost = await response.json();
+            }}
+          >
+            <label htmlFor="comment">Your comment:</label>
+            <textarea
+              placeholder="Enter a comment..."
+              id="comment"
+              onChange={(event) => {
+                setCommentInput(event.currentTarget.value);
+              }}
+            />
+            <button className={styles.button}>Add comment</button>
+          </form>
+          <div className={styles.commentDiv}>
+            {' '}
+            {comments.map((comment: Comment) => {
+              return (
+                <div key={`user-${comment.id}`}>
+                  <div>{comment.comment}</div>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-    </>
+        </div>
+      </div>
+    </div>
   );
 }

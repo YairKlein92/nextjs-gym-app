@@ -2,16 +2,13 @@
 
 export default function PendingRequests(props: any) {
   const requests = props.requests;
-  console.log(requests.id);
   const user = props.user;
-  console.log('user.id', user.id);
 
   const acceptButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>,
     requestingUserId: number,
   ) => {
     event.preventDefault();
-    console.log(event);
 
     try {
       const response = await fetch(
@@ -29,7 +26,6 @@ export default function PendingRequests(props: any) {
           }),
         },
       );
-      console.log(response);
       if (response.ok) {
         // The request was successful, update the UI
         console.log('Request accepted');
@@ -46,7 +42,6 @@ export default function PendingRequests(props: any) {
     requestingUserId: number,
   ) => {
     event.preventDefault();
-    console.log(event);
     const response = await fetch(`/api/matches/user/${user.id}/actions/deny`, {
       method: 'PUT',
       headers: {
