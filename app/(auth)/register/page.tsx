@@ -11,7 +11,6 @@ export default async function RegisterPage(props: Props) {
   const gyms = await getGyms();
 
   const sessionTokenCookie = cookies().get('sessionToken');
-  console.log(sessionTokenCookie);
 
   const session =
     sessionTokenCookie &&

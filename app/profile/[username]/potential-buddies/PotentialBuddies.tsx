@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { User, Users } from '../../../../database/users';
 import styles from './page.module.scss';
 
@@ -15,20 +15,21 @@ export type Match = {
 export default function PotentialBuddyProfile(props: Props) {
   const user = props.user;
   const listOfUsersWithoutMe: any = props.listOfUsersWithoutMe;
+  console.log(listOfUsersWithoutMe);
+  const [matches, setMatches] = useState<number[]>([]);
 
   const potentialBuddies = listOfUsersWithoutMe.filter((buddy: User) => {
     return (
       buddy.isBulking === user.isBulking &&
       buddy.isShredding === user.isShredding &&
-      buddy.isExperienced === user.isExperienced
-      // && !userMatches.some((match: Match) => match.userPendingId === buddy.id)
+      buddy.isExperienced === user.isExperienced &&
+      !matches.includes(buddy.id)
     );
   });
 
   const handleAddMatch = async (
     event: React.MouseEvent<HTMLButtonElement>,
     buddyId: number,
-    matchDivRef: React.RefObject<HTMLDivElement>,
   ) => {
     event.preventDefault();
     try {
@@ -44,10 +45,8 @@ export default function PotentialBuddyProfile(props: Props) {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.json();
-      if (matchDivRef.current) {
-        matchDivRef.current.remove();
-      }
+      // const data = await response.json();
+      setMatches([...matches, buddyId]);
     } catch (error) {
       console.error(error);
     }
@@ -57,11 +56,12 @@ export default function PotentialBuddyProfile(props: Props) {
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
         {potentialBuddies.map((buddy: User) => {
-          const matchDivRef = useRef<HTMLDivElement>(null);
           const matchDivId = `match-${buddy.id}`;
+          if (matches.includes(buddy.id)) {
+            return null; // Skip rendering the match div
+          }
           return (
             <div
-              ref={matchDivRef}
               key={`user-${buddy.id}`}
               className={styles.searchDiv}
               id={matchDivId}
@@ -75,13 +75,22 @@ export default function PotentialBuddyProfile(props: Props) {
                 </div>
                 <div>{buddy.isExperienced ? 'Experienced' : null}</div>
                 <button
-                  onClick={(e) => handleAddMatch(e, buddy.id, matchDivRef)}
+                  className={styles.button}
+                  onClick={(e) => handleAddMatch(e, buddy.id)}
                 >
                   {' '}
                   Add Match
                 </button>
               </div>
-              <div className={styles.pictureDiv}>.</div>
+              <div className={styles.pictureDiv}>
+                <img
+                  className={styles.picture}
+                  src={buddy.profilePicture}
+                  alt="User's profile"
+                  width="120"
+                  height="120"
+                />
+              </div>
             </div>
           );
         })}
@@ -89,3 +98,43 @@ export default function PotentialBuddyProfile(props: Props) {
     </div>
   );
 }
+
+// return (
+//   <div
+//     // ref={matchDivRef}
+//     key={`user-${buddy.id}`}
+//     className={styles.searchDiv}
+//     id={`${buddy.id}`}
+//   >
+//     <div className={styles.infoDiv}>
+//       <div>{buddy.username}</div>
+//       <div>Age: {buddy.age}</div>
+//       <div>
+//         {buddy.isBulking ? 'Bulking' : null}
+//         {buddy.isShredding ? 'Shredding' : null}
+//       </div>
+//       <div>{buddy.isExperienced ? 'Experienced' : null}</div>
+//       <button
+//         className={styles.button}
+//         onClick={(e) => handleAddMatch(e, buddy.id, matchDivRef)}
+//       >
+//         {' '}
+//         Add Match
+//       </button>
+//     </div>
+//     <div className={styles.pictureDiv}>
+//       <img
+//         className={styles.picture}
+//         src={buddy.profilePicture}
+//         alt="User's profile"
+//         width="120"
+//         height="120"
+//       />
+//     </div>
+//   </div>
+// );
+// })}
+// </div>
+// </div>
+// );
+// }

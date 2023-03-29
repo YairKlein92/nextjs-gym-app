@@ -77,7 +77,6 @@ export default function EditProfile(props: Props) {
     isBulking: isBulking,
     isExperienced: isExperienced,
   };
-  console.log('userData', userData);
   return (
     <div className={styles.mainDiv}>
       <form

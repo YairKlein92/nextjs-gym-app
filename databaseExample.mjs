@@ -6,9 +6,5 @@ config();
 
 const sql = postgres(); // because of config() we don't need any info here
 
-console.log(
-  await sql`
-  SELECT * FROM users
-  `,
-);
+
 await sql.end();

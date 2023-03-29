@@ -21,7 +21,7 @@ export default function MatchesPage(props: Props) {
                 {match.username}({match.age})
               </div>
               <div>Mail:{match.mail}</div>
-              <div>Mobile phone:{match.mobile}</div>{' '}
+              <div>Phone:{match.mobile}</div>{' '}
               <Link
                 href={`/profile/${user.username}/matches/comments?username=${match.username}`}
               >

@@ -37,8 +37,6 @@ export default async function PotentialBuddyPage({ params }: Props) {
     });
   });
 
-  console.log('listOfUsersWithoutMe after filtering', listOfUsersWithoutMe);
-
   const Button: React.FC<ButtonProps> = ({ label, user1_id, user2_id }) => {
     async function handleButtonClick() {
       const result = await addMatch(user1_id, user2_id, true, false);

@@ -35,7 +35,6 @@ export const POST = async (request: NextRequest) => {
     result.data.matchId,
     result.data.commentInput,
   );
-  console.log('new match:', newComment);
   // return the new username
   return NextResponse.json({ comment: { isAccepted: true } });
 };

@@ -35,7 +35,6 @@ export const PUT = async (request: NextRequest) => {
     result.data.userRequestingId,
     result.data.userPendingId,
   );
-  console.log(newMatch);
   return NextResponse.json({
     match: { isRequested: false, isAccepted: false },
   });

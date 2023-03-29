@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Comment } from '../../../../../database/comments';
 import { CommentResponseBodyPost } from '../../../../api/matches/comments/route';
@@ -15,6 +16,7 @@ export type CommentProps = {
   user: { id: number; username: string };
 };
 export default function CommentsPage(props: CommentProps) {
+  const router = useRouter();
   const [commentInput, setCommentInput] = useState('');
   const user = props.user;
   const match = props.match;
@@ -45,6 +47,7 @@ export default function CommentsPage(props: CommentProps) {
                 }),
               });
               const data: CommentResponseBodyPost = await response.json();
+              router.refresh();
             }}
           >
             <label htmlFor="comment">Your comment:</label>

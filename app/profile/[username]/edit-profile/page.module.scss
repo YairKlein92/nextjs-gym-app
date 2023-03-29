@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   color: #3b3d3f;
+  border-top: 1px solid grey;
 }
 .registerTextDiv {
   margin-top: 2rem;
@@ -11,8 +12,8 @@
   font-weight: 600;
 }
 .form {
-  width: 22rem;
-  height: 42rem;
+  width: 100vw;
+  height: 93.7vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

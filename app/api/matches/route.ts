@@ -38,7 +38,6 @@ export const POST = async (request: NextRequest) => {
     result.data.isRequested,
     result.data.isAccepted,
   );
-  console.log('new match:', newMatch);
   // return the new username
   return NextResponse.json({ match: { isAccepted: true } });
 };

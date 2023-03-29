@@ -23,9 +23,6 @@ export async function POST(request: NextRequest) {
   const result = userSchema.safeParse(body);
 
   if (!result.success) {
-    // Inside of result.error.issues you are going to have more granular information about what is failing allowing you to create more specific error massages
-    // console.log(result.error.issues);
-
     return NextResponse.json(
       {
         errors: result.error.issues,

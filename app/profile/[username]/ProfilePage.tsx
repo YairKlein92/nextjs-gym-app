@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Gym } from '../../../database/gyms';
 import { User, Users } from '../../../database/users';
-// import PotentialBuddies from '../[username]';
 import styles from './page.module.scss';
+
+// import PotentialBuddyProfile from './potential-buddies/PotentialBuddies';
 
 export type Props = {
   user: User;
@@ -19,11 +20,11 @@ export type Props = {
 export default function ProfilePage(props: Props) {
   const user = props.user;
   const users = props.users;
-  // const pendingRequests = props.pendingRequests;
   const pendingRequests = props.pendingRequests;
   const [isShredding, setIsShredding] = useState(false);
   const [isBulking, setIsBulking] = useState(false);
   const [isExperienced, setIsExperienced] = useState(false);
+
   const [potentialBuddies, setPotentialBuddies] = useState(
     users.filter((buddy: User) => buddy.id !== user.id),
   );
@@ -83,7 +84,7 @@ export default function ProfilePage(props: Props) {
             <div className={styles.profileDiv}>
               {' '}
               <div>
-                <Link href={`/profile/${user.username}/requests`}>
+                <Link href={`/profile/${user.username}/matches`}>
                   <button className={styles.button}>
                     {props.matchCount} matches
                   </button>
@@ -162,7 +163,7 @@ export default function ProfilePage(props: Props) {
             <button>Let's Go!</button>
           </Link>
         </div>
-        {/* <PotentialBuddies potentialBuddies={potentialBuddies} /> */}
+        {/* <PotentialBuddyProfile potentialBuddies={potentialBuddies} /> */}
       </div>
     </div>
   );
