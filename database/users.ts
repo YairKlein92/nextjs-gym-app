@@ -225,6 +225,17 @@ export const updateProfilePicture = cache(
     return userProfilePictureUpdate;
   },
 );
+export const updateExistingProfilePicture = cache(
+  async (id: number, profilePicture: string) => {
+    const [userProfilePictureUpdate] = await sql<Omit<User, 'password'>[]>`
+    UPDATE users
+    SET  profile_picture = ${profilePicture}
+    WHERE id = ${id}
+    RETURNING profile_picture, id
+  `;
+    return userProfilePictureUpdate;
+  },
+);
 export const getUserByUsername = cache(async (username: string) => {
   const [user] = await sql<Omit<User, 'password'>[]>`
   SELECT * FROM

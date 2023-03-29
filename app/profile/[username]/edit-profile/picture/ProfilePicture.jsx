@@ -1,11 +1,11 @@
 'use client';
 import { useRouter } from 'next/router';
-import react, { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function ProfilePicture(props) {
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
-  const [link, setLink] = useState();
+  // const [link, setLink] = useState();
   const user = props.user;
 
   const handleOnChange = (changeEvent) => {
@@ -32,26 +32,25 @@ export default function ProfilePicture(props) {
     }
     formData.append('upload_preset', 'my-uploads');
 
-    const data = await fetch(
+    const dataPicture = await fetch(
       'https://api.cloudinary.com/v1_1/dvbgjm0xm/image/upload',
       {
-        method: 'POST',
+        method: 'PUT',
         body: formData,
       },
     ).then((response) => response.json());
-    setImageSrc(data.secure_url);
-    setUploadData(data);
 
-    setLink(data.secure_url);
+    setImageSrc(dataPicture.secure_url);
+    setUploadData(dataPicture);
 
     const response = await fetch(
       `/api/users/${user.id}/profile/update/profile-picture`,
       {
         method: 'PUT',
-        body: JSON.stringify({ link: link, userId: user.id }), // Change the userId field as necessary
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: JSON.stringify({
+          id: user.id,
+          profilePicture: dataPicture.secure_url || '/public/profile.png',
+        }),
       },
     );
     if (response.ok) {
@@ -77,7 +76,7 @@ export default function ProfilePicture(props) {
           )}
           {uploadData && (
             <code>
-              <pre>{JSON.stringify(uploadData, null, 2)}</pre>
+              <pre>{JSON.stringify(imageSrc, null, 2)}</pre>
             </code>
           )}
         </form>

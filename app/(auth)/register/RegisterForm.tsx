@@ -98,7 +98,7 @@ export default function RegisterForm(props: any) {
             setImageSrc(dataPicture.secure_url);
             setUploadData(dataPicture);
 
-            setProfilePicture(dataPicture.secure_url);
+            // setProfilePicture(dataPicture.secure_url);
 
             // SECOND ACTION - REGISTERING
 
