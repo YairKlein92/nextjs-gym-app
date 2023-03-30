@@ -11,6 +11,7 @@ export type Match = {
   userPendingId: number;
   isRequested: boolean;
   isAccepted: boolean;
+  isBlocked: boolean;
 };
 export default function PotentialBuddyProfile(props: Props) {
   const user = props.user;
@@ -40,6 +41,7 @@ export default function PotentialBuddyProfile(props: Props) {
           userPendingId: buddyId,
           isRequested: true,
           isAccepted: false,
+          isBlocked: false,
         }),
       });
       if (!response.ok) {

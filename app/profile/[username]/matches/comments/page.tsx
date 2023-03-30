@@ -14,5 +14,8 @@ export default async function Comments(props: Props) {
     console.error('User not found');
   }
   const comments = await getUserCommentsByMatchId(user.id, match.id);
-  return <CommentsPage match={match} user={user} comments={comments} />;
+  const visibleComments = comments.filter((comment: any) => {
+    return comment.isVisible === true;
+  });
+  return <CommentsPage match={match} user={user} comments={visibleComments} />;
 }

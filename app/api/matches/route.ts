@@ -7,6 +7,7 @@ const userSchma = z.object({
   userPendingId: z.number(),
   isRequested: z.boolean(),
   isAccepted: z.boolean(),
+  isBlocked: z.boolean(),
 });
 
 export type RegisterResponseBodyPost =
@@ -19,6 +20,7 @@ export type RegisterResponseBodyPost =
         userPendingId: string;
         isRequested: boolean;
         isAccepted: boolean;
+        isBlocked: boolean;
       };
     };
 
@@ -37,6 +39,7 @@ export const POST = async (request: NextRequest) => {
     result.data.userPendingId,
     result.data.isRequested,
     result.data.isAccepted,
+    result.data.isBlocked,
   );
   // return the new username
   return NextResponse.json({ match: { isAccepted: true } });

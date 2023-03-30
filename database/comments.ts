@@ -7,6 +7,7 @@ export type Comment = {
   userId: number;
   matchId: number;
   comment: string;
+  isVisible: boolean;
 };
 const pool = new Pool({
   user: process.env.PGUSERNAME,
@@ -18,13 +19,14 @@ export async function addComment(
   user_id: number,
   match_id: number,
   comment: string,
+  is_visible: boolean,
 ) {
   const client = await pool.connect();
 
   try {
     const result = await client.query(
-      'INSERT INTO comments (user_id, match_id, comment) VALUES ($1, $2, $3)',
-      [user_id, match_id, comment],
+      'INSERT INTO comments (user_id, match_id, comment, is_visible) VALUES ($1, $2, $3, $4)',
+      [user_id, match_id, comment, is_visible],
     );
     return { success: true, message: 'Comment added successfully' };
   } catch (err) {
@@ -42,6 +44,18 @@ export const getUserCommentsByMatchId = cache(
     FROM
       comments
       WHERE user_id = ${user_id} AND match_id = ${match_id}
+    `;
+    return comments;
+  },
+);
+export const getUserCommentsByMatchIdAndVisibility = cache(
+  async (user_id: number, match_id: number, is_visible: boolean) => {
+    const comments = await sql<Comment[]>`
+    SELECT
+      *
+    FROM
+      comments
+      WHERE user_id = ${user_id} AND match_id = ${match_id} AND is_visible = ${is_visible}
     `;
     return comments;
   },

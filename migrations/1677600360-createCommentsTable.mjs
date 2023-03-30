@@ -4,7 +4,10 @@ export async function up(sql) {
       id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       user_id integer REFERENCES users(id) ON DELETE CASCADE,
       match_id integer REFERENCES users(id),
-      comment varchar(500) NOT NULL
+      comment varchar(500) NOT NULL,
+      is_visible BOOLEAN NOT NULL
+      -- , timestamp timestamp NOT NULL DEFAULT NOW()
+
     )
   `;
 }

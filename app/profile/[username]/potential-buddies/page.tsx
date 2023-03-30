@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import {
   addMatch,
-  getMatchRequestById,
+  getNegativelyAnsweredMatchRequestById,
   getUserMatchesFromDatabase,
 } from '../../../../database/matches';
 import {
@@ -18,7 +18,7 @@ export default async function PotentialBuddyPage({ params }: Props) {
   // const matches = await getMatchRequestById(user.id);
   // console.log('matches on potentialBuddy component ->', matches);
   const users: any = await getUsers();
-
+  const deniedUsers = await getNegativelyAnsweredMatchRequestById(user.id);
   if (!user) {
     notFound();
   }
@@ -36,10 +36,17 @@ export default async function PotentialBuddyPage({ params }: Props) {
       );
     });
   });
-
+  const filteredUsersWithBlockedUsers = filteredUsers.filter(
+    (otherUser: User) => {
+      return deniedUsers.some(
+        (deniedUser) =>
+          deniedUser.id === otherUser.id && deniedUser.isBlocked === true,
+      );
+    },
+  );
   const Button: React.FC<ButtonProps> = ({ label, user1_id, user2_id }) => {
     async function handleButtonClick() {
-      const result = await addMatch(user1_id, user2_id, true, false);
+      const result = await addMatch(user1_id, user2_id, true, false, false);
       if (result.success) {
         console.log(result.message);
       } else {
@@ -51,7 +58,10 @@ export default async function PotentialBuddyPage({ params }: Props) {
   };
 
   return (
-    <PotentialBuddyProfile user={user} listOfUsersWithoutMe={filteredUsers} />
+    <PotentialBuddyProfile
+      user={user}
+      listOfUsersWithoutMe={filteredUsersWithBlockedUsers}
+    />
   );
 }
 

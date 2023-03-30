@@ -14,13 +14,20 @@ export async function addMatch(
   user_pending_id: number,
   is_requested: boolean,
   is_accepted: boolean,
+  is_blocked: boolean,
 ) {
   const client = await pool.connect();
 
   try {
     const result = await client.query(
-      'INSERT INTO matches (user_requesting_id, user_pending_id, is_requested, is_accepted) VALUES ($1, $2, $3, $4)',
-      [user_requesting_id, user_pending_id, is_requested, is_accepted],
+      'INSERT INTO matches (user_requesting_id, user_pending_id, is_requested, is_accepted, is_blocked) VALUES ($1, $2, $3, $4, $5)',
+      [
+        user_requesting_id,
+        user_pending_id,
+        is_requested,
+        is_accepted,
+        is_blocked,
+      ],
     );
     return { success: true, message: 'Match added successfully' };
   } catch (err) {

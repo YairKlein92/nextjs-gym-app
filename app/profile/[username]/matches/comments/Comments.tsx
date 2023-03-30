@@ -11,6 +11,7 @@ export type CommentProps = {
     userId: number;
     matchId: number;
     comment: string;
+    is_visible: boolean;
   }[];
   match: { id: number; username: string };
   user: { id: number; username: string };
@@ -44,6 +45,7 @@ export default function CommentsPage(props: CommentProps) {
                   userId,
                   matchId,
                   commentInput,
+                  is_visible: true,
                 }),
               });
               const data: CommentResponseBodyPost = await response.json();
