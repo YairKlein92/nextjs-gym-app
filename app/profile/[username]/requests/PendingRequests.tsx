@@ -23,6 +23,7 @@ export default function PendingRequests(props: any) {
             userPendingId: user.id,
             isRequested: false,
             isAccepted: true,
+            isBlocked: false,
           }),
         },
       );
@@ -52,6 +53,34 @@ export default function PendingRequests(props: any) {
         userPendingId: user.id,
         isRequested: false,
         isAccepted: false,
+        isBlocked: false,
+      }),
+    });
+
+    if (response.ok) {
+      // The request was successful, update the UI
+      console.log('Request denied');
+    } else {
+      // Handle error
+      console.error('Failed to deny request');
+    }
+  };
+  const blockButtonHandler = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    requestingUserId: number,
+  ) => {
+    event.preventDefault();
+    const response = await fetch(`/api/matches/user/${user.id}/actions/block`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userRequestingId: requestingUserId,
+        userPendingId: user.id,
+        isRequested: false,
+        isAccepted: false,
+        isBlocked: true,
       }),
     });
 
@@ -84,6 +113,12 @@ export default function PendingRequests(props: any) {
             <form method="post">
               <input type="hidden" name="matchId" />
               <button onClick={(event) => denyButtonHandler(event, req.id)}>
+                Deny
+              </button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="matchId" />
+              <button onClick={(event) => blockButtonHandler(event, req.id)}>
                 Deny
               </button>
             </form>

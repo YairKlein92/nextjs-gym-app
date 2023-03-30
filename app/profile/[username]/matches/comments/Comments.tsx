@@ -27,7 +27,20 @@ export default function CommentsPage(props: CommentProps) {
   // const [errors, setErrors] = useState([]);
   // const router = useRouter();
   // const { username } = router.query;
-
+  const onClickhandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const response = await fetch('/api/matches/comments/actions/remove', {
+      method: 'PUT',
+      body: JSON.stringify({
+        userId,
+        matchId,
+        commentInput,
+        is_visible: false,
+      }),
+    });
+    const data: CommentResponseBodyPost = await response.json();
+    router.refresh();
+  };
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
@@ -67,7 +80,9 @@ export default function CommentsPage(props: CommentProps) {
             {comments.map((comment: Comment) => {
               return (
                 <div key={`user-${comment.id}`}>
-                  <div>{comment.comment}</div>
+                  <div>
+                    {comment.comment} <button onClick={onClickhandler}></button>
+                  </div>
                 </div>
               );
             })}

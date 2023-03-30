@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { acceptMatchInDatabase } from '../../../../../../../database/matches';
+import { blockMatchInDatabase } from '../../../../../../../database/matches';
 
 const matchSchema = z.object({
   userRequestingId: z.number(),
@@ -29,24 +29,15 @@ export const PUT = async (request: NextRequest) => {
   const result = matchSchema.safeParse(body);
   if (!result.success) {
     // inside the if statement, result.error.issues there is more information about what is allowing you to create more specific error messages
-    console.error('Request body does not match expected schema:', result.error);
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
-  try {
-    // create accept
-    const newMatch = await acceptMatchInDatabase(
-      result.data.userRequestingId,
-      result.data.userPendingId,
-    );
-    return NextResponse.json({
-      match: { isRequested: false, isAccepted: true, isBlocked: false },
-    });
-  } catch (error) {
-    console.error('Failed to accept request:', error);
-    return NextResponse.json(
-      { error: [{ message: 'Failed to accept request.' }] },
-      { status: 500 },
-    );
-  }
+  // create deny
+  const newMatch = await blockMatchInDatabase(
+    result.data.userRequestingId,
+    result.data.userPendingId,
+  );
+  return NextResponse.json({
+    match: { isRequested: false, isAccepted: false, isBlocked: true },
+  });
 };

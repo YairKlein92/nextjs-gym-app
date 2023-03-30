@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { addComment } from '../../../../database/comments';
+import { removeComment } from '../../../../../../database/comments';
 
 const commentSchma = z.object({
   userId: z.number(),
@@ -22,7 +22,7 @@ export type CommentResponseBodyPost =
       };
     };
 
-export const POST = async (request: NextRequest) => {
+export const PUT = async (request: NextRequest) => {
   // Validating the data
   const body = await request.json();
   const result = commentSchma.safeParse(body);
@@ -32,12 +32,12 @@ export const POST = async (request: NextRequest) => {
   }
 
   // create the match
-  const newComment = await addComment(
+  const updatedComment = await removeComment(
     result.data.userId,
     result.data.matchId,
     result.data.commentInput,
-    true,
+    result.data.isVisible,
   );
   // return the new username
-  return NextResponse.json({ comment: { isVisible: true } });
+  return NextResponse.json({ comment: { isVisible: false } });
 };

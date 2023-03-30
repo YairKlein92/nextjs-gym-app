@@ -7,6 +7,7 @@ const matchSchema = z.object({
   userPendingId: z.number(),
   isRequested: z.boolean(),
   isAccepted: z.boolean(),
+  isBlocked: z.boolean(),
 });
 
 export type AcceptDenyMatchResponseBody =
@@ -19,6 +20,7 @@ export type AcceptDenyMatchResponseBody =
         userPendingId: string;
         isRequested: boolean;
         isAccepted: boolean;
+        isBlocked: boolean;
       };
     };
 
@@ -36,6 +38,6 @@ export const PUT = async (request: NextRequest) => {
     result.data.userPendingId,
   );
   return NextResponse.json({
-    match: { isRequested: false, isAccepted: false },
+    match: { isRequested: false, isAccepted: false, isBlocked: false },
   });
 };
