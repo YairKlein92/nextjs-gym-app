@@ -1,6 +1,6 @@
 const gymbuddies = [
   {
-    username: 'Csaba Klein',
+    username: 'CsabaJK',
     password_hash:
       '$2y$10$YTnqxti.XLqNjOX4Dn15xOQxZXyk/oHY7KSMw0kh71sJZgSqf3Jty',
     mail: 'sympla@gmail.com',
@@ -10,36 +10,37 @@ const gymbuddies = [
     is_shredding: true,
     is_bulking: false,
     is_experienced: true,
-    profile_picture: '',
+    profile_picture:
+      'https://images.unsplash.com/photo-1578229353624-a4007142da75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80',
   },
   {
-    username: 'Arnie Schwarzenegger',
+    username: 'Arnie',
     password_hash: 'Arnie',
     mail: 'arnie@gmail.com',
-    age: 65,
+    age: 42,
     mobile: '+36304833454',
     favourite_gym: 'FitInn Johnstrasse',
     is_shredding: true,
     is_bulking: false,
     is_experienced: false,
-    profile_picture: '',
-
+    profile_picture:
+      'https://plus.unsplash.com/premium_photo-1663036312913-620738b33f69?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
   },
   {
-    username: 'Markus Rühl',
-    password_hash: 'Danvagyok',
-    mail: 'markruhl@gmail.com',
+    username: 'ChristophTiger',
+    password_hash: '',
+    mail: 'chrisdt@gmail.com',
     age: 50,
     mobile: '+36305546354',
     favourite_gym: 'FitInn Kagraner Platz',
     is_shredding: false,
     is_bulking: true,
     is_experienced: true,
-    profile_picture: '',
-
+    profile_picture:
+      'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80',
   },
   {
-    username: 'Denis Cyplenkov',
+    username: 'TRXGuy78',
     password_hash: 'Danvagyok',
     mail: 'deniscyp@gmail.com',
     age: 45,
@@ -48,11 +49,11 @@ const gymbuddies = [
     is_shredding: false,
     is_bulking: true,
     is_experienced: false,
-    profile_picture: '',
-
+    profile_picture:
+      'https://images.unsplash.com/photo-1581009137042-c552e485697a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
   },
   {
-    username: 'Michaela Berenson',
+    username: '',
     password_hash: 'Danvagyok',
     mail: 'michaela@gmail.com',
     age: 31,
@@ -61,11 +62,11 @@ const gymbuddies = [
     is_shredding: true,
     is_bulking: false,
     is_experienced: false,
-    profile_picture: '',
-
+    profile_picture:
+      'https://images.unsplash.com/photo-1506863530036-1efeddceb993?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=744&q=80',
   },
   {
-    username: 'Viktoria Kurz',
+    username: 'Viktoria',
     password_hash: 'Danvagyok',
     mail: 'viki@gmail.com',
     age: 22,
@@ -74,8 +75,8 @@ const gymbuddies = [
     is_shredding: false,
     is_bulking: true,
     is_experienced: false,
-    profile_picture: '',
-
+    profile_picture:
+      'https://images.unsplash.com/photo-1550259979-ed79b48d2a30?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=468&q=80',
   },
 ];
 
@@ -92,7 +93,6 @@ export async function up(sql) {
     'is_shredding',
     'is_bulking',
     'is_experienced',
-
   )}
   `;
 }

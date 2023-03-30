@@ -55,6 +55,7 @@ export default function PotentialBuddyProfile(props: Props) {
   return (
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
+        <div className={styles.headerDiv}>Potential matches</div>
         {potentialBuddies.map((buddy: User) => {
           const matchDivId = `match-${buddy.id}`;
           if (matches.includes(buddy.id)) {

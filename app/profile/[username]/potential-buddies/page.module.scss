@@ -10,6 +10,13 @@
   width: 100vw;
   height: 97.2vh;
   overflow: auto;
+  text-align: center;
+}
+.headerDiv {
+  font-size: x-large;
+  font-weight: 700;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
 }
 .searchDiv {
   display: flex;

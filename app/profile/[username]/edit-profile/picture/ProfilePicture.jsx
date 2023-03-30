@@ -1,10 +1,12 @@
 'use client';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import styles from './page.module.scss';
 
 export default function ProfilePicture(props) {
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
+  const [exampleImg, setExampleImg] = useState('');
   // const [link, setLink] = useState();
   const user = props.user;
 
@@ -60,11 +62,20 @@ export default function ProfilePicture(props) {
   };
 
   return (
-    <>
-      <div>Hello World</div>
+    <div className={styles.pageDiv}>
+      <div className={styles.adviceDiv}>
+        After clicking in 'Upload file', you will see the final result that
+        would be shown in your profile.
+        <div className={styles.adviceDiv}>
+          {' '}
+          If you don't like it, you can upload another picture. If you want the
+          best result, try choosing a square picture.
+          <img src={exampleImg} alt="" />
+        </div>{' '}
+      </div>
       <div>
         <form method="post" onChange={handleOnChange} onSubmit={handleOnSubmit}>
-          <label htmlFor="picture">Profile picture</label>{' '}
+          {/* <label htmlFor="picture">Let's start it!</label>{' '} */}
           <div>
             <input id="picture" type="file" name="file" />
           </div>
@@ -75,12 +86,18 @@ export default function ProfilePicture(props) {
             </div>
           )}
           {uploadData && (
-            <code>
-              <pre>{JSON.stringify(imageSrc, null, 2)}</pre>
-            </code>
+            <div>
+              <img
+                className={styles.img}
+                src={imageSrc}
+                alt="The result you would see in your profile"
+                height={240}
+                width={240}
+              />
+            </div>
           )}
         </form>
       </div>
-    </>
+    </div>
   );
 }
