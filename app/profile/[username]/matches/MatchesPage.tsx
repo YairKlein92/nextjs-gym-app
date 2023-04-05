@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { User, Users } from '../../../../database/users';
 import styles from './page.module.scss';
 
@@ -10,6 +11,7 @@ export type Props = {
 export default function MatchesPage(props: Props) {
   const matches = props.matchesFromJointTable;
   const user = props.user;
+  const router = useRouter();
   const denyButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>,
     requestingUserId: number,
@@ -80,13 +82,16 @@ export default function MatchesPage(props: Props) {
               <div>Phone: {match.mobile}</div>
               <div>
                 {' '}
-                <a
+                <Link
                   target="_blank"
-                  rel="noreferrer"
-                  href="https://www.google.at/maps/place/FITINN+Fitnessstudio/@48.2093744,16.4215496,17z/data=!3m2!4b1!5s0x476d073a7629fdb3:0xcd3dc8ea8b96810!4m6!3m5!1s0x476d073a62dde93b:0x81d9f2bb22688055!8m2!3d48.2093744!4d16.4237383!16s%2Fg%2F1hbpwqd1p"
+                  rel="noopener"
+                  href={{
+                    pathname:
+                      'https://www.google.at/maps/place/FITINN+Fitnessstudio/@48.2093744,16.4215496,17z/data=!3m2!4b1!5s0x476d073a7629fdb3:0xcd3dc8ea8b96810!4m6!3m5!1s0x476d073a62dde93b:0x81d9f2bb22688055!8m2!3d48.2093744!4d16.4237383!16s%2Fg%2F1hbpwqd1p',
+                  }}
                 >
                   FitInn Stadion
-                </a>
+                </Link>
               </div>
               <button
                 className={styles.buttonDelete}

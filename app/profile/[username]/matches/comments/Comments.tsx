@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Comment } from '../../../../../database/comments';
+// import { Comment } from '../../../../../database/comments';
 import { CommentResponseBodyPost } from '../../../../api/matches/comments/route';
 import styles from './page.module.scss';
 
@@ -78,7 +78,7 @@ export default function CommentsPage(props: CommentProps) {
           </form>
           <div className={styles.commentDiv}>
             {' '}
-            {comments.map((comment: Comment) => {
+            {comments.map((comment: any) => {
               return (
                 <div key={`user-${comment.id}`}>
                   <div>
