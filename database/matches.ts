@@ -122,6 +122,24 @@ WHERE
   `;
   return match;
 };
+export const getBlockedUsersById = async (userId: number) => {
+  const blocked = await sql`
+  SELECT
+  matches.id,
+  users.*
+FROM
+  matches
+  JOIN users ON (
+    matches.user_requesting_id = users.id
+    OR matches.user_pending_id = users.id
+  )
+WHERE
+  (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+  AND matches.is_blocked = TRUE;
+
+  `;
+  return blocked;
+};
 export const getUnAnsweredMatchRequestById = async (userId: number) => {
   const pendingRequests = await sql`
   SELECT

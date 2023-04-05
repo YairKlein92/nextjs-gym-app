@@ -4,7 +4,11 @@ import React, { useState } from 'react';
 import { User, Users } from '../../../../database/users';
 import styles from './page.module.scss';
 
-export type Props = { user: User; listOfUsersWithoutMe: User };
+export type Props = {
+  user: User;
+  listOfUsersWithoutMe: Users;
+  blockedUsers: Users;
+};
 export type Match = {
   id: number;
   userRequestingId: number;
@@ -16,6 +20,7 @@ export type Match = {
 export default function PotentialBuddyProfile(props: Props) {
   const user = props.user;
   const listOfUsersWithoutMe: any = props.listOfUsersWithoutMe;
+  const blockedUsers: any = props.blockedUsers;
   console.log(listOfUsersWithoutMe);
   const [matches, setMatches] = useState<number[]>([]);
 
@@ -23,8 +28,8 @@ export default function PotentialBuddyProfile(props: Props) {
     return (
       buddy.isBulking === user.isBulking &&
       buddy.isShredding === user.isShredding &&
-      buddy.isExperienced === user.isExperienced &&
-      !matches.includes(buddy.id)
+      buddy.isExperienced === user.isExperienced
+      // && !matches.includes(buddy.id)
     );
   });
 

@@ -63,7 +63,7 @@ export default function ProfilePage(props: Props) {
           {' '}
           <div className={styles.headerDiv}>
             Your profile
-            <br />{' '}
+            <br />
             <span className={styles.username}>
               {user.username} ({user.age}y)
             </span>

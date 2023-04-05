@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import {
   addMatch,
-  getNegativelyAnsweredMatchRequestById,
+  getBlockedUsersById,
   getUserMatchesFromDatabase,
 } from '../../../../database/matches';
 import {
@@ -18,14 +18,15 @@ export default async function PotentialBuddyPage({ params }: Props) {
   // const matches = await getMatchRequestById(user.id);
   // console.log('matches on potentialBuddy component ->', matches);
   const users: any = await getUsers();
-  const deniedUsers = await getNegativelyAnsweredMatchRequestById(user.id);
+  const blockedUsers = await getBlockedUsersById(user.id);
   if (!user) {
     notFound();
   }
+  console.log('blocked users', blockedUsers);
   const listOfUsersWithoutMe: Users = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
-
+  console.log('list of users without me', listOfUsersWithoutMe);
   const mySentOrReceivedRequests = await getUserMatchesFromDatabase(user.id);
 
   const filteredUsers = listOfUsersWithoutMe.filter((otherUser: User) => {
@@ -36,13 +37,17 @@ export default async function PotentialBuddyPage({ params }: Props) {
       );
     });
   });
-  const filteredUsersWithBlockedUsers = filteredUsers.filter(
-    (otherUser: User) => {
-      return deniedUsers.some(
-        (deniedUser) =>
-          deniedUser.id === otherUser.id && deniedUser.isBlocked === true,
+  console.log('filtered users w/o blocked', filteredUsers);
+  const filteredUsersWithoutBlockedUsers = filteredUsers.filter(
+    (user: User) => {
+      return !blockedUsers.some(
+        (blockedUser: User) => blockedUser.id === user.id,
       );
     },
+  );
+  console.log(
+    'filteredUsersWithBlockedUsers',
+    filteredUsersWithoutBlockedUsers,
   );
   const Button: React.FC<ButtonProps> = ({ label, user1_id, user2_id }) => {
     async function handleButtonClick() {
@@ -60,7 +65,8 @@ export default async function PotentialBuddyPage({ params }: Props) {
   return (
     <PotentialBuddyProfile
       user={user}
-      listOfUsersWithoutMe={filteredUsersWithBlockedUsers}
+      listOfUsersWithoutMe={filteredUsersWithoutBlockedUsers}
+      blockedUsers={blockedUsers}
     />
   );
 }

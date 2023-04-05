@@ -11,7 +11,7 @@ const gymbuddies = [
     is_bulking: false,
     is_experienced: true,
     profile_picture:
-      'https://images.unsplash.com/photo-1578229353624-a4007142da75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80',
+      'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1925&q=80',
   },
   {
     username: 'Arnie',
@@ -93,6 +93,7 @@ export async function up(sql) {
     'is_shredding',
     'is_bulking',
     'is_experienced',
+    'profile_picture',
   )}
   `;
 }

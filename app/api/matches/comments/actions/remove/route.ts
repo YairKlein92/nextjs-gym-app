@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { removeComment } from '../../../../../../database/comments';
 
 const commentSchma = z.object({
+  id: z.number(),
   userId: z.number(),
   matchId: z.number(),
   commentInput: z.string(),
@@ -15,6 +16,7 @@ export type CommentResponseBodyPost =
     }
   | {
       message: {
+        id: number;
         userId: string;
         matchId: string;
         comment: string;
@@ -32,12 +34,11 @@ export const PUT = async (request: NextRequest) => {
   }
 
   // create the match
-  const updatedComment = await removeComment(
-    result.data.userId,
-    result.data.matchId,
-    result.data.commentInput,
+  const removedComment = await removeComment(
+    result.data.id,
     result.data.isVisible,
   );
+  console.log('removed comment ->', removedComment);
   // return the new username
   return NextResponse.json({ comment: { isVisible: false } });
 };

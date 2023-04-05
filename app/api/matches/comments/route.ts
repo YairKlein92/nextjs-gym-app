@@ -36,7 +36,7 @@ export const POST = async (request: NextRequest) => {
     result.data.userId,
     result.data.matchId,
     result.data.commentInput,
-    true,
+    result.data.isVisible,
   );
   // return the new username
   return NextResponse.json({ comment: { isVisible: true } });

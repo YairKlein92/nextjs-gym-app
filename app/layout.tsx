@@ -77,7 +77,7 @@ export default async function RootLayout(props: Props) {
                       width={24}
                     />
                   </Link>
-                  {matches.length}
+                  <span className={styles.matchNumber}>{matches.length}</span>
                 </div>
 
                 <div className={styles.greetingUser}> Hi {user.username}!</div>

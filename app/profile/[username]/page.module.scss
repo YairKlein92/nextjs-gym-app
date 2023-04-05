@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // height: 97.2vh;
+  width: 100vw;
   color: #3c4d65;
 }
 
@@ -101,7 +101,8 @@
 }
 
 .profilePicture {
-  border-radius: 50%;
+  border-radius: 2rem;
+  object-fit: cover;
 }
 .button {
   background: none;

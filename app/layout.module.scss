@@ -32,10 +32,11 @@
 }
 
 .greetingUser {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
 }
-
+.matchNumber {
+  font-weight: 700;
+}
 @media only screen and (min-width: 768px) {
   .positionCenter {
     gap: 3.2rem;

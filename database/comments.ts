@@ -36,23 +36,18 @@ export async function addComment(
     client.release();
   }
 }
-export async function removeComment(
-  user_id: number,
-  match_id: number,
-  comment: string,
-  is_visible: boolean,
-) {
+export async function removeComment(commentId: number, isVisible: boolean) {
   const client = await pool.connect();
 
   try {
     const result = await client.query(
-      'INSERT INTO comments (user_id, match_id, comment, is_visible) VALUES ($1, $2, $3, $4)',
-      [user_id, match_id, comment, is_visible],
+      'UPDATE comments SET is_visible = $1 WHERE id = $2',
+      [isVisible, commentId],
     );
-    return { success: true, message: 'Comment added successfully' };
+    return { success: true, message: 'Comment removed successfully' };
   } catch (err) {
-    console.error('Error adding comment', err);
-    return { success: false, message: 'Error adding comment' };
+    console.error('Error removing comment', err);
+    return { success: false, message: 'Error removing comment' };
   } finally {
     client.release();
   }

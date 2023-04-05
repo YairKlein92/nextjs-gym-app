@@ -1,8 +1,12 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import styles from './page.module.scss';
+
 export default function PendingRequests(props: any) {
   const requests = props.requests;
   const user = props.user;
+  const router = useRouter();
 
   const acceptButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -64,6 +68,7 @@ export default function PendingRequests(props: any) {
       // Handle error
       console.error('Failed to deny request');
     }
+    router.refresh();
   };
   const blockButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -93,38 +98,60 @@ export default function PendingRequests(props: any) {
     }
   };
   return (
-    <>
-      {' '}
-      <div>Your pending requests</div>
-      {requests.map((req: any) => {
-        return (
-          <div key={`user-id-${req.id}`}>
-            <div>name: {req.username}</div>
-            <div>age: {req.age}</div>
-            <div> mail: {req.mail} </div>
-            <div>phone: {req.mobile}</div>
-            <div>{req.isShredding}</div>
-            <form method="post">
-              <input type="hidden" name="matchId" />
-              <button onClick={(event) => acceptButtonHandler(event, req.id)}>
-                Accept
-              </button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="matchId" />
-              <button onClick={(event) => denyButtonHandler(event, req.id)}>
-                Deny
-              </button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="matchId" />
-              <button onClick={(event) => blockButtonHandler(event, req.id)}>
-                Deny
-              </button>
-            </form>
-          </div>
-        );
-      })}
-    </>
+    <div className={styles.pageDiv}>
+      <div className={styles.mainDiv}>
+        <div className={styles.titleDiv}>Your pending requests</div>
+        {requests.map((req: any) => {
+          return (
+            <div className={styles.requestDiv} key={`user-id-${req.id}`}>
+              <div>
+                {' '}
+                <div>name: {req.username}</div>
+                <div>age: {req.age}</div>
+                <div> mail: {req.mail} </div>
+                <div>phone: {req.mobile}</div>
+                <div>{req.isShredding}</div>
+                <div className={styles.buttonsDiv}>
+                  <form method="post">
+                    <input type="hidden" name="matchId" />
+                    <button
+                      className={styles.buttonAccept}
+                      onClick={(event) => acceptButtonHandler(event, req.id)}
+                    >
+                      Accept
+                    </button>
+                  </form>{' '}
+                  <form method="post">
+                    <input type="hidden" name="matchId" />
+                    <button
+                      className={styles.buttonDeny}
+                      onClick={(event) => denyButtonHandler(event, req.id)}
+                    >
+                      Deny
+                    </button>
+                  </form>
+                </div>
+                <form method="post">
+                  <input type="hidden" name="matchId" />
+                  <button
+                    className={styles.buttonDeny}
+                    onClick={(event) => blockButtonHandler(event, req.id)}
+                  >
+                    Block
+                  </button>
+                </form>
+              </div>
+              <div>
+                <img
+                  src={req.profilePicture}
+                  className={styles.profilePic}
+                  alt=""
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

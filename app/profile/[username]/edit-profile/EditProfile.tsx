@@ -29,6 +29,7 @@ export type Props = {
     isShredding: boolean;
     isBulking: boolean;
     isExperienced: boolean;
+    profilePicture: string;
   };
   returnTo: string;
 };
@@ -45,6 +46,8 @@ export default function EditProfile(props: Props) {
   const [isExperienced, setIsExperienced] = useState(
     Boolean(user.isExperienced),
   );
+  const profilePicture = user.profilePicture;
+  console.log(user.profilePicture);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
   const [favouriteGym, setFavouriteGym] = useState(gym.gymName);
@@ -76,6 +79,7 @@ export default function EditProfile(props: Props) {
     isShredding: isShredding,
     isBulking: isBulking,
     isExperienced: isExperienced,
+    profilePicure: profilePicture,
   };
   return (
     <div className={styles.mainDiv}>

@@ -5,10 +5,10 @@
 .mainDiv {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  // justify-content: center;
   gap: 1rem;
   align-items: center;
-  min-height: 97vh;
+  min-height: 91vh;
   min-width: 100vw;
   background-image: linear-gradient(to right, #c7b198, #e9e9e9);
   color: #3b3d3f;
@@ -104,11 +104,11 @@
 @media only screen and (min-width: 768px) {
   /* For devices with width 768px and above */
   .mainDiv {
-    width: 22rem;
+    width: 100vw;
   }
   .subText {
     height: 26rem;
-    width: 16rem;
+    width: 100vw;
   }
 }
 

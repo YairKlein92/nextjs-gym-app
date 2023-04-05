@@ -24,6 +24,7 @@ export default function CommentsPage(props: CommentProps) {
   const comments = props.comments;
   const userId = user.id;
   const matchId = match.id;
+  const isVisible = true;
   // const [errors, setErrors] = useState([]);
   // const router = useRouter();
   // const { username } = router.query;
@@ -35,7 +36,7 @@ export default function CommentsPage(props: CommentProps) {
         userId,
         matchId,
         commentInput,
-        is_visible: false,
+        isVisible: false,
       }),
     });
     const data: CommentResponseBodyPost = await response.json();
@@ -58,7 +59,7 @@ export default function CommentsPage(props: CommentProps) {
                   userId,
                   matchId,
                   commentInput,
-                  is_visible: true,
+                  isVisible,
                 }),
               });
               const data: CommentResponseBodyPost = await response.json();
@@ -81,7 +82,8 @@ export default function CommentsPage(props: CommentProps) {
               return (
                 <div key={`user-${comment.id}`}>
                   <div>
-                    {comment.comment} <button onClick={onClickhandler}></button>
+                    {comment.comment}{' '}
+                    <button onClick={onClickhandler}>Remove</button>
                   </div>
                 </div>
               );
