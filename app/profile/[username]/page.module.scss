@@ -24,9 +24,6 @@
   align-items: center;
 }
 .headerDiv {
-  // box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  // background-color: rgb(245, 245, 245);
-  // width: 100vw;
   padding: 0.5rem;
   text-align: center;
   font-size: x-large;
@@ -40,7 +37,6 @@
 .descriptionDiv {
   display: flex;
   justify-content: space-around;
-  // gap: 1.5rem;
   align-items: center;
 }
 .profileDiv {
@@ -51,15 +47,12 @@
   padding: 1rem;
 }
 .filterDiv {
-  // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   text-align: center;
   width: 30vw;
   height: 10rem;
-  // border: 0.1rem dotted grey;
-  // border: 0.1rem dotted grey;
 }
 .gymFilterDiv {
   display: flex;
@@ -118,4 +111,7 @@
 }
 .username {
   font-size: smaller;
+}
+.checked {
+  color: #c44500;
 }

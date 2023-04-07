@@ -70,7 +70,8 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
           Login
         </button>
         <div>
-          Don’t have an account? <Link href="/register">Register!</Link>
+          Don’t have an account?
+          <Link href={{ pathname: '/register' }}>Register!</Link>
         </div>
       </form>
     </div>

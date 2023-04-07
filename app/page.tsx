@@ -21,18 +21,31 @@ export default async function Home() {
         ) : (
           <>
             <div className={styles.mainText}>Let your buddy sweat </div>
-            <div className={styles.pictureDiv}></div>
+            {/* <div className={styles.pictureDiv}>h</div> */}
+            <img
+              src="/landing.jpg"
+              alt="Landing page"
+              className={styles.pictureDiv}
+            />
             <div className={styles.linkDiv}>
-              <Link href={{ pathname: '/register' }} className={styles.link}>
-                <button className={styles.buttonLog}>
-                  <span className={styles.linkText}>Register</span>
-                </button>
-              </Link>
-              <Link href={{ pathname: '/login' }} className={styles.link}>
-                <button className={styles.buttonReg}>
-                  <span className={styles.linkText}>Login</span>
-                </button>
-              </Link>
+              <button className={styles.buttonLog}>
+                <span className={styles.linkText}>
+                  <Link
+                    href={{ pathname: '/register' }}
+                    className={styles.link}
+                  >
+                    Register
+                  </Link>
+                </span>
+              </button>
+
+              <button className={styles.buttonReg}>
+                <span className={styles.linkText}>
+                  <Link href={{ pathname: '/login' }} className={styles.link}>
+                    Login
+                  </Link>
+                </span>
+              </button>
             </div>
           </>
         )}

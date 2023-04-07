@@ -1,8 +1,8 @@
 import { getUserCommentsByMatchId } from '../../../../../database/comments';
-import { getUserByUsername, Props } from '../../../../../database/users';
+import { getUserByUsername } from '../../../../../database/users';
 import CommentsPage from './Comments';
 
-export default async function Comments(props: Props) {
+export default async function Comments(props) {
   const matchUsername = props.searchParams.username;
   const username = props.params.username;
   const match = await getUserByUsername(matchUsername);
@@ -14,7 +14,7 @@ export default async function Comments(props: Props) {
     console.error('User not found');
   }
   const comments = await getUserCommentsByMatchId(user.id, match.id);
-  const visibleComments = comments.filter((comment: any) => {
+  const visibleComments = comments.filter((comment) => {
     return comment.isVisible === true;
   });
   return <CommentsPage match={match} user={user} comments={visibleComments} />;

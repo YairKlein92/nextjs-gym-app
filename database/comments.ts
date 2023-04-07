@@ -28,6 +28,7 @@ export async function addComment(
       'INSERT INTO comments (user_id, match_id, comment, is_visible) VALUES ($1, $2, $3, $4)',
       [user_id, match_id, comment, is_visible],
     );
+    console.log(result);
     return { success: true, message: 'Comment added successfully' };
   } catch (err) {
     console.error('Error adding comment', err);
@@ -44,6 +45,7 @@ export async function removeComment(commentId: number, isVisible: boolean) {
       'UPDATE comments SET is_visible = $1 WHERE id = $2',
       [isVisible, commentId],
     );
+    console.log(result);
     return { success: true, message: 'Comment removed successfully' };
   } catch (err) {
     console.error('Error removing comment', err);

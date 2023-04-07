@@ -1,20 +1,20 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, Users } from '../../../../database/users';
+// import { User, Users } from '../../../../database/users';
 import styles from './page.module.scss';
 
-export type Props = {
-  user: User;
-  matchesFromJointTable: Users;
-};
-export default function MatchesPage(props: Props) {
+// export type Props = {
+//   user: User;
+//   matchesFromJointTable: Users;
+// };
+export default function MatchesPage(props) {
   const matches = props.matchesFromJointTable;
   const user = props.user;
   const router = useRouter();
   const denyButtonHandler = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-    requestingUserId: number,
+    event, // : React.MouseEvent<HTMLButtonElement>,
+    requestingUserId,
   ) => {
     event.preventDefault();
     const response = await fetch(`/api/matches/user/${user.id}/actions/deny`, {
@@ -41,8 +41,8 @@ export default function MatchesPage(props: Props) {
     router.refresh();
   };
   const blockButtonHandler = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-    requestingUserId: number,
+    event, // : React.MouseEvent<HTMLButtonElement>,
+    requestingUserId, // : number,
   ) => {
     event.preventDefault();
     const response = await fetch(`/api/matches/user/${user.id}/actions/block`, {
@@ -108,7 +108,7 @@ export default function MatchesPage(props: Props) {
               <Link
                 href={`/profile/${user.username}/matches/comments?username=${match.username}`}
               >
-                <button className={styles.button}>Comment</button>
+                <span className={styles.button}>Comment</span>
               </Link>
             </div>
             <div>

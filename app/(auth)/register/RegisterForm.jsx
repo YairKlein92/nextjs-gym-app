@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 // import toast, { Toaster } from 'react-hot-toast';
 import { getSafeReturnToPath } from '../../../utils/validation';
-import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
+// import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
 import styles from './page.module.scss';
 
-export default function RegisterForm(props: any) {
+export default function RegisterForm(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mail, setMail] = useState('');
@@ -21,11 +21,11 @@ export default function RegisterForm(props: any) {
   const [favouriteGym, setFavouriteGym] = useState('FitInn Johnstrasse');
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
-  const [profilePicture, setProfilePicture] = useState();
-
-  const [errors, setErrors] = useState<{ message: string }[]>([]);
+  // const [profilePicture, setProfilePicture] = useState();
+  const [errors, setErrors] = useState([]);
+  // const [errors, setErrors] = useState<{ message }[]>([]);
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = (useRef < HTMLInputElement) | (null > null);
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);
@@ -45,11 +45,12 @@ export default function RegisterForm(props: any) {
 
   //   reader.readAsDataURL(event.target.files[0]);
   // };
-  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = (event) => {
+    // : React.ChangeEvent<HTMLInputElement>
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImageSrc(e.target?.result as string);
+        setImageSrc(e.target?.result); // as strin
       };
       reader.readAsDataURL(event.target.files[0]);
     } else {
@@ -76,7 +77,7 @@ export default function RegisterForm(props: any) {
               (element) =>
                 element instanceof HTMLInputElement && element.type === 'file',
             )
-            .pop() as HTMLInputElement | undefined;
+            .pop(); // as HTMLInputElement | undefined;
           if (fileInput) {
             const formData = new FormData();
             if (fileInput.files !== null) {
@@ -117,7 +118,7 @@ export default function RegisterForm(props: any) {
                 profilePicture: dataPicture.secure_url || '/public/profile.png',
               }),
             });
-            const data: RegisterResponseBodyPost = await response.json();
+            const data = await response.json(); // : RegisterResponseBodyPost
             if ('errors' in data) {
               // Show error message using react-hot-toast
               data.errors.forEach((error) => {
@@ -188,7 +189,7 @@ export default function RegisterForm(props: any) {
             value={favouriteGym}
             onChange={(event) => setFavouriteGym(event.currentTarget.value)}
           >
-            {props.gyms.map((gym: any) => (
+            {props.gyms.map((gym) => (
               <option key={`user-${gym.id}`} value={gym.id}>
                 {gym.gymName}
               </option>
@@ -198,8 +199,9 @@ export default function RegisterForm(props: any) {
         <div className={styles.goalDiv}>
           <label
             htmlFor="shredding"
-            className={styles.checkboxLabel}
-            style={{ color: isShredding ? 'red' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isShredding ? styles.checked : ''
+            }`}
           >
             shredding
           </label>
@@ -212,8 +214,9 @@ export default function RegisterForm(props: any) {
           />
           <label
             htmlFor="bulking"
-            className={styles.checkboxLabel}
-            style={{ color: isBulking ? 'red' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isBulking ? styles.checked : ''
+            }`}
           >
             bulking
           </label>
@@ -227,11 +230,12 @@ export default function RegisterForm(props: any) {
         </div>
         <label
           htmlFor="experienced"
-          className={styles.checkboxLabel}
-          style={{ color: isExperienced ? 'red' : 'inherit' }}
+          className={`${styles.checkboxLabel} ${
+            isExperienced ? styles.checked : ''
+          }`}
         >
           experienced
-        </label>{' '}
+        </label>
         <input
           checked={isExperienced}
           className={styles.checkbox}

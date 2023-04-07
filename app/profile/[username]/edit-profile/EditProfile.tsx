@@ -107,6 +107,7 @@ export default function EditProfile(props: Props) {
             })
             .then((data) => {
               if ('errors' in data) {
+                console.error(errors);
                 setErrors(data.errors);
                 return;
               }
@@ -172,8 +173,9 @@ export default function EditProfile(props: Props) {
         <div className={styles.goalDiv}>
           <label
             htmlFor="shredding"
-            className={styles.checkboxLabel}
-            style={{ color: isShredding ? '#c44500' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isShredding ? styles.checked : ''
+            }`}
           >
             shredding
           </label>
@@ -186,8 +188,9 @@ export default function EditProfile(props: Props) {
           />
           <label
             htmlFor="bulking"
-            className={styles.checkboxLabel}
-            style={{ color: isBulking ? '#c44500' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isBulking ? styles.checked : ''
+            }`}
           >
             bulking
           </label>
@@ -201,8 +204,9 @@ export default function EditProfile(props: Props) {
         </div>
         <label
           htmlFor="experienced"
-          className={styles.checkboxLabel}
-          style={{ color: isExperienced ? '#c44500' : 'inherit' }}
+          className={`${styles.checkboxLabel} ${
+            isExperienced ? styles.checked : ''
+          }`}
         >
           experienced
         </label>{' '}

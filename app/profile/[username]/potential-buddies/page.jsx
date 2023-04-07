@@ -4,33 +4,26 @@ import {
   getBlockedUsersById,
   getUserMatchesFromDatabase,
 } from '../../../../database/matches';
-import {
-  getUserByUsername,
-  getUsers,
-  User,
-  Users,
-} from '../../../../database/users';
+import { getUserByUsername, getUsers } from '../../../../database/users';
 import PotentialBuddyProfile from './PotentialBuddies';
 
-type Props = { params: { username: string } };
-export default async function PotentialBuddyPage({ params }: Props) {
-  const user: any = await getUserByUsername(params.username);
+// type Props = { params: { username: string } };
+export default async function PotentialBuddyPage({ params }) {
+  const user = await getUserByUsername(params.username);
   // const matches = await getMatchRequestById(user.id);
   // console.log('matches on potentialBuddy component ->', matches);
-  const users: any = await getUsers();
+  const users = await getUsers();
   const blockedUsers = await getBlockedUsersById(user.id);
   if (!user) {
     notFound();
   }
   console.log('blocked users', blockedUsers);
-  const listOfUsersWithoutMe: Users = users.filter(
-    (buddy: User) => buddy.id !== user.id,
-  );
+  const listOfUsersWithoutMe = users.filter((buddy) => buddy.id !== user.id);
   console.log('list of users without me', listOfUsersWithoutMe);
   const mySentOrReceivedRequests = await getUserMatchesFromDatabase(user.id);
 
-  const filteredUsers = listOfUsersWithoutMe.filter((otherUser: User) => {
-    return !mySentOrReceivedRequests.some((match: any) => {
+  const filteredUsers = listOfUsersWithoutMe.filter((otherUser) => {
+    return !mySentOrReceivedRequests.some((match) => {
       return (
         otherUser.id === match.userPendingId ||
         otherUser.id === match.userRequestingId
@@ -38,18 +31,15 @@ export default async function PotentialBuddyPage({ params }: Props) {
     });
   });
   console.log('filtered users w/o blocked', filteredUsers);
-  const filteredUsersWithoutBlockedUsers = filteredUsers.filter(
-    (user: User) => {
-      return !blockedUsers.some(
-        (blockedUser: User) => blockedUser.id === user.id,
-      );
-    },
-  );
+  const filteredUsersWithoutBlockedUsers = filteredUsers.filter((theUser) => {
+    return !blockedUsers.some((blockedUser) => blockedUser.id === theUser.id);
+  });
   console.log(
     'filteredUsersWithBlockedUsers',
     filteredUsersWithoutBlockedUsers,
   );
-  const Button: React.FC<ButtonProps> = ({ label, user1_id, user2_id }) => {
+  const button = ({ label, user1_id, user2_id }) => {
+    // : React.FC<ButtonProps>
     async function handleButtonClick() {
       const result = await addMatch(user1_id, user2_id, true, false, false);
       if (result.success) {

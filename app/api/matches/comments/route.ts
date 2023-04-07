@@ -38,6 +38,7 @@ export const POST = async (request: NextRequest) => {
     result.data.commentInput,
     result.data.isVisible,
   );
+  console.log(newComment);
   // return the new username
   return NextResponse.json({ comment: { isVisible: true } });
 };

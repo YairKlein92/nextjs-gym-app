@@ -1,4 +1,5 @@
 {
+  // "plugins": [{ "name": "next" }],
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@upleveled/eslint-config-upleveled/tsconfig.base.json",
   "include": [
@@ -11,7 +12,7 @@
     "**/*.mjs",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    "app/(auth)/register/RegisterForm.tsx",
+    "app/(auth)/register/RegisterForm.jsx",
     "1677601099-insertIntoUsers"
   ],
   "compilerOptions": {

@@ -22,7 +22,7 @@
 .pictureDiv {
   background-repeat: no-repeat;
   background-size: scale(1);
-  background-image: url('../public/landing.jpg');
+  // background-image: url('../public/landing.jpg');
   height: 26rem;
   width: 16rem;
 }
@@ -91,10 +91,10 @@
   .mainDiv {
     padding: 0 20px;
   }
-  .subText {
-    // height: 18rem;
-    // width: 10rem;
-  }
+  // .subText {
+  //   height: 18rem;
+  //   width: 10rem;
+  // }
   .buttonReg,
   .buttonLog {
     width: 100%;

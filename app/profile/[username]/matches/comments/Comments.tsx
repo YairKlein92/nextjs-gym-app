@@ -40,6 +40,7 @@ export default function CommentsPage(props: CommentProps) {
       }),
     });
     const data: CommentResponseBodyPost = await response.json();
+    console.log(data);
     router.refresh();
   };
   return (
@@ -63,6 +64,7 @@ export default function CommentsPage(props: CommentProps) {
                 }),
               });
               const data: CommentResponseBodyPost = await response.json();
+              console.log(data);
               router.refresh();
             }}
           >

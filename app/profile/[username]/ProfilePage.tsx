@@ -14,7 +14,6 @@ export type Props = {
   favouriteGym: Gym;
   gymLink: string;
   pendingRequests: any;
-  realPendingRequests: any;
   matchCount: number;
 };
 export default function ProfilePage(props: Props) {
@@ -84,16 +83,16 @@ export default function ProfilePage(props: Props) {
             <div className={styles.profileDiv}>
               {' '}
               <div>
-                <Link href={`/profile/${user.username}/matches`}>
-                  <button className={styles.button}>
+                <a href={`/profile/${user.username}/matches`}>
+                  <span className={styles.button}>
                     {props.matchCount} matches
-                  </button>
-                </Link>
+                  </span>
+                </a>
               </div>
               <Link href={`/profile/${user.username}/requests`}>
-                <button className={styles.button}>
+                <span className={styles.button}>
                   <div>{pendingRequests.length} pending request(s)</div>
-                </button>
+                </span>
               </Link>
               <div>
                 {' '}
@@ -109,8 +108,9 @@ export default function ProfilePage(props: Props) {
 
           <label
             htmlFor="bulking"
-            className={styles.checkboxLabel}
-            style={{ color: isBulking ? 'red' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isBulking ? styles.checked : ''
+            }`}
           >
             bulking
           </label>
@@ -126,8 +126,9 @@ export default function ProfilePage(props: Props) {
 
           <label
             htmlFor="shredding"
-            className={styles.checkboxLabel}
-            style={{ color: isShredding ? 'red' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isShredding ? styles.checked : ''
+            }`}
           >
             shredding
           </label>
@@ -142,8 +143,9 @@ export default function ProfilePage(props: Props) {
           />
           <label
             htmlFor="experienced"
-            className={styles.checkboxLabel}
-            style={{ color: isExperienced ? 'red' : 'inherit' }}
+            className={`${styles.checkboxLabel} ${
+              isExperienced ? styles.checked : ''
+            }`}
           >
             experienced
           </label>
@@ -160,7 +162,7 @@ export default function ProfilePage(props: Props) {
         <div className={styles.potentialDiv}>
           <div>{potentialBuddies.length} potencial gym buddies</div>
           <Link href={`/profile/${user.username}/potential-buddies`}>
-            <button>Let's Go!</button>
+            <span>Let's Go!</span>
           </Link>
         </div>
         {/* <PotentialBuddyProfile potentialBuddies={potentialBuddies} /> */}

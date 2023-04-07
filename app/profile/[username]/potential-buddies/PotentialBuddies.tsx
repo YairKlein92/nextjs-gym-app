@@ -7,7 +7,7 @@ import styles from './page.module.scss';
 export type Props = {
   user: User;
   listOfUsersWithoutMe: Users;
-  blockedUsers: Users;
+  // blockedUsers: Users;
 };
 export type Match = {
   id: number;
@@ -20,7 +20,7 @@ export type Match = {
 export default function PotentialBuddyProfile(props: Props) {
   const user = props.user;
   const listOfUsersWithoutMe: any = props.listOfUsersWithoutMe;
-  const blockedUsers: any = props.blockedUsers;
+  // const blockedUsers: any = props.blockedUsers;
   console.log(listOfUsersWithoutMe);
   const [matches, setMatches] = useState<number[]>([]);
 
@@ -106,43 +106,3 @@ export default function PotentialBuddyProfile(props: Props) {
     </div>
   );
 }
-
-// return (
-//   <div
-//     // ref={matchDivRef}
-//     key={`user-${buddy.id}`}
-//     className={styles.searchDiv}
-//     id={`${buddy.id}`}
-//   >
-//     <div className={styles.infoDiv}>
-//       <div>{buddy.username}</div>
-//       <div>Age: {buddy.age}</div>
-//       <div>
-//         {buddy.isBulking ? 'Bulking' : null}
-//         {buddy.isShredding ? 'Shredding' : null}
-//       </div>
-//       <div>{buddy.isExperienced ? 'Experienced' : null}</div>
-//       <button
-//         className={styles.button}
-//         onClick={(e) => handleAddMatch(e, buddy.id, matchDivRef)}
-//       >
-//         {' '}
-//         Add Match
-//       </button>
-//     </div>
-//     <div className={styles.pictureDiv}>
-//       <img
-//         className={styles.picture}
-//         src={buddy.profilePicture}
-//         alt="User's profile"
-//         width="120"
-//         height="120"
-//       />
-//     </div>
-//   </div>
-// );
-// })}
-// </div>
-// </div>
-// );
-// }

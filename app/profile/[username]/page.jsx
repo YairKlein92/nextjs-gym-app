@@ -11,9 +11,9 @@ import {
 import { getUserByUsername, getUsers } from '../../../database/users';
 import ProfilePage from './ProfilePage';
 
-type Props = { params: { username: string } };
+// type Props = { params: { username: string } };
 
-export default async function Profile({ params }: Props) {
+export default async function Profile({ params }) {
   const user = await getUserByUsername(params.username);
   if (!user) {
     notFound();
@@ -31,7 +31,7 @@ export default async function Profile({ params }: Props) {
     <ProfilePage
       user={user}
       users={users}
-      favouriteGym={favouriteGym}
+      favouriteGym={favouriteGym} // only line with TS error
       pendingRequests={pendingRequests}
       matchCount={matchCount}
     />

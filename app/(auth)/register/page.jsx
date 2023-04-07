@@ -4,9 +4,9 @@ import { getGyms } from '../../../database/gyms';
 import { getValidSessionByToken } from '../../../database/sessions';
 import RegisterForm from './RegisterForm';
 
-type Props = { searchParams: { returnTo?: string | string[] } };
+// type Props = { searchParams: { returnTo?: string | string[] } };
 
-export default async function RegisterPage(props: Props) {
+export default async function RegisterPage(props) {
   // check if i have a valid session
   const gyms = await getGyms();
 
