@@ -19,11 +19,11 @@ export type User = {
   passwordHash: string;
   mail: string;
   age: number;
-  mobile: string | null;
+  mobile: string;
   favouriteGym: string;
-  isShredding: boolean | null;
-  isBulking: boolean | null;
-  isExperienced: boolean | null;
+  isShredding: boolean;
+  isBulking: boolean;
+  isExperienced: boolean;
   profilePicture: string;
 };
 export type UserWithoutPassword = Omit<User, 'password'>;
@@ -34,11 +34,11 @@ export type Users = {
   passwordHash: string;
   mail: string;
   age: number;
-  mobile: string | null;
+  mobile: string;
   favouriteGym: string;
-  isShredding: boolean | null;
-  isBulking: boolean | null;
-  isExperienced: boolean | null;
+  isShredding: boolean;
+  isBulking: boolean;
+  isExperienced: boolean;
   profilePicture: string;
 }[];
 
@@ -67,7 +67,7 @@ export const getUserById = cache(async (id: number) => {
 });
 
 export const getUsersByIds = cache(async (ids: number[]) => {
-  const users = await sql`
+  const [users] = await sql<Users[]>`
     SELECT *
     FROM users
     WHERE id IN ${sql(ids)};

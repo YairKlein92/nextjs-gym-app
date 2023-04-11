@@ -4,7 +4,6 @@ import { z } from 'zod';
 import {
   getUserBySessionToken,
   updateProfilePicture,
-  User,
 } from '../../../../../database/users';
 
 const userSchema = z.object({
@@ -19,7 +18,7 @@ const userSchema = z.object({
   profilePicture: z.string(),
 });
 
-export type UpdateProfileResponseBodyPost =
+export type UpdateProfileResponseBodyPut =
   | {
       errors: { message: string }[];
     }
@@ -28,6 +27,10 @@ export type UpdateProfileResponseBodyPost =
         profilePicture: string;
       };
     };
+export type UpdateProfilePicture = {
+  id: number;
+  profilePicture: string;
+};
 
 export async function PUT(
   request: NextRequest,
@@ -49,7 +52,7 @@ export async function PUT(
     );
   }
 
-  const user: User = {
+  const user: UpdateProfilePicture = {
     id: existingUser.id,
     profilePicture: result.data.profilePicture,
   };

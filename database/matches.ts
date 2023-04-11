@@ -8,7 +8,18 @@ import { sql } from './connect';
 //   host: process.env.PGHOST,
 //   database: process.env.PGDATABASE,
 // });
-export type PendingRequests = Array<Request>;
+export type PendingRequests = {
+  id: number;
+  passwordHash: string;
+  mail: string;
+  age: number;
+  mobile: string;
+  favourite_gym: string | null;
+  isShredding: boolean;
+  isBulking: boolean;
+  isExperienced: boolean;
+  profilePicture: string;
+};
 export type Query = Array<Query>;
 export type Blocked = Array<Blocked>;
 type Matches = {

@@ -20,7 +20,7 @@ const userSchema = z.object({
   profilePicture: z.string(),
 });
 
-export type UpdateProfileResponseBodyPost =
+export type UpdateProfileResponseBodyPut =
   | {
       errors: { message: string }[];
     }
