@@ -3,7 +3,7 @@ const matches = [
     id: 1,
     user_requesting_id: 1,
     user_pending_id: 1,
-    is_requested: false,
+    is_pending: false,
     is_accepted: true,
     is_blocked: false,
   },
@@ -15,7 +15,7 @@ export async function up(sql) {
       matches,
       'user_requesting_id',
       'user_pending_id',
-      'is_requested',
+      'is_pending',
       'is_accepted',
       'is_blocked',
     )}

@@ -43,6 +43,7 @@ export default async function RootLayout(props: Props) {
     }
   }
   const matches = await numberOfMatches();
+
   return (
     <html lang="en">
       <head />

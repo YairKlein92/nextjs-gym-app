@@ -68,7 +68,7 @@ export const getUserCommentsByMatchId = cache(
 );
 export const getUserCommentsByMatchIdAndVisibility = cache(
   async (user_id: number, match_id: number, is_visible: boolean) => {
-    const comments = await sql<Comment[]>`
+    const [comments] = await sql<Comment[]>`
     SELECT
       *
     FROM
