@@ -70,7 +70,9 @@ export default async function RootLayout(props: Props) {
                   />
                 </Link>
                 <div>
-                  <Link href={`/profile/${user.username}/matches`}>
+                  <Link
+                    href={{ pathname: `/profile/${user.username}/matches` }}
+                  >
                     <img
                       src="/matches.png"
                       alt="See your matches"
@@ -78,11 +80,15 @@ export default async function RootLayout(props: Props) {
                       width={24}
                     />
                   </Link>
-                  <span className={styles.matchNumber}>{matches.length}</span>
+                  <span className={styles.matchNumber}>
+                    {matches ? matches.length : '0'}
+                  </span>
                 </div>
 
                 <div className={styles.greetingUser}> Hi {user.username}!</div>
-                <Link href={`/profile/${user.username}/edit-profile`}>
+                <Link
+                  href={{ pathname: `/profile/${user.username}/edit-profile` }}
+                >
                   <img
                     src="/edit.png"
                     alt="back to homepage"
@@ -112,16 +118,6 @@ export default async function RootLayout(props: Props) {
         {props.children}
 
         {/* <footer>
-        <div className={styles.positionCenter}>
-          <div className={styles.headerDiv}>
-            {user ? (
-              <div className={styles.headerLoggedIn}></div>
-            ) : (
-              <div>&nbsp;</div>
-            )}
-          </div>
-        </div>
-
         </footer> */}
       </body>
     </html>

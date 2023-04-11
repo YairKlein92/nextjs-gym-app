@@ -11,6 +11,7 @@
     "migrate": "dotenv ley"
   },
   "dependencies": {
+    "@playwright/test": "^1.32.3",
     "bcrypt": "^5.1.0",
     "cookie": "^0.5.0",
     "csrf": "^3.1.0",

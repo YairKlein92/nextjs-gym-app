@@ -20,7 +20,7 @@ export default async function Home() {
           <div>.</div>
         ) : (
           <>
-            <div className={styles.mainText}>Let your buddy sweat </div>
+            <h1 className={styles.mainText}>Let your buddy sweat </h1>
             {/* <div className={styles.pictureDiv}>h</div> */}
             <img
               src="/landing.jpg"

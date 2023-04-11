@@ -17,11 +17,12 @@ export default async function PotentialBuddyPage({ params }) {
   if (!user) {
     notFound();
   }
-  console.log('blocked users', blockedUsers);
+
   const listOfUsersWithoutMe = users.filter((buddy) => buddy.id !== user.id);
-  console.log('list of users without me', listOfUsersWithoutMe);
+
   const mySentOrReceivedRequests = await getUserMatchesFromDatabase(user.id);
 
+  // if (mySentOrReceivedRequests !== undefined) {
   const filteredUsers = listOfUsersWithoutMe.filter((otherUser) => {
     return !mySentOrReceivedRequests.some((match) => {
       return (
@@ -30,14 +31,11 @@ export default async function PotentialBuddyPage({ params }) {
       );
     });
   });
-  console.log('filtered users w/o blocked', filteredUsers);
+
   const filteredUsersWithoutBlockedUsers = filteredUsers.filter((theUser) => {
     return !blockedUsers.some((blockedUser) => blockedUser.id === theUser.id);
   });
-  console.log(
-    'filteredUsersWithBlockedUsers',
-    filteredUsersWithoutBlockedUsers,
-  );
+  // }
   const button = ({ label, user1_id, user2_id }) => {
     // : React.FC<ButtonProps>
     async function handleButtonClick() {

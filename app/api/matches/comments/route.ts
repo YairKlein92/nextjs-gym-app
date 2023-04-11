@@ -31,7 +31,6 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
-  // create the match
   const newComment = await addComment(
     result.data.userId,
     result.data.matchId,
@@ -39,6 +38,6 @@ export const POST = async (request: NextRequest) => {
     result.data.isVisible,
   );
   console.log(newComment);
-  // return the new username
+
   return NextResponse.json({ comment: { isVisible: true } });
 };

@@ -21,8 +21,8 @@ export default async function Profile({ params }) {
   const favouriteGym = await getFavouriteGymsByUserId(user.id);
   const users = await getUsers();
   const matchArray = await getAnsweredMatchRequestById(user.id);
-  console.log('matches for matches length', matchArray.length);
-  const matchCount = matchArray.length;
+  console.log(matchArray);
+  // const matchCount = matchArray.length;
 
   const pendingRequests = await getUnAnsweredMatchRequestById(user.id);
   // const matches = await;
@@ -33,7 +33,7 @@ export default async function Profile({ params }) {
       users={users}
       favouriteGym={favouriteGym} // only line with TS error
       pendingRequests={pendingRequests}
-      matchCount={matchCount}
+      // matchCount={matchCount}
     />
   );
 }

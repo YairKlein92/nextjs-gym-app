@@ -6,7 +6,7 @@ export default async function PendingRequestsPage({ params }: any) {
   const username = params.username;
   const user = await getUserByUsername(username);
   if (!user) {
-    console.error('No user');
+    return null;
   }
   const requests = await getUnAnsweredMatchRequestById(user.id);
   return <PendingRequests requests={requests} user={user} />;

@@ -1,17 +1,20 @@
-import { Pool } from 'pg';
+// import { Pool } from 'pg';
 import { cache } from 'react';
 import { sql } from './connect';
 
-const pool = new Pool({
-  user: process.env.PGUSERNAME,
-  password: process.env.PGPASSWORD,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-});
+// const pool = new Pool({
+//   user: process.env.PGUSERNAME,
+//   password: process.env.PGPASSWORD,
+//   host: process.env.PGHOST,
+//   database: process.env.PGDATABASE,
+// });
 export type PendingRequests = Array<Request>;
 export type Query = Array<Query>;
 export type Blocked = Array<Blocked>;
-export type Matches = Array<Matches>;
+type Matches = {
+  userRequestingId: number;
+  userPendingId: number;
+};
 
 // export async function addMatch(
 //   user_requesting_id: number,
@@ -59,9 +62,9 @@ export const addMatch = cache(
 );
 export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
   const [matches] = await sql<Matches[]>`
-    SELECT m.id, m.user_requesting_id, m.user_pending_id
-    FROM matches m
-    WHERE m.user_requesting_id = ${userId};
+    SELECT *
+    FROM matches
+    WHERE user_requesting_id = ${userId};
   `;
   return matches;
 });
@@ -72,6 +75,7 @@ export const getUserMatchesFromDatabase = cache(async (userId: number) => {
     FROM matches m
     WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
   `;
+  console.log('matches:', matches);
   return matches;
 });
 export const getMatchRequestById = cache(async (userId: number) => {

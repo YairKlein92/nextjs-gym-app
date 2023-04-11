@@ -11,7 +11,7 @@ export type CommentProps = {
     userId: number;
     matchId: number;
     comment: string;
-    is_visible: boolean;
+    isVisible: boolean;
   }[];
   match: { id: number; username: string };
   user: { id: number; username: string };

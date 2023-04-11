@@ -37,6 +37,7 @@ export async function addComment(
     client.release();
   }
 }
+
 export async function removeComment(commentId: number, isVisible: boolean) {
   const client = await pool.connect();
 

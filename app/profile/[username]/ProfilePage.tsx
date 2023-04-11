@@ -89,9 +89,12 @@ export default function ProfilePage(props: Props) {
                   </span>
                 </a>
               </div>
-              <Link href={`/profile/${user.username}/requests`}>
+              <Link href={{ pathname: `/profile/${user.username}/requests` }}>
                 <span className={styles.button}>
-                  <div>{pendingRequests.length} pending request(s)</div>
+                  <div>
+                    {pendingRequests ? pendingRequests.length : '0'} pending
+                    request(s)
+                  </div>
                 </span>
               </Link>
               <div>
@@ -161,7 +164,9 @@ export default function ProfilePage(props: Props) {
         </div>
         <div className={styles.potentialDiv}>
           <div>{potentialBuddies.length} potencial gym buddies</div>
-          <Link href={`/profile/${user.username}/potential-buddies`}>
+          <Link
+            href={{ pathname: `/profile/${user.username}/potential-buddies` }}
+          >
             <span>Let's Go!</span>
           </Link>
         </div>
