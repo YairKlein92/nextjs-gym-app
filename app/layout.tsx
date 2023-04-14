@@ -35,11 +35,14 @@ export default async function RootLayout(props: Props) {
 
   // if user is not undefined, the person is logged in
   // if user is undefined, the person is logged out
-  let matches = [];
 
-  if (user) {
-    matches = await getAnsweredMatchRequestById(user.id);
+  async function numberOfMatches() {
+    if (user) {
+      const matches = await getAnsweredMatchRequestById(user.id);
+      return matches;
+    }
   }
+  const matches = await numberOfMatches();
 
   return (
     <html lang="en">

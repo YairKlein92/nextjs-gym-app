@@ -18,7 +18,7 @@ const userSchema = z.object({
   profilePicture: z.string(),
 });
 
-export type UpdateProfileResponseBodyPost =
+export type UpdateProfileResponseBodyPut =
   | {
       errors: { message: string }[];
     }
@@ -35,7 +35,7 @@ export type UpdateProfilePicture = {
 
 export async function PUT(
   request: NextRequest,
-): Promise<NextResponse<UpdateProfileResponseBodyPost>> {
+): Promise<NextResponse<UpdateProfileResponseBodyPut>> {
   const cookieStore = cookies();
   const token = cookieStore.get('sessionToken');
 
