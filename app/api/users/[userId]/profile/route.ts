@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { getUserBySessionToken } from '../../../../../database/users';
+import { getUserBySessionToken, User } from '../../../../../database/users';
 
 export type ProfileResponseBodyGet =
   | {
       error: string;
     }
   | {
-      user: { id: number; username: string; csrfSecret: string; };
+      user: User;
     };
 
 export async function GET({

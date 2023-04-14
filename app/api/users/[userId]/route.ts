@@ -40,7 +40,7 @@ export type UpdateProfileResponseBodyPut =
 
 export async function PUT(
   request: NextRequest,
-): Promise<NextResponse<UpdateProfileResponseBodyPut>> {
+): Promise<NextResponse<number, UpdateProfileResponseBodyPut>> {
   const cookieStore = cookies();
   const token = cookieStore.get('sessionToken');
 

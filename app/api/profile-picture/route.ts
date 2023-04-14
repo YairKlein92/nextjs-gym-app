@@ -21,7 +21,7 @@ export type UpdateProfilePicture = {
   id: number;
   profilePicture: string;
 };
-export type UpdateProfileResponseBodyPut =
+export type UpdateProfileResponseBodyPost =
   | {
       errors: { message: string }[];
     }
@@ -33,7 +33,7 @@ export type UpdateProfileResponseBodyPut =
 
 export async function PUT(
   request: NextRequest,
-): Promise<NextResponse<UpdateProfileResponseBodyPut>> {
+): Promise<NextResponse<number, UpdateProfileResponseBodyPut>> {
   const cookieStore = cookies();
   const token = cookieStore.get('sessionToken');
 
