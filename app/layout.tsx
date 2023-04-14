@@ -35,14 +35,11 @@ export default async function RootLayout(props: Props) {
 
   // if user is not undefined, the person is logged in
   // if user is undefined, the person is logged out
+  let matches = [];
 
-  async function numberOfMatches() {
-    if (user) {
-      const matches = await getAnsweredMatchRequestById(user.id);
-      return matches;
-    }
+  if (user) {
+    matches = await getAnsweredMatchRequestById(user.id);
   }
-  const matches = await numberOfMatches();
 
   return (
     <html lang="en">
@@ -81,7 +78,7 @@ export default async function RootLayout(props: Props) {
                     />
                   </Link>
                   <span className={styles.matchNumber}>
-                    {matches ? matches.length : '0'}
+                    {[matches].length - 1}
                   </span>
                 </div>
 
