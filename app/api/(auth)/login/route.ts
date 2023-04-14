@@ -16,7 +16,9 @@ export type LoginResponseBodyPost =
   | { errors: { message: string }[] }
   | { user: { username: string } };
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+): Promise<NextResponse<LoginResponseBodyPost>> {
   // 1. validate the data
   const body = await request.json();
 
