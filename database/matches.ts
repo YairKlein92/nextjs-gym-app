@@ -103,7 +103,7 @@ export const getMatchRequestById = cache(async (userId: number) => {
   return pendingRequests;
 });
 export const getAnsweredMatchRequestById = cache(async (userId: number) => {
-  const [pendingRequests] = await sql<PendingRequests[]>`
+  const pendingRequests = await sql<PendingRequests[]>`
 SELECT
   matches.id,
   users.*

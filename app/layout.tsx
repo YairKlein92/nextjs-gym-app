@@ -1,7 +1,10 @@
 import './globals.css';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { getAnsweredMatchRequestById } from '../database/matches';
+import {
+  getAnsweredMatchRequestById,
+  PendingRequests,
+} from '../database/matches';
 import { getUserBySessionToken } from '../database/users';
 import styles from './layout.module.scss';
 
@@ -35,14 +38,11 @@ export default async function RootLayout(props: Props) {
 
   // if user is not undefined, the person is logged in
   // if user is undefined, the person is logged out
+  let matches: PendingRequests[] | undefined = [];
 
-  async function numberOfMatches() {
-    if (user) {
-      const matches = await getAnsweredMatchRequestById(user.id);
-      return matches;
-    }
+  if (user) {
+    matches = await getAnsweredMatchRequestById(user.id);
   }
-  const matches = await numberOfMatches();
 
   return (
     <html lang="en">
@@ -50,7 +50,6 @@ export default async function RootLayout(props: Props) {
       <body>
         <header>
           <nav>
-            {}
             {user ? (
               <div className={styles.positionCenter}>
                 {/* <Link href="/">
