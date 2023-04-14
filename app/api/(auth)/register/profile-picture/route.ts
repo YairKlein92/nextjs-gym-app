@@ -27,6 +27,7 @@ export type UpdateProfileResponseBodyPut =
         profilePicture: string;
       };
     };
+
 export type UpdateProfilePicture = {
   id: number;
   profilePicture: string;

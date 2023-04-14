@@ -11,9 +11,7 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts",
-    "next-env.d.ts",
-    "app/(auth)/register/RegisterForm.jsx",
-    "1677601099-insertIntoUsers"
+    "next-env.d.ts"
   ],
   "compilerOptions": {
     "jsx": "preserve",

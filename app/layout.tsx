@@ -80,7 +80,7 @@ export default async function RootLayout(props: Props) {
                     />
                   </Link>
                   <span className={styles.matchNumber}>
-                    {matches ? matches.length : '0'}
+                    {[matches].length - 1}
                   </span>
                 </div>
 
