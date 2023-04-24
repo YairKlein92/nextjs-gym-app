@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy the content of the project to the machine
 COPY . .
 RUN yq --inplace --output-format=json '.dependencies = .dependencies * (.devDependencies | to_entries | map(select(.key | test("^(typescript|@types/*|@upleveled/)"))) | from_entries)' package.json
+RUN apk add --update python3 make g++\
+   && rm -rf /var/cache/apk/*
 RUN yarn install --frozen-lockfile
 RUN yarn build
 

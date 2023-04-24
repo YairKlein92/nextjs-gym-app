@@ -42,5 +42,5 @@ export const POST = async (request: NextRequest) => {
     result.data.isBlocked,
   );
   // return the new username
-  return NextResponse.json({ match: { isAccepted: true } });
+  return NextResponse.json({ match: { isAccepted: true, newMatch: newMatch } });
 };
