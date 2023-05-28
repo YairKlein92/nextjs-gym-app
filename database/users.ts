@@ -1,14 +1,6 @@
-import { Pool } from 'pg'; // Client
 import { cache } from 'react';
 import { sql } from './connect';
 
-// const db = new Client({
-//   user: 'nextjs_gym_app',
-//   password: 'nextjs_gym_app',
-//   host: 'localhost',
-//   port: 5432,
-//   database: 'nextjs_gym_app',
-// });
 export type Props = {
   params: { username: string };
   searchParams: { username: string };
@@ -126,14 +118,6 @@ export const getUserByUsernameWithPasswordHash = cache(
   },
 );
 
-const pool = new Pool({
-  user: 'nextjs_gym_app',
-  password: 'nextjs_gym_app',
-  host: 'localhost',
-  port: 5432,
-  database: 'nextjs_gym_app',
-});
-
 export const createUser = cache(
   async (
     username: string,
@@ -141,54 +125,17 @@ export const createUser = cache(
     mail: string,
     age: number,
     mobile: string,
-    favouriteGym: string,
     isShredding: boolean,
     isBulking: boolean,
     isExperienced: boolean,
     profilePicture: string,
   ) => {
-    const client = await pool.connect();
-    try {
-      await client.query('BEGIN');
-
-      // Insert into the users table
-      const userInsertResult = await client.query<Omit<User, 'password'>>({
-        text: `
-          INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-          RETURNING id, username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture
-        `,
-        values: [
-          username,
-          passwordHash,
-          mail,
-          age,
-          mobile,
-          isShredding,
-          isBulking,
-          isExperienced,
-          profilePicture,
-        ],
-      });
-      const user = userInsertResult.rows[0];
-
-      // Insert into the favourite_gyms join table
-      await client.query({
-        text: `
-          INSERT INTO favourite_gyms (user_id, gym_id)
-          VALUES ($1, $2)
-        `,
-        values: [user?.id, favouriteGym],
-      });
-
-      await client.query('COMMIT');
-      return user;
-    } catch (e) {
-      await client.query('ROLLBACK');
-      throw e;
-    } finally {
-      client.release();
-    }
+    const [user] = await sql<Omit<User, 'password'>[]>`
+      INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture)
+      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${isShredding}, ${isBulking}, ${isExperienced}, ${profilePicture})
+      RETURNING id, username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture
+    `;
+    return user;
   },
 );
 

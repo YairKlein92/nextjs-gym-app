@@ -1,4 +1,3 @@
-import { Pool } from 'pg';
 import { cache } from 'react';
 import { sql } from './connect';
 
@@ -9,52 +8,33 @@ export type Comment = {
   comment: string;
   isVisible: boolean;
 };
-const pool = new Pool({
-  user: process.env.PGUSERNAME,
-  password: process.env.PGPASSWORD,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
+
+export const addComment = cache(
+  async (
+    user_id: number,
+    match_id: number,
+    the_comment: string,
+    is_visible: boolean,
+  ) => {
+    const [comment] = await sql<Comment[]>`
+      INSERT INTO comments (user_id, match_id, comment, is_visible)
+      VALUES (${user_id}, ${match_id}, ${the_comment}, ${is_visible})
+    `;
+    return comment;
+  },
+);
+export const removeComment = cache(async (commentId: number) => {
+  const [comment] = await sql<Comment[]>`
+UPDATE
+comments
+SET
+is_visible = false
+WHERE
+id = ${commentId}
+`;
+  return comment;
 });
-export async function addComment(
-  user_id: number,
-  match_id: number,
-  comment: string,
-  is_visible: boolean,
-) {
-  const client = await pool.connect();
 
-  try {
-    const result = await client.query(
-      'INSERT INTO comments (user_id, match_id, comment, is_visible) VALUES ($1, $2, $3, $4)',
-      [user_id, match_id, comment, is_visible],
-    );
-    console.log(result);
-    return { success: true, message: 'Comment added successfully' };
-  } catch (err) {
-    console.error('Error adding comment', err);
-    return { success: false, message: 'Error adding comment' };
-  } finally {
-    client.release();
-  }
-}
-
-export async function removeComment(commentId: number, isVisible: boolean) {
-  const client = await pool.connect();
-
-  try {
-    const result = await client.query(
-      'UPDATE comments SET is_visible = $1 WHERE id = $2',
-      [isVisible, commentId],
-    );
-    console.log(result);
-    return { success: true, message: 'Comment removed successfully' };
-  } catch (err) {
-    console.error('Error removing comment', err);
-    return { success: false, message: 'Error removing comment' };
-  } finally {
-    client.release();
-  }
-}
 export const getUserCommentsByMatchId = cache(
   async (user_id: number, match_id: number) => {
     const comments = await sql<Comment[]>`

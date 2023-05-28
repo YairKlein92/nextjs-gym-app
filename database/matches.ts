@@ -212,14 +212,24 @@ export const denyMatchInDatabase = cache(
     return query;
   },
 );
-
-export const blockMatchInDatabase = cache(
-  async (userRequestingId: number, userPendingingId: number) => {
-    const [query] = await sql<Query[]>`
+export async function blockMatchInDatabase(
+  userRequestingId: number,
+  userPendingingId: number,
+) {
+  const query = await sql`
     UPDATE matches
-    SET is_pending = FALSE, is_accepted = FALSE, is_blocked = TRUE
+    SET is_requested = FALSE, is_accepted = FALSE, is_blocked = TRUE
     WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
   `;
-    return query;
-  },
-);
+  return query;
+}
+// export const blockMatchInDatabase = cache(
+//   async (userRequestingId: number, userPendingingId: number) => {
+//     const [query] = await sql<Query[]>`
+//     UPDATE matches
+//     SET is_pending = FALSE, is_accepted = FALSE, is_blocked = TRUE
+//     WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+//   `;
+//     return query;
+//   },
+// );
