@@ -1,13 +1,6 @@
-// import { Pool } from 'pg';
 import { cache } from 'react';
 import { sql } from './connect';
 
-// const pool = new Pool({
-//   user: process.env.PGUSERNAME,
-//   password: process.env.PGPASSWORD,
-//   host: process.env.PGHOST,
-//   database: process.env.PGDATABASE,
-// });
 export type PendingRequests = {
   id: number;
   passwordHash: string;
@@ -27,34 +20,6 @@ type Matches = {
   userPendingId: number;
 };
 
-// export async function addMatch(
-//   user_requesting_id: number,
-//   user_pending_id: number,
-//   is_pending: boolean,
-//   is_accepted: boolean,
-//   is_blocked: boolean,
-// ) {
-//   const client = await pool.connect();
-
-//   try {
-//     const result = await client.query(
-//       'INSERT INTO matches (user_requesting_id, user_pending_id, is_pending, is_accepted, is_blocked) VALUES ($1, $2, $3, $4, $5)',
-//       [
-//         user_requesting_id,
-//         user_pending_id,
-//         is_pending,
-//         is_accepted,
-//         is_blocked,
-//       ],
-//     );
-//     return { success: true, message: 'Match added successfully' };
-//   } catch (err) {
-//     console.error('Error adding match', err);
-//     return { success: false, message: 'Error adding match' };
-//   } finally {
-//     client.release();
-//   }
-// }
 export const addMatch = cache(
   async (
     user_requesting_id: number,
@@ -72,23 +37,53 @@ export const addMatch = cache(
   },
 );
 export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
-  const [matches] = await sql<Matches[]>`
-    SELECT *
-    FROM matches
-    WHERE user_requesting_id = ${userId};
+  const matches = await sql<Matches[]>`
+    SELECT m.id, m.user_requesting_id, m.user_pending_id
+    FROM matches m
+    WHERE m.user_requesting_id = ${userId};
   `;
   return matches;
 });
+// export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
+//   const [matches] = await sql<Matches[]>`
+//     SELECT *
+//     FROM matches
+//     WHERE user_requesting_id = ${userId};
+//   `;
+//   return matches;
+// });
 
-export const getUserMatchesFromDatabase = cache(async (userId: number) => {
+export const getUserMatchesFromDatabase = async (userId: number) => {
   const [matches] = await sql<Matches[]>`
-    SELECT m.id, m.user_requesting_id, m.user_pending_id,m.is_pending, m.is_accepted
+    SELECT m.id, m.user_requesting_id, m.user_pending_id,m.is_requested, m.is_accepted
     FROM matches m
     WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
   `;
-  console.log('matches:', matches);
   return matches;
-});
+};
+// export const getUserMatchesFromDatabase = cache(async (userId: number) => {
+//   const [matches] = await sql<Matches[]>`
+//     SELECT m.id, m.user_requesting_id, m.user_pending_id,m.is_pending, m.is_accepted
+//     FROM matches m
+//     WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
+//   `;
+//   console.log('matches:', matches);
+//   return matches;
+// });
+
+// export const getMatchRequestById = async (userId: number) => {
+//   const pendingRequests = await sql`
+//   SELECT
+//       matches.id,
+//       users.*
+//     FROM
+//       matches
+//       JOIN users ON matches.user_requesting_id = users.id
+//     WHERE
+//       matches.user_pending_id = ${userId};
+//   `;
+//   return pendingRequests;
+// };
 export const getMatchRequestById = cache(async (userId: number) => {
   const [pendingRequests] = await sql<PendingRequests[]>`
   SELECT
@@ -102,6 +97,23 @@ export const getMatchRequestById = cache(async (userId: number) => {
   `;
   return pendingRequests;
 });
+// export const getAnsweredMatchRequestById = async (userId: number) => {
+//   const pendingRequests = await sql`
+// SELECT
+//   matches.id,
+//   users.*
+// FROM
+//   matches
+//   JOIN users ON (
+//     (matches.user_requesting_id = users.id AND matches.user_pending_id != ${userId})
+//     OR (matches.user_pending_id = users.id AND matches.user_requesting_id != ${userId})
+//   )
+// WHERE
+//   (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+//   AND matches.is_requested = FALSE;
+//     `;
+//   return pendingRequests;
+// };
 export const getAnsweredMatchRequestById = cache(async (userId: number) => {
   const [pendingRequests] = await sql<PendingRequests[]>`
 SELECT
@@ -119,6 +131,26 @@ WHERE
     `;
   return pendingRequests;
 });
+
+// export const getPositivelyAnsweredMatchRequestById = async (userId: number) => {
+//   const match = await sql`
+// SELECT
+//   matches.id,
+//   users.*
+// FROM
+//   matches
+//   JOIN users ON (
+//     matches.user_requesting_id = users.id
+//     OR matches.user_pending_id = users.id
+//   )
+// WHERE
+//   (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+//   AND matches.is_requested = FALSE
+//   AND matches.is_accepted = TRUE
+//   AND users.id != ${userId};
+//   `;
+//   return match;
+// };
 export const getPositivelyAnsweredMatchRequestById = cache(
   async (userId: number) => {
     const [matches] = await sql<Matches[]>`
@@ -140,6 +172,25 @@ WHERE
     return matches;
   },
 );
+// export const getNegativelyAnsweredMatchRequestById = async (userId: number) => {
+//   const match = await sql`
+//   SELECT
+//   matches.id,
+//   users.*
+// FROM
+//   matches
+//   JOIN users ON (
+//     matches.user_requesting_id = users.id
+//     OR matches.user_pending_id = users.id
+//   )
+// WHERE
+//   (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+//   AND matches.is_requested = FALSE
+//   AND matches.is_accepted = FALSE;
+//   `;
+//   return match;
+// };
+
 export const getNegativelyAnsweredMatchRequestById = cache(
   async (userId: number) => {
     const [matches] = await sql<Matches[]>`
@@ -160,6 +211,26 @@ WHERE
     return matches;
   },
 );
+
+// export const getBlockedUsersById = async (userId: number) => {
+//   const blocked = await sql`
+//   SELECT
+//   matches.id,
+//   users.*
+// FROM
+//   matches
+//   JOIN users ON (
+//     matches.user_requesting_id = users.id
+//     OR matches.user_pending_id = users.id
+//   )
+// WHERE
+//   (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+//   AND matches.is_blocked = TRUE;
+
+//   `;
+//   return blocked;
+// };
+
 export const getBlockedUsersById = cache(async (userId: number) => {
   const [blocked] = await sql<Blocked[]>`
   SELECT
@@ -178,6 +249,20 @@ WHERE
   `;
   return blocked;
 });
+
+// export const getUnAnsweredMatchRequestById = async (userId: number) => {
+//   const pendingRequests = await sql`
+//   SELECT
+//       matches.id,
+//       users.*
+//     FROM
+//       matches
+//       JOIN users ON matches.user_requesting_id = users.id
+//     WHERE
+//       matches.user_pending_id = ${userId} AND matches.is_requested = TRUE ;
+//   `;
+//   return pendingRequests;
+// };
 export const getUnAnsweredMatchRequestById = cache(async (userId: number) => {
   const [pendingRequests] = await sql<PendingRequests[]>`
   SELECT
@@ -191,6 +276,18 @@ export const getUnAnsweredMatchRequestById = cache(async (userId: number) => {
   `;
   return pendingRequests;
 });
+
+// export async function acceptMatchInDatabase(
+//   userRequestingId: number,
+//   userPendingingId: number,
+// ) {
+//   const query = await sql`
+//     UPDATE matches
+//     SET is_requested = FALSE, is_accepted = TRUE, is_blocked = FALSE
+//     WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+//   `;
+//   return query;
+// }
 export const acceptMatchInDatabase = cache(
   async (userRequestingId: number, userPendingId: number) => {
     const [query] = await sql<Query[]>`
@@ -201,7 +298,17 @@ export const acceptMatchInDatabase = cache(
     return query;
   },
 );
-
+// export async function denyMatchInDatabase(
+//   userRequestingId: number,
+//   userPendingingId: number,
+// ) {
+//   const query = await sql`
+//     UPDATE matches
+//     SET is_requested = FALSE, is_accepted = FALSE, is_blocked = FALSE
+//     WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+//   `;
+//   return query;
+// }
 export const denyMatchInDatabase = cache(
   async (userRequestingId: number, userPendingingId: number) => {
     const [query] = await sql<Query[]>`
@@ -212,24 +319,26 @@ export const denyMatchInDatabase = cache(
     return query;
   },
 );
-export async function blockMatchInDatabase(
-  userRequestingId: number,
-  userPendingingId: number,
-) {
-  const query = await sql`
-    UPDATE matches
-    SET is_requested = FALSE, is_accepted = FALSE, is_blocked = TRUE
-    WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
-  `;
-  return query;
-}
-// export const blockMatchInDatabase = cache(
-//   async (userRequestingId: number, userPendingingId: number) => {
-//     const [query] = await sql<Query[]>`
+
+// export async function blockMatchInDatabase(
+//   userRequestingId: number,
+//   userPendingingId: number,
+// ) {
+//   const query = await sql`
 //     UPDATE matches
-//     SET is_pending = FALSE, is_accepted = FALSE, is_blocked = TRUE
+//     SET is_requested = FALSE, is_accepted = FALSE, is_blocked = TRUE
 //     WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
 //   `;
-//     return query;
-//   },
-// );
+//   return query;
+// }
+
+export const blockMatchInDatabase = cache(
+  async (userRequestingId: number, userPendingingId: number) => {
+    const [query] = await sql<Query[]>`
+    UPDATE matches
+    SET is_pending = FALSE, is_accepted = FALSE, is_blocked = TRUE
+    WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+  `;
+    return query;
+  },
+);

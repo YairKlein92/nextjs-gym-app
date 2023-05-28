@@ -2,6 +2,10 @@
   "name": "nextjs-gym-app",
   "version": "0.1.0",
   "private": true,
+  "browserslist": [
+    ">0.3%",
+    "not dead"
+  ],
   "scripts": {
     "postinstall": "patch-package",
     "dev": "next dev",
@@ -20,7 +24,6 @@
     "ley": "^0.8.1",
     "next": "13.2.4",
     "patch-package": "^6.5.1",
-    "pg-native": "^3.0.1",
     "postgres": "^3.3.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
