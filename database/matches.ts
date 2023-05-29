@@ -53,23 +53,25 @@ export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
 //   return matches;
 // });
 
-export const getUserMatchesFromDatabase = async (userId: number) => {
-  const [matches] = await sql<Matches[]>`
-    SELECT m.id, m.user_requesting_id, m.user_pending_id,m.is_requested, m.is_accepted
-    FROM matches m
-    WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
-  `;
-  return matches;
-};
-// export const getUserMatchesFromDatabase = cache(async (userId: number) => {
+// export const getSentOrReceivedRequestsFromDatabase = async (userId: number) => {
 //   const [matches] = await sql<Matches[]>`
-//     SELECT m.id, m.user_requesting_id, m.user_pending_id,m.is_pending, m.is_accepted
-//     FROM matches m
-//     WHERE m.user_requesting_id = ${userId} OR m.user_pending_id = ${userId};
+//     SELECT id, user_requesting_id, user_pending_id, is_pending, is_accepted
+//     FROM matches
+//     WHERE user_requesting_id = ${userId} OR user_pending_id = ${userId};
 //   `;
-//   console.log('matches:', matches);
 //   return matches;
-// });
+// };
+export const getSentOrReceivedRequestsFromDatabase = cache(
+  async (userId: number) => {
+    const [matches] = await sql<Matches[]>`
+    SELECT id, user_requesting_id, user_pending_id, is_pending, is_accepted
+    FROM matches
+    WHERE user_requesting_id = ${userId} OR user_pending_id = ${userId};
+  `;
+    console.log('matches:', matches);
+    return matches;
+  },
+);
 
 // export const getMatchRequestById = async (userId: number) => {
 //   const pendingRequests = await sql`

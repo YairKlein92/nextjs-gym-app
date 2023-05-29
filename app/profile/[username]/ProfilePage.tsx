@@ -99,9 +99,9 @@ export default function ProfilePage(props: Props) {
               </Link>
               <div>
                 {' '}
-                <a target="_blank" rel="noreferrer" href={favouriteGym.gymLink}>
+                {/* <a target="_blank" rel="noreferrer" href={favouriteGym.gymLink}>
                   {favouriteGym.gymName}
-                </a>{' '}
+                </a>{' '} */}
               </div>
             </div>
           </div>

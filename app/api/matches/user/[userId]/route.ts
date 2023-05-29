@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
-import { getUserMatchesFromDatabase } from '../../../../../database/matches';
+import { getSentOrReceivedRequestsFromDatabase } from '../../../../../database/matches';
 
 export const GET = async (request: any) => {
   // get the user id from the request
   const userId = request.query.userId as string;
   try {
     // get the user's matches
-    const matches = await getUserMatchesFromDatabase(parseInt(userId));
+    const matches = await getSentOrReceivedRequestsFromDatabase(
+      parseInt(userId),
+    );
     return NextResponse.json(matches);
   } catch (error) {
     console.error(error);

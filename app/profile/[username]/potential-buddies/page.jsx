@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import {
   addMatch,
   getBlockedUsersById,
-  getUserMatchesFromDatabase,
+  getSentOrReceivedRequestsFromDatabase,
 } from '../../../../database/matches';
 import { getUserByUsername, getUsers } from '../../../../database/users';
 import PotentialBuddyProfile from './PotentialBuddies';
@@ -20,20 +20,26 @@ export default async function PotentialBuddyPage({ params }) {
 
   const listOfUsersWithoutMe = users.filter((buddy) => buddy.id !== user.id);
 
-  const mySentOrReceivedRequests = await getUserMatchesFromDatabase(user.id);
+  const mySentOrReceivedRequests = await getSentOrReceivedRequestsFromDatabase(
+    user.id,
+  );
 
-  // if (mySentOrReceivedRequests !== undefined) {
-  const filteredUsers = listOfUsersWithoutMe.filter((otherUser) => {
-    return !mySentOrReceivedRequests.some((match) => {
-      return (
-        otherUser.id === match.userPendingId ||
-        otherUser.id === match.userRequestingId
-      );
-    });
+  // BUG - mySentOrReceivedRequests is undefined
+  const filteredUsers = listOfUsersWithoutMe.filter((currentUser) => {
+    if (mySentOrReceivedRequests !== undefined) {
+      return !mySentOrReceivedRequests.some((match) => {
+        return (
+          currentUser.id === match.userPendingId ||
+          currentUser.id === match.userRequestingId
+        );
+      });
+    } else {
+      return true;
+    }
   });
 
   const filteredUsersWithoutBlockedUsers = filteredUsers.filter((theUser) => {
-    return !blockedUsers.some((blockedUser) => blockedUser.id === theUser.id);
+    return !blockedUsers?.some((blockedUser) => blockedUser.id === theUser.id);
   });
   // }
   const button = ({ label, user1_id, user2_id }) => {
@@ -58,19 +64,3 @@ export default async function PotentialBuddyPage({ params }) {
     />
   );
 }
-
-// OLD CODE
-// const listOfUsersWithoutMe: Users = users.filter(
-//   (buddy: User) => buddy.id !== user.id,
-// );
-// const mySentOrReceivedRequests = await getUserMatchesFromDatabase(user.id);
-// for (const otherUsers in listOfUsersWithoutMe) {
-//   for (const match in mySentOrReceivedRequests) {
-//     if (
-//       otherUsers.id === match.userPendingId ||
-//       otherUsers.id === match.userRequestingId
-//     ) {
-//       listOfUsersWithoutMe.splice(user, 1);
-//     }
-//   }
-// }
