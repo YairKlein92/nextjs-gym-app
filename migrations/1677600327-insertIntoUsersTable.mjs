@@ -53,7 +53,7 @@ const gymbuddies = [
       'https://images.unsplash.com/photo-1581009137042-c552e485697a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
   },
   {
-    username: '',
+    username: 'Danvagyok',
     password_hash: 'Danvagyok',
     mail: 'michaela@gmail.com',
     age: 31,
@@ -67,7 +67,7 @@ const gymbuddies = [
   },
   {
     username: 'Viktoria',
-    password_hash: 'Danvagyok',
+    password_hash: 'Viktoria',
     mail: 'viki@gmail.com',
     age: 22,
     mobile: '+436704833465',

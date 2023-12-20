@@ -13,10 +13,11 @@ import EditProfile from './EditProfile';
 export default async function EditPage({ params }) {
   const gyms = await getGyms();
   const user = await getUserByUsername(params.username);
+  console.log('user:', user);
   if (!user) {
     console.error('User not found');
   }
   const favouriteGym = await getFavouriteGymsByUserId(user.id);
-
+  console.log('favouriteGym on server:', favouriteGym);
   return <EditProfile user={user} gyms={gyms} favouriteGym={favouriteGym} />;
 }

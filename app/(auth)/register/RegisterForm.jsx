@@ -25,7 +25,7 @@ export default function RegisterForm(props) {
   const [errors, setErrors] = useState([]);
   // const [errors, setErrors] = useState<{ message }[]>([]);
   const router = useRouter();
-  const fileInputRef = (useRef < HTMLInputElement) | (null > null);
+  // const fileInputRef = (useRef < HTMLInputElement) | (null > null);
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);
@@ -70,7 +70,7 @@ export default function RegisterForm(props) {
 
         onSubmit={async (event) => {
           event.preventDefault();
-          // FIRST ACTION - SETTIN THE URL LINK
+          // FIRST ACTION - SETTING THE URL LINK
           const form = event.currentTarget;
           const fileInput = Array.from(form.elements)
             .filter(

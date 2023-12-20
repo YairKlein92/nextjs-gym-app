@@ -13,12 +13,14 @@ export type Props = {
     gymName: string;
     gymAddress: string;
     gymPostalCode: string;
+    gymLink: string;
   };
   gyms: {
     id: number;
     gymName: string;
     gymAddress: string;
     gymPostalCode: string;
+    gymLink: string;
   }[];
   user: {
     id: number;
@@ -35,8 +37,10 @@ export type Props = {
 };
 export default function EditProfile(props: Props) {
   const user = props.user;
-  const gym = props.favouriteGym;
   const gyms = props.gyms;
+  const gym = props.favouriteGym;
+  console.log('gym:', gym);
+
   const [username, setUsername] = useState(user.username);
   const [mail, setMail] = useState(user.mail);
   const [age, setAge] = useState(user.age);

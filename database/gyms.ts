@@ -24,6 +24,7 @@ export const getGyms = cache(async () => {
   return gymsNames;
 });
 
+// returns undefined when working on EditProfile!!
 export const getFavouriteGymsByUserId = cache(async (id: number) => {
   const [gym] = await sql<Gym[]>`
   SELECT
