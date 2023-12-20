@@ -12,7 +12,7 @@ export type Props = {
   user: User;
   users: Users;
   favouriteGym: Gym;
-  gymLink: string;
+  // gymLink: string;
   pendingRequests: any;
   matchCount: number;
 };
@@ -32,6 +32,7 @@ export default function ProfilePage(props: Props) {
   const listOfUsersWithoutMe: User[] = users.filter(
     (buddy: User) => buddy.id !== user.id,
   );
+
   // pending requests function
 
   useEffect(() => {

@@ -41,6 +41,7 @@ export default async function PotentialBuddyPage({ params }) {
   const filteredUsersWithoutBlockedUsers = filteredUsers.filter((theUser) => {
     return !blockedUsers?.some((blockedUser) => blockedUser.id === theUser.id);
   });
+
   // }
   const button = ({ label, user1_id, user2_id }) => {
     // : React.FC<ButtonProps>
