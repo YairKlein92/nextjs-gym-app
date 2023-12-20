@@ -12,6 +12,9 @@ export default function MatchesPage(props: Props) {
   const matches = props.matchesFromJointTable;
   const user = props.user;
   const router = useRouter();
+  if (!matches) {
+    return <div>NO MATCHES</div>;
+  }
   const denyButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>, // ,
     requestingUserId: number,
