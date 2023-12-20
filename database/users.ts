@@ -125,15 +125,16 @@ export const createUser = cache(
     mail: string,
     age: number,
     mobile: string,
+    favouriteGym: string,
     isShredding: boolean,
     isBulking: boolean,
     isExperienced: boolean,
     profilePicture: string,
   ) => {
     const [user] = await sql<Omit<User, 'password'>[]>`
-      INSERT INTO users (username, password_hash, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture)
-      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${isShredding}, ${isBulking}, ${isExperienced}, ${profilePicture})
-      RETURNING id, username, mail, age, mobile, is_shredding, is_bulking, is_experienced, profile_picture
+      INSERT INTO users (username, password_hash, mail, age, mobile,favourite_gym, is_shredding, is_bulking, is_experienced, profile_picture)
+      VALUES (${username}, ${passwordHash}, ${mail}, ${age}, ${mobile}, ${favouriteGym}, ${isShredding}, ${isBulking}, ${isExperienced}, ${profilePicture})
+      RETURNING id, username, mail, age, mobile, favourite_gym, is_shredding, is_bulking, is_experienced, profile_picture
     `;
     return user;
   },
