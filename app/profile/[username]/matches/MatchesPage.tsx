@@ -9,7 +9,10 @@ export type Props = {
   matchesFromJointTable: Users;
 };
 export default function MatchesPage(props: Props) {
-  const matches = props.matchesFromJointTable;
+  const matches = Array.isArray(props.matchesFromJointTable)
+    ? props.matchesFromJointTable // If it's already an array, use it as is
+    : [props.matchesFromJointTable]; // If it's a single User, wrap it in an array
+
   const user = props.user;
   const router = useRouter();
   if (!matches) {
@@ -129,3 +132,12 @@ export default function MatchesPage(props: Props) {
     </div>
   );
 }
+// let matches = [];
+// if (props.matches && typeof props.matches === 'object') {
+//   // If it has only one request, wrap it in an array
+//   matches = [props.matches];
+// } else if (Array.isArray(props.matches)) {
+//   // If it's already an array, keep it as is
+//   matches = props.matches;
+// }
+// console.log('Matches Data:', matches);

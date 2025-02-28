@@ -37,7 +37,7 @@ export const PUT = async (request: NextRequest) => {
       result.data.userRequestingId,
       result.data.userPendingId,
     );
-    console.log(newMatch);
+    console.log('newMatch from route.ts', newMatch);
     return NextResponse.json({
       match: { isRequested: false, isAccepted: true },
     });

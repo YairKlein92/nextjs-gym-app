@@ -2,12 +2,13 @@ import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+// import { createFavouriteGymforUser } from '../../../../database/gyms';
 import { createSession } from '../../../../database/sessions';
 import { createUser, getUserByUsername } from '../../../../database/users';
 import { createSerializedRegisterSessionTokenCookie } from '../../../../utils/cookies';
 import { createCsrfSecret } from '../../../../utils/csrf';
 
-const userSchma = z.object({
+const userSchema = z.object({
   username: z.string(),
   password: z.string(),
   mail: z.string(),
@@ -19,7 +20,6 @@ const userSchma = z.object({
   isExperienced: z.boolean(),
   profilePicture: z.string(),
 });
-
 export type RegisterResponseBodyPost =
   | {
       errors: { message: string }[];
@@ -42,7 +42,8 @@ export type RegisterResponseBodyPost =
 export const POST = async (request: NextRequest) => {
   // Validating the data
   const body = await request.json();
-  const result = userSchma.safeParse(body);
+  const result = userSchema.safeParse(body);
+  console.log('result:', result);
   if (!result.success) {
     // inside the if statement, result.error.issues there is more information about what is allowing you to create more specific error messages
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
@@ -80,6 +81,7 @@ export const POST = async (request: NextRequest) => {
     result.data.isExperienced,
     result.data.profilePicture,
   );
+
   if (!newUser) {
     return NextResponse.json(
       {
@@ -93,6 +95,11 @@ export const POST = async (request: NextRequest) => {
       { status: 400 },
     );
   }
+  // // create favourite gym
+  // const newFavouriteGym = await createFavouriteGymforUser(
+  //   result.data.userId,
+  //   result.data.favouriteGym,
+  // );
 
   // create a token for the user
   const token = crypto.randomBytes(80).toString('base64');

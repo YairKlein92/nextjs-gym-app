@@ -3,7 +3,7 @@
 // import bcrypt from 'bcrypt';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 // import toast, { Toaster } from 'react-hot-toast';
 import { getSafeReturnToPath } from '../../../utils/validation';
 // import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
@@ -18,7 +18,7 @@ export default function RegisterForm(props) {
   const [isShredding, setIsShredding] = useState(Boolean(false));
   const [isBulking, setIsBulking] = useState(Boolean(false));
   const [isExperienced, setIsExperienced] = useState(Boolean(false));
-  const [favouriteGym, setFavouriteGym] = useState('FitInn Johnstrasse');
+  const [favouriteGym, setFavouriteGym] = useState(1);
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
   // const [profilePicture, setProfilePicture] = useState();
@@ -119,6 +119,8 @@ export default function RegisterForm(props) {
               }),
             });
             const data = await response.json(); // : RegisterResponseBodyPost
+            // const userId = data;
+            console.log('data: ', data);
             if ('errors' in data) {
               // Show error message using react-hot-toast
               data.errors.forEach((error) => {
@@ -126,6 +128,23 @@ export default function RegisterForm(props) {
               });
               return;
             }
+            // new stuff
+            // const responseGym = await fetch('/api/registerGym', {
+            //   method: 'POST',
+            //   body: JSON.stringify({
+            //     userId,
+            //     favouriteGym,
+            //   }),
+            // });
+            // const dataGym = await responseGym.json(); // : RegisterResponseBodyPost
+            // if ('errors' in dataGym) {
+            //   // Show error message using react-hot-toast
+            //   data.errors.forEach((error) => {
+            //     console.error(error.message);
+            //   });
+            //   return;
+            // }
+
             const returnTo = getSafeReturnToPath(props.returnTo);
             if (returnTo) {
               router.push(returnTo);
@@ -137,8 +156,8 @@ export default function RegisterForm(props) {
             errors.map((error) => (
               <div key={`error-${error.message}`}>Error: {error.message}</div>
             ));
-          }
-        }} // end of if(fileInput)
+          } // end of if(fileInput)
+        }}
       >
         <div className={styles.registerTextDiv}>Register</div>
         <label htmlFor="username">

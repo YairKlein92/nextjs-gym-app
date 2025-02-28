@@ -37,7 +37,7 @@ export const POST = async (request: NextRequest) => {
     result.data.commentInput,
     result.data.isVisible,
   );
-  console.log(newComment);
+  console.log('newComment', newComment);
 
   return NextResponse.json({ comment: { isVisible: true } });
 };

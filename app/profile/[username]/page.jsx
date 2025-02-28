@@ -21,7 +21,7 @@ export default async function Profile({ params }) {
   const favouriteGym = await getFavouriteGymsByUserId(user.id);
   const users = await getUsers();
   const matchArray = await getAnsweredMatchRequestById(user.id);
-  console.log(matchArray);
+  console.log('matchArray', matchArray);
   // const matchCount = matchArray.length;
 
   const pendingRequests = await getUnAnsweredMatchRequestById(user.id);
