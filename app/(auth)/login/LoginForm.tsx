@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getSafeReturnToPath } from '../../../utils/validation';
 import { LoginResponseBodyPost } from '../../api/(auth)/login/route';
-import styles from './page.module.scss';
+import styles from './page.module.css';
 
 export default function LoginForm(props: { returnTo?: string | string[] }) {
   const [username, setUsername] = useState('');

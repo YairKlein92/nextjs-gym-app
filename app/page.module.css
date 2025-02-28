@@ -2,17 +2,17 @@
   display: flex;
   justify-content: center;
 }
-.mainDiv {
+/* .mainDiv {
   display: flex;
   flex-direction: column;
-  // justify-content: center;
+  justify-content: center;
   gap: 1rem;
   align-items: center;
   min-height: 91vh;
   min-width: 100vw;
   background-image: linear-gradient(to right, #c7b198, #e9e9e9);
   color: #3b3d3f;
-}
+} */
 
 .mainText {
   font-size: 1.5rem;
@@ -22,23 +22,11 @@
 .pictureDiv {
   background-repeat: no-repeat;
   background-size: scale(1);
-  // background-image: url('../public/landing.jpg');
   height: 26rem;
   width: 16rem;
 }
 .link {
   width: 12rem;
-}
-.linkDiv {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-
-  a {
-    text-align: center;
-  }
 }
 
 .username {
@@ -59,11 +47,11 @@
   transition: 0.4s;
   color: white;
   background-color: #3b3d3f;
-  &:hover {
-    color: white;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-    background-color: #4a4c4e;
-  }
+}
+.buttonReg:hover {
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  background-color: #4a4c4e;
 }
 
 .buttonLog {
@@ -78,23 +66,18 @@
   color: #3b3d3f;
   background-color: #f5f5f5;
   border: 1px solid #3b3d3f;
-  &:hover {
-    color: white;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-    background-color: #4a4c4e;
-  }
+}
+.buttonLog:hover {
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  background-color: #4a4c4e;
 }
 
-/* Media queries */
 @media only screen and (min-width: 320px) {
-  /* For devices with width 320px and above */
   .mainDiv {
     padding: 0 20px;
   }
-  // .subText {
-  //   height: 18rem;
-  //   width: 10rem;
-  // }
+
   .buttonReg,
   .buttonLog {
     width: 100%;
@@ -102,7 +85,6 @@
 }
 
 @media only screen and (min-width: 768px) {
-  /* For devices with width 768px and above */
   .mainDiv {
     width: 100vw;
   }
@@ -113,7 +95,6 @@
 }
 
 @media only screen and (min-width: 1200px) {
-  /* For devices with width 1200px and above */
   .mainDiv {
     width: 28rem;
   }

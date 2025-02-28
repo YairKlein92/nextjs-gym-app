@@ -1,4 +1,4 @@
-import { getFavouriteGymsByUserId, getGyms } from '../../../../database/gyms';
+import { getFavouriteGymByUserId, getGyms } from '../../../../database/gyms';
 import { getUserByUsername } from '../../../../database/users';
 import EditProfile from './EditProfile';
 
@@ -17,7 +17,7 @@ export default async function EditPage({ params }) {
   if (!user) {
     console.error('User not found');
   }
-  const favouriteGym = await getFavouriteGymsByUserId(user.id);
+  const favouriteGym = await getFavouriteGymByUserId(user.id);
   console.log('favouriteGym on server:', favouriteGym);
   return <EditProfile user={user} gyms={gyms} favouriteGym={favouriteGym} />;
 }

@@ -23,10 +23,11 @@ export default async function PotentialBuddyPage({ params }) {
   const mySentOrReceivedRequests = await getSentOrReceivedRequestsFromDatabase(
     user.id,
   );
+  console.log('mySentOrReceivedRequests ->', mySentOrReceivedRequests); // Debug line
 
   // BUG - mySentOrReceivedRequests is undefined
   const filteredUsers = listOfUsersWithoutMe.filter((currentUser) => {
-    if (mySentOrReceivedRequests !== undefined) {
+    if (mySentOrReceivedRequests?.length) {
       return !mySentOrReceivedRequests.some((match) => {
         return (
           currentUser.id === match.userPendingId ||
@@ -34,7 +35,7 @@ export default async function PotentialBuddyPage({ params }) {
         );
       });
     } else {
-      return true;
+      return true; // No matches or requests, continue filtering
     }
   });
 

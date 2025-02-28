@@ -7,7 +7,7 @@ import { useState } from 'react';
 // import toast, { Toaster } from 'react-hot-toast';
 import { getSafeReturnToPath } from '../../../utils/validation';
 // import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
-import styles from './page.module.scss';
+import styles from './page.module.css';
 
 export default function RegisterForm(props) {
   const [username, setUsername] = useState('');

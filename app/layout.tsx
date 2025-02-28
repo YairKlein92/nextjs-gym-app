@@ -3,10 +3,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { getAnsweredMatchRequestById } from '../database/matches';
 import { getUserBySessionToken } from '../database/users';
-import styles from './layout.module.scss';
-
-// import CookieBanner from './CookieBanner';
-// import styles from './layout.module.scss';
+import styles from './layout.module.css';
 
 export const metadata = {
   title: {

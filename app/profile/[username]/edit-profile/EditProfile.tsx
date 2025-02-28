@@ -21,7 +21,7 @@ export type Props = {
     gymAddress: string;
     gymPostalCode: string;
     gymLink: string;
-  }[];
+  };
   user: {
     id: number;
     username: string;
@@ -51,10 +51,10 @@ export default function EditProfile(props: Props) {
     Boolean(user.isExperienced),
   );
   const profilePicture = user.profilePicture;
-  console.log(user.profilePicture);
+  console.log('User profile picture', user.profilePicture);
   const [errors, setErrors] = useState<{ message: string }[]>([]);
   const router = useRouter();
-  const [favouriteGym, setFavouriteGym] = useState(gym.gymName);
+  const [favouriteGym, setFavouriteGym] = useState(gyms.gymName);
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);

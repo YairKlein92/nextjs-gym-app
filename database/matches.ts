@@ -155,23 +155,29 @@ WHERE
 // };
 export const getPositivelyAnsweredMatchRequestById = cache(
   async (userId: number) => {
-    const [matches] = await sql<Matches[]>`
-SELECT
-  matches.id,
-  users.*
-FROM
-  matches
-  JOIN users ON (
-    matches.user_requesting_id = users.id
-    OR matches.user_pending_id = users.id
-  )
-WHERE
-  (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
-  AND matches.is_pending = FALSE
-  AND matches.is_accepted = TRUE
-  AND users.id != ${userId};
-  `;
-    return matches;
+    try {
+      const [matches] = await sql<Matches[]>`
+        SELECT
+          matches.id,
+          users.*
+        FROM
+          matches
+          JOIN users ON (
+            matches.user_requesting_id = users.id
+            OR matches.user_pending_id = users.id
+          )
+        WHERE
+          (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
+          AND matches.is_pending = FALSE
+          AND matches.is_accepted = TRUE
+          AND users.id != ${userId};
+      `;
+      console.log('Matches fetched:', matches);
+      return matches;
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+      throw error;
+    }
   },
 );
 // export const getNegativelyAnsweredMatchRequestById = async (userId: number) => {

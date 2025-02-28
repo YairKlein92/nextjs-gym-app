@@ -6,17 +6,19 @@
   color: #3c4d65;
   height: 93.7vh;
 }
+
 .mainDiv {
   display: flex;
   flex-direction: column;
   align-items: center;
-  // justify-content: space-around;
+  justify-content: space-around;
   width: 100vw;
   height: 93.7vh;
   overflow: auto;
   background-image: linear-gradient(to right, #c7b198, #e9e9e9);
   border-top: 1px solid grey;
 }
+
 .titleDiv {
   color: black;
   font-size: x-large;
@@ -24,36 +26,36 @@
   margin-top: 4rem;
   margin-bottom: 6rem;
 }
+
 .matchMainDiv {
   display: flex;
   height: 17vh;
-
   justify-content: center;
   align-items: center;
 }
+
 .descriptionDiv {
   display: flex;
   flex-direction: column;
-  // align-items: center;
   justify-content: center;
-  // padding-bottom: 0.5rem;
   width: 14rem;
   height: 12rem;
 }
+
 .profilePic {
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
   object-fit: cover;
 }
+
 .button {
   margin-top: 0.5rem;
   background: none;
   color: #358a87;
   border: 5px solid #2cd3ceaa;
   border-radius: 0.5rem;
-  padding: 0.2rem;
-  padding-left: 0.3rem;
+  padding: 0.2rem 0.3rem;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
@@ -63,17 +65,20 @@
   cursor: pointer;
   outline: inherit;
   transition: 0.5s;
-  &:hover {
-    box-shadow: 0 0.5px 4px 0 #15f4ee inset, 0 0.5px 4px 0 #15f4ee,
-      0 0.5px 4px 0 #15f4ee inset, 0 0.5px 4px 0 #15f4ee;
-    text-shadow: 0 0 0.5px #15f4edaa, 0 0 0.5px #15f4edaa;
-  }
 }
+
+.button:hover {
+  box-shadow: 0 0.5px 4px 0 #15f4ee inset, 0 0.5px 4px 0 #15f4ee,
+    0 0.5px 4px 0 #15f4ee inset, 0 0.5px 4px 0 #15f4ee;
+  text-shadow: 0 0 0.5px #15f4edaa, 0 0 0.5px #15f4edaa;
+}
+
 .username {
   font-size: larger;
   font-weight: 600;
   margin-bottom: 2rem;
 }
+
 .buttonDelete {
   margin-top: 0.5rem;
   background: none;
@@ -81,8 +86,7 @@
   color: #ff0000;
   border: 5px solid #d3422ca7;
   border-radius: 0.5rem;
-  padding: 0.2rem;
-  padding-left: 0.3rem;
+  padding: 0.2rem 0.3rem;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
@@ -92,9 +96,10 @@
   cursor: pointer;
   outline: inherit;
   transition: 0.5s;
-  &:hover {
-    box-shadow: 0 0.5px 4px 0 #f41515 inset, 0 0.5px 4px 0 #f41515,
-      0 0.5px 4px 0 #f41515 inset, 0 0.5px 4px 0 #f41515;
-    text-shadow: 0 0 0.5px #f41515aa, 0 0 0.5px #f41515aa;
-  }
+}
+
+.buttonDelete:hover {
+  box-shadow: 0 0.5px 4px 0 #f41515 inset, 0 0.5px 4px 0 #f41515,
+    0 0.5px 4px 0 #f41515 inset, 0 0.5px 4px 0 #f41515;
+  text-shadow: 0 0 0.5px #f41515aa, 0 0 0.5px #f41515aa;
 }

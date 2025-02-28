@@ -31,22 +31,17 @@ export const getGyms = cache(async () => {
 
 // returns undefined when working on EditProfile!!
 // https://www.youtube.com/watch?v=2X_qXnPg6G0&ab_channel=Amigoscode
-export const getFavouriteGymsByUserId = cache(async (id: number) => {
-  const [gym] = await sql<Gym[]>`
-  SELECT
-    gyms.*
-  FROM
-    users
-  JOIN
-    favourite_gyms ON favourite_gyms.user_id = users.id
-  JOIN
-    gyms ON gyms.id = favourite_gyms.gym_id
-  WHERE
-    users.id = ${id};
+export const getFavouriteGymByUserId = cache(async (id: number) => {
+  // Perform a JOIN between the users and gyms table to get the gym name directly
+  const gym = await sql<FavouriteGym>`
+    SELECT gyms.gym_name
+    FROM users
+    JOIN gyms ON gyms.id = CAST(users.favourite_gym AS INTEGER)    WHERE users.id = ${id};
   `;
+
+  // Return the gym name or null if no result found
   return gym;
 });
-
 export const createFavouriteGymforUser = cache(
   async (userId: number, gymId: number) => {
     const [favouriteGym] = await sql<FavouriteGym[]>`

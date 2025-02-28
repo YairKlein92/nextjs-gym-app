@@ -14,6 +14,7 @@ export default async function Matches({ params }) {
   const matchesFromJointTable = await getPositivelyAnsweredMatchRequestById(
     user.id,
   );
+  console.log('matchesFromJointTable', matchesFromJointTable);
   return (
     <MatchesPage user={user} matchesFromJointTable={matchesFromJointTable} />
   );
