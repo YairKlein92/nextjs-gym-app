@@ -2,7 +2,7 @@
 // 'use client';
 // import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { notFound } from 'next/navigation';
-import { getFavouriteGymsByUserId } from '../../../database/gyms';
+import { getFavouriteGymByUserId } from '../../../database/gyms';
 import {
   getAnsweredMatchRequestById,
   getUnAnsweredMatchRequestById,
@@ -18,11 +18,13 @@ export default async function Profile({ params }) {
   if (!user) {
     notFound();
   }
-  const favouriteGym = await getFavouriteGymsByUserId(user.id);
+  const favouriteGym = await getFavouriteGymByUserId(user.id);
   const users = await getUsers();
-  const matchArray = await getAnsweredMatchRequestById(user.id);
+  const matchObject = await getAnsweredMatchRequestById(user.id);
+  const matchArray = [matchObject]; // Now `matchArray` is an array with the object inside.
+
   console.log('matchArray', matchArray);
-  // const matchCount = matchArray.length;
+  const matchCount = matchArray.length;
 
   const pendingRequests = await getUnAnsweredMatchRequestById(user.id);
   // const matches = await;
@@ -33,7 +35,7 @@ export default async function Profile({ params }) {
       users={users}
       favouriteGym={favouriteGym} // only line with TS error
       pendingRequests={pendingRequests}
-      // matchCount={matchCount}
+      matchCount={matchCount}
     />
   );
 }

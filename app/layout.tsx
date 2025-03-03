@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { getAnsweredMatchRequestById } from '../database/matches';
 import { getUserBySessionToken } from '../database/users';
-import styles from './layout.module.css';
 
 export const metadata = {
   title: {
@@ -41,78 +40,72 @@ export default async function RootLayout(props: Props) {
   return (
     <html lang="en">
       <head />
-      <body>
-        <header>
-          <nav>
-            {}
+      <body className="bg-gradient-to-r from-[#c7b198] to-[#e9e9e9]">
+        <header className="w-full py-3 px-4 md:px-6 lg:px-12">
+          <nav className="flex justify-between items-center">
             {user ? (
-              <div className={styles.positionCenter}>
-                {/* <Link href="/">
-                  <img
-                    src="/backArrow.png"
-                    alt="Back to the homepage"
-                    height={24}
-                    width={24}
-                  />
-                </Link> */}
+              <div className="flex items-center gap-8">
                 <Link href={`/profile/${user.username}`}>
                   <img
                     src="/profile.png"
                     alt="Back to your profile"
                     height={24}
                     width={24}
+                    className="cursor-pointer"
                   />
                 </Link>
-                <div>
+                <div className="relative">
                   <Link
                     href={{ pathname: `/profile/${user.username}/matches` }}
+                    className="flex items-center gap-1"
                   >
                     <img
                       src="/matches.png"
                       alt="See your matches"
                       height={24}
                       width={24}
+                      className="cursor-pointer"
                     />
                   </Link>
-                  <span className={styles.matchNumber}>
-                    {[matches].length - 1}
+                  <span className="absolute top-0 right-0 rounded-full bg-red-600 text-white text-xs px-2 py-1">
+                    {matches.length}
                   </span>
                 </div>
 
-                <div className={styles.greetingUser}> Hi {user.username}!</div>
+                <div className="text-lg font-bold">Hi, {user.username}!</div>
                 <Link
                   href={{ pathname: `/profile/${user.username}/edit-profile` }}
+                  className="flex items-center gap-1"
                 >
                   <img
                     src="/edit.png"
-                    alt="back to homepage"
+                    alt="Edit profile"
                     height={24}
                     width={24}
+                    className="cursor-pointer"
                   />
                 </Link>
                 <Link
-                  href={{ pathname: '/logout' }}
-                  className={styles.link}
+                  href="/logout"
+                  className="flex items-center gap-1"
                   prefetch={false}
                 >
                   <img
                     src="/logout.png"
-                    alt="back to homepage"
+                    alt="Logout"
                     height={24}
                     width={24}
+                    className="cursor-pointer"
                   />
                 </Link>
               </div>
             ) : (
-              <div className={styles.positionCenter}>&nbsp;</div>
+              <div className="text-center">Please log in</div>
             )}
           </nav>
         </header>
 
-        {props.children}
-
-        {/* <footer>
-        </footer> */}
+        <main>{props.children}</main>
       </body>
     </html>
   );

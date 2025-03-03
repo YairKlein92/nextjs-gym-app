@@ -36,10 +36,9 @@ export const getFavouriteGymByUserId = cache(async (id: number) => {
   const gym = await sql<FavouriteGym>`
     SELECT gyms.gym_name
     FROM users
-    JOIN gyms ON gyms.id = CAST(users.favourite_gym AS INTEGER)    WHERE users.id = ${id};
+    JOIN gyms ON gyms.id = CAST(users.favourite_gym AS INTEGER)
+    WHERE users.id = ${id};
   `;
-
-  // Return the gym name or null if no result found
   return gym;
 });
 export const createFavouriteGymforUser = cache(

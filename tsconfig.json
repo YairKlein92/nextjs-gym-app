@@ -12,9 +12,13 @@
     ".next/types/**/*.ts",
     "next-env.d.ts"
   ],
-
   "compilerOptions": {
     "jsx": "preserve",
-    "strict": true
+    "strict": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   }
 }

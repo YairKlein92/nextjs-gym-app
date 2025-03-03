@@ -1,19 +1,11 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
   experimental: {
-    appDir: true,
-    typedRoutes: true,
-    serverComponentsExternalPackages: ['bcrypt'],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  images: {
-    domains: ['res.cloudinary.com'],
+    appDir: true, // Enable the new `app` directory feature
   },
 };
-
 module.exports = nextConfig;

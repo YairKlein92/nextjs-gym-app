@@ -1,13 +1,9 @@
 'use client';
 
-// import bcrypt from 'bcrypt';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-// import toast, { Toaster } from 'react-hot-toast';
 import { getSafeReturnToPath } from '../../../utils/validation';
-// import { RegisterResponseBodyPost } from '../../api/(auth)/register/route';
-import styles from './page.module.css';
 
 export default function RegisterForm(props) {
   const [username, setUsername] = useState('');
@@ -21,11 +17,9 @@ export default function RegisterForm(props) {
   const [favouriteGym, setFavouriteGym] = useState(1);
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
-  // const [profilePicture, setProfilePicture] = useState();
   const [errors, setErrors] = useState([]);
-  // const [errors, setErrors] = useState<{ message }[]>([]);
   const router = useRouter();
-  // const fileInputRef = (useRef < HTMLInputElement) | (null > null);
+
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);
@@ -35,252 +29,297 @@ export default function RegisterForm(props) {
     setIsBulking(!isBulking);
     setIsShredding(false);
   };
-  // const handleOnChange = (event: React.ChangeEvent<HTMLFormElement>) => {
-  //   const reader = new FileReader();
 
-  //   reader.onload = (onLoadEvent) => {
-  //     setImageSrc(onLoadEvent.target.result);
-  //     setUploadData(undefined);
-  //   };
-
-  //   reader.readAsDataURL(event.target.files[0]);
-  // };
   const handleOnChange = (event) => {
-    // : React.ChangeEvent<HTMLInputElement>
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImageSrc(e.target?.result); // as strin
+        setImageSrc(e.target?.result);
       };
       reader.readAsDataURL(event.target.files[0]);
     } else {
       setImageSrc(null);
     }
   };
-  // console.log(await bcrypt.hash('abc', 12));
 
   return (
-    <div className={styles.mainDiv}>
-      <form
-        className={styles.form}
-        onChange={(event) => {
-          handleOnChange(event);
-        }}
-        //  ONSUBMIT
+    <div className="bg-black text-white flex min-h-screen flex-col items-center justify-center">
+      <div className="w-full max-w-md h-full p-12 flex flex-col bg-[#1e1f24]  rounded-lg shadow-xl space-y-8">
+        {/* Header */}
+        <div className="text-center !mt-8 !mb-8">
+          <h2 className="text-3xl text-sky-400 font-bold">Register</h2>
+          <p className="mt-4 text-lg text-gray-400">
+            Start your fitness journey with us!
+          </p>
+        </div>
 
-        onSubmit={async (event) => {
-          event.preventDefault();
-          // FIRST ACTION - SETTING THE URL LINK
-          const form = event.currentTarget;
-          const fileInput = Array.from(form.elements)
-            .filter(
-              (element) =>
-                element instanceof HTMLInputElement && element.type === 'file',
-            )
-            .pop(); // as HTMLInputElement | undefined;
-          if (fileInput) {
-            const formData = new FormData();
-            if (fileInput.files !== null) {
-              for (const file of fileInput.files) {
-                formData.append('file', file);
-              }
-            }
-
-            formData.append('upload_preset', 'my-uploads');
-
-            const dataPicture = await fetch(
-              'https://api.cloudinary.com/v1_1/dvbgjm0xm/image/upload',
-              {
-                method: 'POST',
-                body: formData,
-              },
-            ).then((response) => response.json());
-
-            setImageSrc(dataPicture.secure_url);
-            setUploadData(dataPicture);
-
-            // setProfilePicture(dataPicture.secure_url);
-
-            // SECOND ACTION - REGISTERING
-
-            const response = await fetch('/api/register', {
-              method: 'POST',
-              body: JSON.stringify({
-                username,
-                password,
-                mail,
-                age,
-                mobile,
-                favouriteGym,
-                isShredding,
-                isBulking,
-                isExperienced,
-                profilePicture: dataPicture.secure_url || '/public/profile.png',
-              }),
-            });
-            const data = await response.json(); // : RegisterResponseBodyPost
-            // const userId = data;
-            console.log('data: ', data);
-            if ('errors' in data) {
-              // Show error message using react-hot-toast
-              data.errors.forEach((error) => {
-                console.error(error.message);
-              });
-              return;
-            }
-            // new stuff
-            // const responseGym = await fetch('/api/registerGym', {
-            //   method: 'POST',
-            //   body: JSON.stringify({
-            //     userId,
-            //     favouriteGym,
-            //   }),
-            // });
-            // const dataGym = await responseGym.json(); // : RegisterResponseBodyPost
-            // if ('errors' in dataGym) {
-            //   // Show error message using react-hot-toast
-            //   data.errors.forEach((error) => {
-            //     console.error(error.message);
-            //   });
-            //   return;
-            // }
-
-            const returnTo = getSafeReturnToPath(props.returnTo);
-            if (returnTo) {
-              router.push(returnTo);
-              return;
-            }
-
-            router.replace(`/profile/${data.user.username}`);
-            router.refresh();
-            errors.map((error) => (
+        {/* Error Handling */}
+        {errors.length > 0 && (
+          <div className="text-red-500 text-center">
+            {errors.map((error) => (
               <div key={`error-${error.message}`}>Error: {error.message}</div>
-            ));
-          } // end of if(fileInput)
-        }}
-      >
-        <div className={styles.registerTextDiv}>Register</div>
-        <label htmlFor="username">
-          <input
-            placeholder="Username"
-            onChange={(event) => {
-              setUsername(event.currentTarget.value);
-            }}
-          />
-        </label>
-        <label htmlFor="password">
-          <input
-            placeholder="Password"
-            onChange={(event) => {
-              setPassword(event.currentTarget.value);
-            }}
-            type="password"
-          />
-        </label>
-        <label htmlFor="mail">
-          <input
-            placeholder="Mail"
-            onChange={(event) => {
-              setMail(event.currentTarget.value);
-            }}
-          />
-        </label>
-        <label htmlFor="age">
-          <input
-            placeholder="Age"
-            onChange={(event) => {
-              setAge(Number(event.currentTarget.value));
-            }}
-          />
-        </label>
-        <label htmlFor="mobile">
-          <input
-            placeholder="Phone number"
-            onChange={(event) => {
-              setMobile(event.currentTarget.value);
-            }}
-          />
-        </label>
-        <label htmlFor="favourite-gym-select">
-          Gym:
-          <select
-            id="favourite-gym"
-            value={favouriteGym}
-            onChange={(event) => setFavouriteGym(event.currentTarget.value)}
-          >
-            {props.gyms.map((gym) => (
-              <option key={`user-${gym.id}`} value={gym.id}>
-                {gym.gymName}
-              </option>
             ))}
-          </select>
-        </label>
-        <div className={styles.goalDiv}>
-          <label
-            htmlFor="shredding"
-            className={`${styles.checkboxLabel} ${
-              isShredding ? styles.checked : ''
-            }`}
-          >
-            shredding
-          </label>
-          <input
-            checked={isShredding}
-            className={styles.checkbox}
-            id="shredding"
-            onChange={handleShreddingChange}
-            type="checkbox"
-          />
-          <label
-            htmlFor="bulking"
-            className={`${styles.checkboxLabel} ${
-              isBulking ? styles.checked : ''
-            }`}
-          >
-            bulking
-          </label>
-          <input
-            checked={isBulking}
-            className={styles.checkbox}
-            id="bulking"
-            onChange={handleBulkingChange}
-            type="checkbox"
-          />
-        </div>
-        <label
-          htmlFor="experienced"
-          className={`${styles.checkboxLabel} ${
-            isExperienced ? styles.checked : ''
-          }`}
-        >
-          experienced
-        </label>
-        <input
-          checked={isExperienced}
-          className={styles.checkbox}
-          id="experienced"
-          onChange={() => {
-            setIsExperienced(Boolean(!isExperienced));
+          </div>
+        )}
+
+        {/* Register Form */}
+        <form
+          className="flex flex-col items-center gap-4 w-full"
+          onChange={(event) => handleOnChange(event)}
+          onSubmit={async (event) => {
+            event.preventDefault();
+
+            // Handle image upload
+            const form = event.currentTarget;
+            const fileInput = Array.from(form.elements)
+              .filter(
+                (element) =>
+                  element instanceof HTMLInputElement &&
+                  element.type === 'file',
+              )
+              .pop();
+            if (fileInput) {
+              const formData = new FormData();
+              if (fileInput.files !== null) {
+                for (const file of fileInput.files) {
+                  formData.append('file', file);
+                }
+              }
+
+              formData.append('upload_preset', 'my-uploads');
+              const dataPicture = await fetch(
+                'https://api.cloudinary.com/v1_1/dvbgjm0xm/image/upload',
+                {
+                  method: 'POST',
+                  body: formData,
+                },
+              ).then((response) => response.json());
+
+              setImageSrc(dataPicture.secure_url);
+              setUploadData(dataPicture);
+
+              // Registering
+              const response = await fetch('/api/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                  username,
+                  password,
+                  mail,
+                  age,
+                  mobile,
+                  favouriteGym,
+                  isShredding,
+                  isBulking,
+                  isExperienced,
+                  profilePicture:
+                    dataPicture.secure_url || '/public/profile.png',
+                }),
+              });
+              const data = await response.json();
+              if ('errors' in data) {
+                setErrors(data.errors);
+                return;
+              }
+
+              const returnTo = getSafeReturnToPath(props.returnTo);
+              if (returnTo) {
+                router.push(returnTo);
+                return;
+              }
+
+              router.replace(`/profile/${data.user.username}`);
+              router.refresh();
+            }
           }}
-          type="checkbox"
-        />
-        <label htmlFor="picture">Profile picture</label>
-        <input id="picture" type="file" name="file" />
-        <div>
-          <button className={`${styles.button} ${styles.buttonReg}`}>
-            Register
-          </button>
-        </div>
-        <div>
-          Already have an account?
-          <Link href={{ pathname: '/login' }} as="/login">
-            Log in!
+        >
+          {/* Username Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Username
+            </label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <input
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+              />
+            </div>
+          </div>
+
+          {/* Password Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Password
+            </label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+              />
+            </div>
+          </div>
+
+          {/* Email Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">Email</label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={mail}
+                onChange={(e) => setMail(e.target.value)}
+                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+              />
+            </div>
+          </div>
+
+          {/* Age Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">Age</label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <input
+                placeholder="14" // Set the placeholder value to 14
+                value={age}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Only allow valid numbers or empty string
+                  if (!value || /^\d+$/.test(value)) {
+                    setAge(Number(value)); // Update age if it's a valid number or empty
+                  }
+                }}
+                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                min="14"
+                required
+              />
+            </div>
+
+            {/* Display warning if age is less than 14 */}
+            {age < 14 && age !== 0 && (
+              <div className="text-red-500 text-xs mt-1">
+                You must be at least 14 years old to register.
+              </div>
+            )}
+
+            {/* Display error if the input is NaN (not a number) */}
+            {isNaN(age) && age !== 0 && (
+              <div className="text-red-500 text-xs mt-1">
+                You must type a number.
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Phone number
+            </label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <input
+                type="tel"
+                placeholder="Enter your phone number"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+              />
+            </div>
+          </div>
+
+          {/* Gym Select */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">Gym</label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <select
+                id="favourite-gym"
+                value={favouriteGym}
+                onChange={(event) =>
+                  setFavouriteGym(Number(event.target.value))
+                }
+                className="w-full bg-transparent text-gray-400 border-0 focus:outline-none text-sm h-8"
+              >
+                {props.gyms.map((gym) => (
+                  <option
+                    className="bg-black"
+                    key={`user-${gym.id}`}
+                    value={gym.id}
+                  >
+                    {gym.gymName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Goal Options */}
+          <div className="flex gap-4 justify-around w-full mt-4">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="rounded-sm border border-gray-600 bg-transparent focus:ring-green-400"
+                checked={isShredding}
+                onChange={handleShreddingChange}
+              />
+              Shredding
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="rounded-sm border border-gray-600 bg-transparent focus:ring-green-400"
+                checked={isBulking}
+                onChange={handleBulkingChange}
+              />
+              Bulking
+            </label>
+          </div>
+
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="rounded-sm border border-gray-600 bg-transparent focus:ring-green-400"
+              checked={isExperienced}
+              onChange={() => setIsExperienced(!isExperienced)}
+            />
+            Experienced
+          </label>
+
+          {/* Profile Picture */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Profile Picture
+            </label>
+            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+              <input
+                id="picture"
+                type="file"
+                name="file"
+                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm"
+              />
+            </div>
+          </div>
+
+          {/* Register Button */}
+          <div className=" !mb-8 flex items-center justify-center gap-x-2">
+            <button
+              type="submit"
+              className="font-semibold w-30 hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
+            >
+              Register
+            </button>
+          </div>
+        </form>
+
+        {/* Already have an account */}
+        <div className="mt-4 !mb-6 text-center text-sm">
+          Already have an account?{' '}
+          <Link href="/login" className="text-sky-400 hover:underline">
+            Log in here
           </Link>
         </div>
-        {errors.map((error) => (
-          <div key={`error-${error.message}`}>Error: {error.message}</div>
-        ))}
-      </form>
+      </div>
     </div>
   );
 }

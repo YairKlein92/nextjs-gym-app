@@ -1,49 +1,42 @@
-import './globals.css';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { getUserBySessionToken } from '../database/users';
-import styles from './page.module.css';
 
 export default async function Home() {
   const cookieStore = cookies();
   const sessionToken = cookieStore.get('sessionToken');
 
-  // 2. validate that session
-  // 3. get the user profile matching the session
+  // Validate session and get the user profile
   const user = !sessionToken?.value
     ? undefined
     : await getUserBySessionToken(sessionToken.value);
+
   return (
-    <div className={styles.head}>
-      <div className="flex flex-col justify-center items-center gap-4 min-h-[91vh] min-w-full bg-gradient-to-r from-[#c7b198] to-[#e9e9e9] text-[#3b3d3f]">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-[#111827] to-[#1F2937] text-white">
+      <div className="flex flex-col justify-center items-center gap-6 px-6 sm:px-8 md:px-16 lg:px-24">
         {user ? (
-          <div>.</div>
+          <div className="text-lg font-bold text-[#64FF00]">
+            Welcome back, {user.username}!
+          </div>
         ) : (
           <>
-            <h1 className="text-xl font-extrabold">Let your buddy sweat </h1>
-            <div
-              className={`${styles.pictureDiv} bg-no-repeat bg-contain h-[26rem] w-[16rem]`}
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-sky-400 leading-tight">
+              Find Your Gym Buddy <br /> Crush Your Fitness Goals
+            </h1>
+            {/* <div
+              className="bg-no-repeat bg-center bg-cover h-[16rem] w-[11rem] sm:h-[30rem] sm:w-[20rem] lg:h-[35rem] lg:w-[25rem]"
               style={{ backgroundImage: 'url(/landing.jpg)' }}
-              // alt="Landing page"
-            />
-            <div className="flex flex-col justify-center items-center gap-8">
-              {' '}
-              <button className="text-[#3b3d3f] cursor-pointer rounded-lg font-semibold mx-5 py-2 shadow-md transition duration-300 bg-[#f5f5f5] border border-[#3b3d3f] hover:bg-[#4a4c4e] hover:shadow-lg text-white">
-                <span className={styles.linkText}>
-                  <Link
-                    href="/register"
-                    className="w-[12rem] text-center text-blue-500 hover:text-blue-700"
-                  >
-                    Register
-                  </Link>
-                </span>
-              </button>
-              <button className="text-white cursor-pointer rounded-lg font-semibold mx-4 py-2 shadow-md transition duration-300 bg-[#3b3d3f] hover:bg-[#4a4c4e] hover:shadow-lg">
-                <span className={styles.linkText}>
-                  <Link href={{ pathname: '/login' }} className={styles.link}>
-                    Login
-                  </Link>
-                </span>
+            /> */}
+
+            <div className="mt-4 flex items-center justify-center gap-6">
+              <Link
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:ring hover:ring-white h-10 px-4 py-2 duration-200 w-45"
+                href="/register"
+              >
+                Register
+              </Link>
+              <button className="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 w-45">
+                <Link href="/login">Log in</Link>
               </button>
             </div>
           </>
