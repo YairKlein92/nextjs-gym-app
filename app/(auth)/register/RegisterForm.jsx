@@ -43,8 +43,8 @@ export default function RegisterForm(props) {
   };
 
   return (
-    <div className="bg-black text-white flex min-h-screen flex-col items-center justify-center">
-      <div className="w-full max-w-md h-full p-12 flex flex-col bg-[#1e1f24]  rounded-lg shadow-xl space-y-8">
+    <div className="bg-gradient-to-r from-[#111827] to-[#1F2937] text-white flex min-h-screen flex-col items-center justify-center">
+      <div className="w-full max-w-md h-full p-12 flex flex-col rounded-lg shadow-xl space-y-8">
         {/* Header */}
         <div className="text-center !mt-8 !mb-8">
           <h2 className="text-3xl text-sky-400 font-bold">Register</h2>

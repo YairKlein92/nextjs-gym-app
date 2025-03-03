@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getUserBySessionToken } from '../database/users';
 
 export default async function Home() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const sessionToken = cookieStore.get('sessionToken');
 
   // Validate session and get the user profile

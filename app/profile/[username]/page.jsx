@@ -4,7 +4,7 @@
 import { notFound } from 'next/navigation';
 import { getFavouriteGymByUserId } from '../../../database/gyms';
 import {
-  getAnsweredMatchRequestById,
+  getPositivelyAnsweredMatchRequestById,
   getUnAnsweredMatchRequestById,
 } from '../../../database/matches';
 // import { Component } from 'react';
@@ -20,7 +20,7 @@ export default async function Profile({ params }) {
   }
   const favouriteGym = await getFavouriteGymByUserId(user.id);
   const users = await getUsers();
-  const matchObject = await getAnsweredMatchRequestById(user.id);
+  const matchObject = await getPositivelyAnsweredMatchRequestById(user.id);
   const matchArray = [matchObject]; // Now `matchArray` is an array with the object inside.
 
   console.log('matchArray', matchArray);
@@ -36,6 +36,7 @@ export default async function Profile({ params }) {
       favouriteGym={favouriteGym} // only line with TS error
       pendingRequests={pendingRequests}
       matchCount={matchCount}
+      matchArray={matchArray}
     />
   );
 }

@@ -12,13 +12,11 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
   const router = useRouter();
 
   return (
-    <div className="bg-black text-white flex min-h-screen flex-col items-center justify-center">
-      <div className="w-full max-w-md h-[80vh] flex flex-col justify-around bg-[#1e1f24] p-12 rounded-lg shadow-xl space-y-8">
+    <div className="bg-gradient-to-r from-[#111827] to-[#1F2937] text-white flex min-h-screen flex-col items-center justify-center">
+      <div className="w-full max-w-md h-[80vh] flex flex-col justify-around p-12 rounded-lg shadow-xl space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-3xl text-sky-400 font-extrabold text-[#64FF00]">
-            Login
-          </h2>
+          <h2 className="text-3xl text-sky-400 font-extrabold">Login</h2>
           <p className="mt-4 text-lg text-gray-400">
             No more excuses. <br /> Get the support you need!
           </p>
