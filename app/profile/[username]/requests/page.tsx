@@ -4,6 +4,7 @@ import PendingRequests from './PendingRequests';
 
 export default async function PendingRequestsPage({ params }: any) {
   const username = params.username;
+  console.log('params', params);
   const user = await getUserByUsername(username);
   if (!user) {
     return null;

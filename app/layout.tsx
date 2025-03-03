@@ -20,7 +20,7 @@ export type Props = {
 export const dynamic = 'force-dynamic';
 export default async function RootLayout(props: Props) {
   // 1. get the session token from the cookie
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const sessionToken = cookieStore.get('sessionToken');
 
   // 2. validate that session
@@ -31,11 +31,11 @@ export default async function RootLayout(props: Props) {
 
   // if user is not undefined, the person is logged in
   // if user is undefined, the person is logged out
-  let matches = [];
+  // let matches = [];
 
-  if (user) {
-    matches = await getAnsweredMatchRequestById(user.id);
-  }
+  // if (user) {
+  //   matches = await getAnsweredMatchRequestById(user.id);
+  // }
 
   return (
     <html lang="en">
@@ -67,9 +67,9 @@ export default async function RootLayout(props: Props) {
                       className="cursor-pointer"
                     />
                   </Link>
-                  <span className="absolute top-0 right-0 rounded-full bg-red-600 text-white text-xs px-2 py-1">
+                  {/* <span className="absolute top-0 right-0 rounded-full bg-red-600 text-white text-xs px-2 py-1">
                     {matches.length}
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className="text-lg font-bold">Hi, {user.username}!</div>

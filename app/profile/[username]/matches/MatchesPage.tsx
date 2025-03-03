@@ -6,7 +6,7 @@ import styles from './page.module.css';
 
 export type Props = {
   user: User;
-  matchesFromJointTable: Users;
+  matchesFromJointTable: Users | undefined;
 };
 
 export default function MatchesPage(props: Props) {
@@ -75,11 +75,11 @@ export default function MatchesPage(props: Props) {
     <div className={styles.pageDiv}>
       <div className={styles.mainDiv}>
         <div className={styles.titleDiv}>Your matches</div>
-        {matches !== undefined ? (
+        {matches.length > 0 ? (
           matches.map((match) => {
             // Ensure that match is a valid object
-            if (!match || !match.username) {
-              return null; // Skip rendering if match or username is undefined
+            if (!match) {
+              return null; // Skip rendering if match is undefined
             }
 
             return (

@@ -33,11 +33,9 @@ export const PUT = async (request: NextRequest) => {
     return NextResponse.json({ error: result.error.issues }, { status: 400 });
   }
 
-  // create the match ERROR
-  const removedComment = await removeComment(
-    result.data.id,
-    result.data.isVisible,
-  );
+  // create the match ERROR     result.data.isVisible, was removed
+
+  const removedComment = await removeComment(result.data.id);
   console.log('removed comment ->', removedComment);
   // return the new username
   return NextResponse.json({ comment: { isVisible: false } });

@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import styles from './page.module.scss';
 
 export default function PendingRequests(props: any) {
+  console.log('user in pending requests:', props.requests);
+
   let requests = [];
   if (props.requests && typeof props.requests === 'object') {
     // If it has only one request, wrap it in an array

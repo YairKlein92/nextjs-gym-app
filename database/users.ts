@@ -18,7 +18,7 @@ export type User = {
   isExperienced: boolean;
   profilePicture: string;
 };
-export type UserWithoutPassword = Omit<User, 'password'>;
+export type UserWithoutPassword = Omit<User, 'passwordHash'>;
 
 export type Users = {
   id: number;

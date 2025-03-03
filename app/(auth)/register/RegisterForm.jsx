@@ -3,8 +3,23 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+// import { User } from '../../../database/users';
 import { getSafeReturnToPath } from '../../../utils/validation';
 
+// type RegisterFormProps = {
+//   username: string;
+//   password: string;
+//   mail: string;
+//   age: number;
+//   mobile: string;
+//   isShredding: boolean;
+//   isBulking: boolean;
+//   isExperienced: boolean;
+//   favouriteGym: string;
+//   imageSrc: string;
+//   uploadData: string;
+//   errors: string;
+// };
 export default function RegisterForm(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -34,6 +49,7 @@ export default function RegisterForm(props) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
+        console.log(imageSrc);
         setImageSrc(e.target?.result);
       };
       reader.readAsDataURL(event.target.files[0]);
@@ -96,6 +112,7 @@ export default function RegisterForm(props) {
               ).then((response) => response.json());
 
               setImageSrc(dataPicture.secure_url);
+              console.log(uploadData);
               setUploadData(dataPicture);
 
               // Registering
@@ -135,68 +152,71 @@ export default function RegisterForm(props) {
           {/* Username Input */}
           <div className="w-60">
             <label className="text-xs font-medium text-gray-400">
-              Username
+              Username{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                />
+              </div>
             </label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <input
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
-              />
-            </div>
           </div>
 
           {/* Password Input */}
           <div className="w-60">
             <label className="text-xs font-medium text-gray-400">
-              Password
+              Password{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                />
+              </div>
             </label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
-              />
-            </div>
           </div>
 
           {/* Email Input */}
           <div className="w-60">
-            <label className="text-xs font-medium text-gray-400">Email</label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={mail}
-                onChange={(e) => setMail(e.target.value)}
-                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
-              />
-            </div>
+            <label className="text-xs font-medium text-gray-400">
+              Email{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={mail}
+                  onChange={(e) => setMail(e.target.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                />
+              </div>
+            </label>
           </div>
 
           {/* Age Input */}
           <div className="w-60">
-            <label className="text-xs font-medium text-gray-400">Age</label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <input
-                placeholder="14" // Set the placeholder value to 14
-                value={age}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Only allow valid numbers or empty string
-                  if (!value || /^\d+$/.test(value)) {
-                    setAge(Number(value)); // Update age if it's a valid number or empty
-                  }
-                }}
-                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
-                min="14"
-                required
-              />
-            </div>
+            <label className="text-xs font-medium text-gray-400">
+              Age{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  placeholder="14" // Set the placeholder value to 14
+                  value={age}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Only allow valid numbers or empty string
+                    if (!value || /^\d+$/.test(value)) {
+                      setAge(Number(value)); // Update age if it's a valid number or empty
+                    }
+                  }}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                  min="14"
+                  required
+                />
+              </div>
+            </label>
 
             {/* Display warning if age is less than 14 */}
             {age < 14 && age !== 0 && (
@@ -216,42 +236,44 @@ export default function RegisterForm(props) {
           {/* Mobile Input */}
           <div className="w-60">
             <label className="text-xs font-medium text-gray-400">
-              Phone number
+              Phone number{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                />
+              </div>
             </label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <input
-                type="tel"
-                placeholder="Enter your phone number"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
-              />
-            </div>
           </div>
 
           {/* Gym Select */}
           <div className="w-60">
-            <label className="text-xs font-medium text-gray-400">Gym</label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <select
-                id="favourite-gym"
-                value={favouriteGym}
-                onChange={(event) =>
-                  setFavouriteGym(Number(event.target.value))
-                }
-                className="w-full bg-transparent text-gray-400 border-0 focus:outline-none text-sm h-8"
-              >
-                {props.gyms.map((gym) => (
-                  <option
-                    className="bg-black"
-                    key={`user-${gym.id}`}
-                    value={gym.id}
-                  >
-                    {gym.gymName}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <label className="text-xs font-medium text-gray-400">
+              Gym{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <select
+                  id="favourite-gym"
+                  value={favouriteGym}
+                  onChange={(event) =>
+                    setFavouriteGym(Number(event.target.value))
+                  }
+                  className="w-full bg-transparent text-gray-400 border-0 focus:outline-none text-sm h-8"
+                >
+                  {props.gyms.map((gym) => (
+                    <option
+                      className="bg-black"
+                      key={`user-${gym.id}`}
+                      value={gym.id}
+                    >
+                      {gym.gymName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </label>
           </div>
 
           {/* Goal Options */}
@@ -285,28 +307,24 @@ export default function RegisterForm(props) {
             />
             Experienced
           </label>
-
           {/* Profile Picture */}
           <div className="w-60">
             <label className="text-xs font-medium text-gray-400">
-              Profile Picture
+              Profile Picture{' '}
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  id="picture"
+                  type="file"
+                  name="file"
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm"
+                />
+              </div>
             </label>
-            <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
-              <input
-                id="picture"
-                type="file"
-                name="file"
-                className="w-full bg-transparent text-white border-0 focus:outline-none text-sm"
-              />
-            </div>
           </div>
 
           {/* Register Button */}
           <div className=" !mb-8 flex items-center justify-center gap-x-2">
-            <button
-              type="submit"
-              className="font-semibold w-30 hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
-            >
+            <button className="font-semibold w-30 hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2">
               Register
             </button>
           </div>

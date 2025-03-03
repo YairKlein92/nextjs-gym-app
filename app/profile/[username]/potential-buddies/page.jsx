@@ -27,10 +27,10 @@ export default async function PotentialBuddyPage({ params }) {
 
   // BUG - mySentOrReceivedRequests is undefined
   const filteredUsers = listOfUsersWithoutMe.filter(
-    (user) =>
+    (theUser) =>
       !Array.isArray(mySentOrReceivedRequests) ||
       !mySentOrReceivedRequests.some((match) =>
-        [match.userPendingId, match.userRequestingId].includes(user.id),
+        [match.userPendingId, match.userRequestingId].includes(theUser.id),
       ),
   );
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface PreferencesProps {
   isShredding: boolean;
@@ -22,8 +22,8 @@ const Preferences: React.FC<PreferencesProps> = ({
   potentialBuddies,
   user,
 }) => {
-  // Load preferences from localStorage when component mounts
   useEffect(() => {
+    // Check if preferences are already in localStorage and set them in state
     const storedShredding = localStorage.getItem('isShredding');
     const storedBulking = localStorage.getItem('isBulking');
     const storedExperienced = localStorage.getItem('isExperienced');
@@ -39,7 +39,6 @@ const Preferences: React.FC<PreferencesProps> = ({
     }
   }, [setIsShredding, setIsBulking, setIsExperienced]);
 
-  // Handle checkbox changes and update localStorage
   const handleCheckboxChange = (
     setter: React.Dispatch<React.SetStateAction<boolean>>,
     key: string,
@@ -47,8 +46,7 @@ const Preferences: React.FC<PreferencesProps> = ({
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.checked;
       setter(newValue);
-      localStorage.setItem(key, JSON.stringify(newValue)); // Store in localStorage
-      console.log(`Updated ${key} to ${newValue}`); // Debugging output
+      localStorage.setItem(key, JSON.stringify(newValue)); // Store the new value in localStorage
     };
   };
 
@@ -96,13 +94,14 @@ const Preferences: React.FC<PreferencesProps> = ({
           {potentialBuddies.length} Potential Gym Buddies
         </p>
         <Link
+          className="flex justify-center"
           href={{
             pathname: `/profile/${user.username}/potential-buddies`,
           }}
         >
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold !py-2 !px-4 rounded-lg transition duration-300">
+          <div className="bg-blue-500 hover:bg-blue-600 text-white font-bold !py-2 !px-4 rounded-lg transition duration-300 w-30 flex items-center justify-center">
             Let's Go!
-          </button>
+          </div>
         </Link>
       </div>
     </div>

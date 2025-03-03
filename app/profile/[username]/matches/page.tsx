@@ -3,25 +3,25 @@ import { getPositivelyAnsweredMatchRequestById } from '../../../../database/matc
 import { getUserByUsername } from '../../../../database/users';
 import MatchesPage from './MatchesPage';
 
-// export type Params = { params: { username: string } };
+export default async function Matches({
+  params,
+}: {
+  params: { username: string };
+}) {
+  // Ensure that we wait for params to be available and valid
+  const { username } = params;
 
-export default async function Matches({ params }) {
-  const user = await getUserByUsername(params.username);
+  const user = await getUserByUsername(username);
   if (!user) {
-    notFound();
+    notFound(); // If user is not found, show a 404 page
   }
 
   const matchesFromJointTable = await getPositivelyAnsweredMatchRequestById(
     user.id,
   );
   console.log('matchesFromJointTable', matchesFromJointTable);
+
   return (
     <MatchesPage user={user} matchesFromJointTable={matchesFromJointTable} />
   );
 }
-
-// const pendingUserIds = matchesFromJointTable.map(
-//   (match) => match.userPendingId,
-// );
-
-// const matches = await getUsersByIds(pendingUserIds);

@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { sql } from './connect';
+import { Users } from './users';
 
 export type PendingRequests = {
   id: number;
@@ -12,7 +13,7 @@ export type PendingRequests = {
   isBulking: boolean;
   isExperienced: boolean;
   profilePicture: string;
-};
+}[];
 export type Query = Array<Query>;
 export type Blocked = Array<Blocked>;
 type Matches = {
@@ -156,7 +157,7 @@ WHERE
 export const getPositivelyAnsweredMatchRequestById = cache(
   async (userId: number) => {
     try {
-      const [matches] = await sql<Matches[]>`
+      const [matches] = await sql<Users[]>`
         SELECT
           matches.id,
           users.*

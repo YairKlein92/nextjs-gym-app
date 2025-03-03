@@ -33,8 +33,8 @@ export type UpdateProfileResponseBodyPost =
 
 export async function PUT(
   request: NextRequest,
-): Promise<NextResponse<number, UpdateProfileResponseBodyPut>> {
-  const cookieStore = cookies();
+): Promise<NextResponse<UpdateProfileResponseBodyPost>> {
+  const cookieStore = await cookies();
   const token = cookieStore.get('sessionToken');
 
   const body = await request.json();

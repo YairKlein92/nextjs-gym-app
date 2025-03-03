@@ -10,7 +10,9 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts",
-    "next-env.d.ts"
+    "next-env.d.ts",
+    "app/(auth)/register/pagetjsx",
+    ".next/types/app/profile/[username]/matches/page.ts"
   ],
   "compilerOptions": {
     "jsx": "preserve",

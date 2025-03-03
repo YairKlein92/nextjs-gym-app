@@ -7,35 +7,35 @@ import { getSafeReturnToPath } from '../../../../utils/validation';
 // import { UpdateProfileResponseBodyPost } from '../../../api/users/[userId]/route';
 import styles from './page.module.scss';
 
-export type Props = {
-  favouriteGym: {
-    id: number;
-    gymName: string;
-    gymAddress: string;
-    gymPostalCode: string;
-    gymLink: string;
-  };
-  gyms: {
-    id: number;
-    gymName: string;
-    gymAddress: string;
-    gymPostalCode: string;
-    gymLink: string;
-  };
-  user: {
-    id: number;
-    username: string;
-    mail: string;
-    age: number;
-    mobile: string;
-    isShredding: boolean;
-    isBulking: boolean;
-    isExperienced: boolean;
-    profilePicture: string;
-  };
-  returnTo: string;
-};
-export default function EditProfile(props: Props) {
+// export type Props = {
+//   favouriteGym: {
+//     id: number;
+//     gymName: string;
+//     gymAddress: string;
+//     gymPostalCode: string;
+//     gymLink: string;
+//   };
+//   gyms: {
+//     id: number;
+//     gymName: string;
+//     gymAddress: string;
+//     gymPostalCode: string;
+//     gymLink: string;
+//   };
+//   user: {
+//     id: number;
+//     username: string;
+//     mail: string;
+//     age: number;
+//     mobile: string;
+//     isShredding: boolean;
+//     isBulking: boolean;
+//     isExperienced: boolean;
+//     profilePicture: string;
+//   };
+//   returnTo: string;
+// };
+export default function EditProfile(props) {
   const user = props.user;
   const gyms = props.gyms;
   const gym = props.favouriteGym;
@@ -52,7 +52,7 @@ export default function EditProfile(props: Props) {
   );
   const profilePicture = user.profilePicture;
   console.log('User profile picture', user.profilePicture);
-  const [errors, setErrors] = useState<{ message: string }[]>([]);
+  const [errors, setErrors] = useState([{ message: 'Something went wrong!' }]);
   const router = useRouter();
   const [favouriteGym, setFavouriteGym] = useState(gyms.gymName);
   const handleShreddingChange = () => {
@@ -89,7 +89,7 @@ export default function EditProfile(props: Props) {
     <div className={styles.mainDiv}>
       <form
         className={styles.form}
-        onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
+        onSubmit={async (event) => {
           event.preventDefault();
 
           if (!isFormValid()) {

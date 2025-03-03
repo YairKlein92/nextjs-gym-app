@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import { Gym } from '../../../database/gyms';
 import { User, Users } from '../../../database/users';
 import Matches from './components/Matches';
-import Preferences from './components/Preferences';
+import Preferences from './components/Preferences'; // Adjust the import path accordingly
 import ProfileNavBar from './components/ProfileNavBar';
+import Settings from './components/Settings';
 import UserHeader from './components/UserHeader';
 
 export type Props = {
@@ -15,13 +16,16 @@ export type Props = {
   favouriteGym: Gym;
   pendingRequests: any;
   matchCount: number;
-  matchArray: any;
+  matchArray: any[];
+  pendingRequestsArray: any[];
 };
 
 export default function ProfilePage(props: Props) {
-  const { user, users, favouriteGym, pendingRequests, matchCount, matchArray } =
+  const { user, users, favouriteGym, matchCount, pendingRequests, matchArray } =
     props;
-  console.log(matchArray);
+  console.log('profile page user', user);
+  const pendingRequestsArray = [pendingRequests];
+  console.log('Profil page pendingRequestsArray', pendingRequestsArray);
   const [isShredding, setIsShredding] = useState(false);
   const [isBulking, setIsBulking] = useState(false);
   const [isExperienced, setIsExperienced] = useState(false);
@@ -30,6 +34,7 @@ export default function ProfilePage(props: Props) {
     users.filter((buddy: User) => buddy.id !== user.id),
   );
   const [isMatchVisible, setIsMatchVisible] = useState(false);
+  // Filter potential buddies based on preferences (shredding, bulking, experienced)
   useEffect(() => {
     const filteredBuddies = users.filter((buddy: User) => {
       if (buddy.id === user.id) return false;
@@ -41,44 +46,38 @@ export default function ProfilePage(props: Props) {
     });
     setPotentialBuddies(filteredBuddies);
   }, [isBulking, isShredding, isExperienced, users, user.id]);
+
   const showMatchesHandler = async () => {
     matchArray.map((match: any) => {
       setIsMatchVisible(!isMatchVisible);
     });
   };
+
   return (
     <div className="bg-gradient-to-r from-[#111827] to-[#1F2937] !p-8 rounded-lg shadow-xl h-170 w-full animate-fade-in-down">
-      {/* UserHeader.tsx  */}
+      {/* UserHeader.tsx */}
       <UserHeader
         profilePicture={user.profilePicture}
         username={user.username}
         age={user.age}
       />
-      {/* ProfilNavBar.tsx */}
+
+      {/* ProfileNavBar.tsx */}
       <ProfileNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      {/* Matches Tab */}
       {activeTab === 'contact' && (
         <Matches
-          matchCount={matchCount}
+          user={user}
           matchArray={matchArray}
           pendingRequests={pendingRequests}
         />
       )}
-      {/* Settings Tab */}
-      {activeTab === 'settings' && (
-        <div className="space-y-4">
-          {/* Change Password Button */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-200 mb-2">
-              Account Security
-            </h3>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold !py-2 !px-4 rounded-lg transition duration-300">
-              {/* <IoMdSettings className="inline mr-2" /> */}
-              Edit data
-            </button>
-          </div>
-        </div>
-      )}
-      {/* Preferences Tab */}
+
+      {/* Settings.tsx */}
+      {activeTab === 'settings' && <Settings user={user} />}
+
+      {/* Preferences.tsx */}
       {activeTab === 'preferences' && (
         <Preferences
           isShredding={isShredding}
@@ -88,9 +87,9 @@ export default function ProfilePage(props: Props) {
           isExperienced={isExperienced}
           setIsExperienced={setIsExperienced}
           potentialBuddies={potentialBuddies}
-          user={user}
+          user={user} // Passing user object to link to "Potential Buddies" section
         />
-      )}{' '}
+      )}
     </div>
   );
 }

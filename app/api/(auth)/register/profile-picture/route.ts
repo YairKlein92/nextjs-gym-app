@@ -36,7 +36,7 @@ export type UpdateProfilePicture = {
 export async function PUT(
   request: NextRequest,
 ): Promise<NextResponse<UpdateProfileResponseBodyPost>> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get('sessionToken');
 
   const body = await request.json();
