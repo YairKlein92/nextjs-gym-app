@@ -4,15 +4,10 @@ import { getGyms } from '../../../database/gyms';
 import { getValidSessionByToken } from '../../../database/sessions';
 import RegisterForm from './RegisterForm';
 
-export default async function RegisterPage({
-  params,
-}: {
-  params: { searchParams?: { returnTo?: string | string[] } };
-}) {
+export default async function RegisterPage({ params }) {
   // Fetch available gyms
   const gyms = await getGyms();
 
-  // Await cookies before calling `.get()`
   const sessionTokenCookie = (await cookies()).get('sessionToken');
 
   const session =

@@ -1,12 +1,9 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import {
-  getUserBySessionToken,
-  updateUser,
-  User,
-} from '../../../../database/users';
+import { getUserBySessionToken, updateUser } from '../../../../database/users';
 
+// Define the schema for the user data
 const userSchema = z.object({
   username: z.string(),
   passwordHash: z.string(),
@@ -20,37 +17,25 @@ const userSchema = z.object({
   profilePicture: z.string(),
 });
 
-export type UpdateProfileResponseBodyPut =
-  | {
-      errors: { message: string }[];
-    }
-  | {
-      user: {
-        username: string;
-        passwordHash: string;
-        mail: string;
-        age: number;
-        mobile: string;
-        favouriteGym: string;
-        isShredding: boolean;
-        isBulking: boolean;
-        isExperienced: boolean;
-      };
-    };
-
-export async function PUT(
-  request: NextRequest,
-): Promise<NextResponse<UpdateProfileResponseBodyPut>> {
+// PUT request handler
+export async function PUT(request) {
+  // Retrieve session token from cookies
   const cookieStore = await cookies();
   const token = cookieStore.get('sessionToken');
 
+  // Parse request body
   const body = await request.json();
   const result = userSchema.safeParse(body);
+
+  // If validation fails, return a 400 response with errors
   if (!result.success) {
     return NextResponse.json({ errors: result.error.issues }, { status: 400 });
   }
 
+  // Get user by session token
   const existingUser = token && (await getUserBySessionToken(token.value));
+
+  // If user is not found, return a 404 response
   if (!existingUser) {
     return NextResponse.json(
       { errors: [{ message: 'User not found' }] },
@@ -58,7 +43,8 @@ export async function PUT(
     );
   }
 
-  const user: User = {
+  // Create updated user object from parsed data
+  const user = {
     id: existingUser.id,
     username: result.data.username,
     passwordHash: result.data.passwordHash,
@@ -72,6 +58,7 @@ export async function PUT(
     profilePicture: result.data.profilePicture,
   };
 
+  // Check for authorization
   if (existingUser.id !== user.id) {
     return NextResponse.json(
       { errors: [{ message: 'Unauthorized' }] },
@@ -80,6 +67,7 @@ export async function PUT(
   }
 
   try {
+    // Update the user in the database
     await updateUser(
       existingUser.id,
       user.username,
@@ -93,6 +81,7 @@ export async function PUT(
       user.profilePicture,
     );
 
+    // Respond with the updated user information
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
     console.error(error);

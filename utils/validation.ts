@@ -17,8 +17,11 @@ const returnToSchema = z.string().refine((value) => {
   );
 });
 
-export function getSafeReturnToPath(path: string | string[] | undefined) {
-  const result = returnToSchema.safeParse(path);
-  if (!result.success) return undefined;
-  return result.data;
+export function getSafeReturnToPath(
+  returnTo?: string | string[],
+): string | undefined {
+  if (Array.isArray(returnTo)) {
+    return returnTo[0];
+  }
+  return returnTo;
 }

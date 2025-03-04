@@ -3,37 +3,23 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-// import { User } from '../../../database/users';
 import { getSafeReturnToPath } from '../../../utils/validation';
 
-// type RegisterFormProps = {
-//   username: string;
-//   password: string;
-//   mail: string;
-//   age: number;
-//   mobile: string;
-//   isShredding: boolean;
-//   isBulking: boolean;
-//   isExperienced: boolean;
-//   favouriteGym: string;
-//   imageSrc: string;
-//   uploadData: string;
-//   errors: string;
-// };
 export default function RegisterForm(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mail, setMail] = useState('');
   const [age, setAge] = useState(0);
   const [mobile, setMobile] = useState('');
-  const [isShredding, setIsShredding] = useState(Boolean(false));
-  const [isBulking, setIsBulking] = useState(Boolean(false));
-  const [isExperienced, setIsExperienced] = useState(Boolean(false));
+  const [isShredding, setIsShredding] = useState(false);
+  const [isBulking, setIsBulking] = useState(false);
+  const [isExperienced, setIsExperienced] = useState(false);
   const [favouriteGym, setFavouriteGym] = useState(1);
   const [imageSrc, setImageSrc] = useState();
   const [uploadData, setUploadData] = useState();
   const [errors, setErrors] = useState([]);
   const router = useRouter();
+  const gyms = props.gyms || [];
 
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
@@ -49,7 +35,6 @@ export default function RegisterForm(props) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        console.log(imageSrc);
         setImageSrc(e.target?.result);
       };
       reader.readAsDataURL(event.target.files[0]);
@@ -80,10 +65,13 @@ export default function RegisterForm(props) {
 
         {/* Register Form */}
         <form
+          id="formId"
+          name="formName"
           className="flex flex-col items-center gap-4 w-full"
-          onChange={(event) => handleOnChange(event)}
+          onChange={async (event) => handleOnChange(event)}
           onSubmit={async (event) => {
             event.preventDefault();
+            console.log('Final username:', username); // ✅ Debugging log
 
             // Handle image upload
             const form = event.currentTarget;
@@ -112,7 +100,6 @@ export default function RegisterForm(props) {
               ).then((response) => response.json());
 
               setImageSrc(dataPicture.secure_url);
-              console.log(uploadData);
               setUploadData(dataPicture);
 
               // Registering
@@ -133,6 +120,7 @@ export default function RegisterForm(props) {
                 }),
               });
               const data = await response.json();
+              console.log('data in register', data);
               if ('errors' in data) {
                 setErrors(data.errors);
                 return;
@@ -149,6 +137,7 @@ export default function RegisterForm(props) {
             }
           }}
         >
+          {/* Form Fields */}
           {/* Username Input */}
           <div className="w-60">
             <label className="text-xs font-medium text-gray-400">
@@ -157,7 +146,7 @@ export default function RegisterForm(props) {
                 <input
                   placeholder="Enter your username"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.currentTarget.value)}
                   className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
                 />
               </div>
@@ -173,7 +162,7 @@ export default function RegisterForm(props) {
                   type="password"
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.currentTarget.value)}
                   className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
                 />
               </div>
@@ -189,7 +178,7 @@ export default function RegisterForm(props) {
                   type="email"
                   placeholder="Enter your email"
                   value={mail}
-                  onChange={(e) => setMail(e.target.value)}
+                  onChange={(e) => setMail(e.currentTarget.value)}
                   className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
                 />
               </div>
@@ -202,13 +191,12 @@ export default function RegisterForm(props) {
               Age{' '}
               <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
                 <input
-                  placeholder="14" // Set the placeholder value to 14
+                  placeholder="14"
                   value={age}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    // Only allow valid numbers or empty string
+                    const value = e.currentTarget.value;
                     if (!value || /^\d+$/.test(value)) {
-                      setAge(Number(value)); // Update age if it's a valid number or empty
+                      setAge(Number(value));
                     }
                   }}
                   className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
@@ -258,19 +246,15 @@ export default function RegisterForm(props) {
                   id="favourite-gym"
                   value={favouriteGym}
                   onChange={(event) =>
-                    setFavouriteGym(Number(event.target.value))
+                    setFavouriteGym(event.currentTarget.value)
                   }
                   className="w-full bg-transparent text-gray-400 border-0 focus:outline-none text-sm h-8"
                 >
-                  {props.gyms.map((gym) => (
-                    <option
-                      className="bg-black"
-                      key={`user-${gym.id}`}
-                      value={gym.id}
-                    >
+                  {gyms.map((gym) => (
+                    <option key={gym.id} value={gym.id}>
                       {gym.gymName}
                     </option>
-                  ))}
+                  ))}{' '}
                 </select>
               </div>
             </label>
@@ -307,36 +291,30 @@ export default function RegisterForm(props) {
             />
             Experienced
           </label>
+
           {/* Profile Picture */}
           <div className="w-60">
             <label className="text-xs font-medium text-gray-400">
               Profile Picture{' '}
               <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
                 <input
-                  id="picture"
                   type="file"
-                  name="file"
-                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm"
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                  accept="image/*"
+                  name="profile_picture"
                 />
               </div>
             </label>
           </div>
 
-          {/* Register Button */}
-          <div className=" !mb-8 flex items-center justify-center gap-x-2">
-            <button className="font-semibold w-30 hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2">
-              Register
-            </button>
-          </div>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="mt-6 bg-blue-500 text-white py-2 px-6 rounded-lg"
+          >
+            Register
+          </button>
         </form>
-
-        {/* Already have an account */}
-        <div className="mt-4 !mb-6 text-center text-sm">
-          Already have an account?{' '}
-          <Link href="/login" className="text-sky-400 hover:underline">
-            Log in here
-          </Link>
-        </div>
       </div>
     </div>
   );

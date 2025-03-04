@@ -1,4 +1,4 @@
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 export function createSerializedRegisterSessionTokenCookie(token: string) {
   const isProduction = process.env.NODE_ENV === 'production';
