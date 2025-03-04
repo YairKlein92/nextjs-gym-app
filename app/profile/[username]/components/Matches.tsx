@@ -40,9 +40,10 @@ export default function Matches({
           },
           body: JSON.stringify({
             userRequestingId: requestingUserId,
-            userPendingId: user.id,
-            isRequested: false,
+            userReceivingId: user.id,
+            isPending: false,
             isAccepted: true,
+            isDenied: false,
             isBlocked: false,
           }),
         },
@@ -74,9 +75,10 @@ export default function Matches({
           },
           body: JSON.stringify({
             userRequestingId: requestingUserId,
-            userPendingId: user.id,
-            isRequested: false,
+            userReceivingId: user.id,
+            isPending: false,
             isAccepted: false,
+            isDenied: true,
             isBlocked: false,
           }),
         },
@@ -100,18 +102,19 @@ export default function Matches({
     event.preventDefault();
     try {
       const response = await fetch(
-        `/api/matches/user/${user.id}/actions/block`,
+        `/api/matches/user/${user.id}/actions/delete`,
         {
-          method: 'PUT',
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             userRequestingId: requestingUserId,
-            userPendingId: user.id,
-            isRequested: false,
+            userReceivingId: user.id,
+            isPending: false,
             isAccepted: false,
-            isBlocked: true,
+            isDenied: true,
+            isBlocked: false,
           }),
         },
       );

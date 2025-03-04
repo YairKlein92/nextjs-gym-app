@@ -4,9 +4,10 @@ import { blockMatchInDatabase } from '../../../../../../../database/matches';
 
 const matchSchema = z.object({
   userRequestingId: z.number(),
-  userPendingId: z.number(),
-  isRequested: z.boolean(),
+  userReceivingId: z.number(),
+  isPending: z.boolean(),
   isAccepted: z.boolean(),
+  isDenied: z.boolean(),
   isBlocked: z.boolean(),
 });
 
@@ -17,9 +18,11 @@ export type AcceptDenyMatchResponseBody =
   | {
       match: {
         userRequestingId: string;
-        userPendingId: string;
-        isRequested: boolean;
+        userReceivingId: string;
+        isPending: boolean;
         isAccepted: boolean;
+        isDenied: boolean;
+
         isBlocked: boolean;
       };
     };
@@ -35,10 +38,15 @@ export const PUT = async (request: NextRequest) => {
   // create deny
   const newMatch = await blockMatchInDatabase(
     result.data.userRequestingId,
-    result.data.userPendingId,
+    result.data.userReceivingId,
   );
   console.log('newMatch in block/route.ts', newMatch);
   return NextResponse.json({
-    match: { isRequested: false, isAccepted: false, isBlocked: true },
+    match: {
+      isPending: false,
+      isAccepted: false,
+      isDenied: true,
+      isBlocked: true,
+    },
   });
 };

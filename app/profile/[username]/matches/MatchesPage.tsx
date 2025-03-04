@@ -18,7 +18,7 @@ export default function MatchesPage(props: Props) {
   const user = props.user;
   const router = useRouter();
 
-  const denyButtonHandler = async (
+  const deleteButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>,
     requestingUserId: number,
   ) => {
@@ -26,15 +26,16 @@ export default function MatchesPage(props: Props) {
     const response = await fetch(
       `/api/matches/user/${user.id}/actions/delete`,
       {
-        method: 'PUT',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userRequestingId: requestingUserId,
-          userPendingId: user.id,
-          isRequested: false,
+          userReceivingId: user.id,
+          isPending: false,
           isAccepted: false,
+          isDenied: true,
           isBlocked: false,
         }),
       },
@@ -60,8 +61,8 @@ export default function MatchesPage(props: Props) {
       },
       body: JSON.stringify({
         userRequestingId: requestingUserId,
-        userPendingId: user.id,
-        isRequested: false,
+        userReceivingId: user.id,
+        isPending: false,
         isAccepted: false,
         isBlocked: true,
       }),
@@ -107,7 +108,7 @@ export default function MatchesPage(props: Props) {
                   </div>
                   <button
                     className={styles.buttonDelete}
-                    onClick={(event) => denyButtonHandler(event, match.id)}
+                    onClick={(event) => deleteButtonHandler(event, match.id)}
                   >
                     Delete
                   </button>

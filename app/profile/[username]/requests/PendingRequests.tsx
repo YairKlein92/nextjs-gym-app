@@ -35,8 +35,8 @@ export default function PendingRequests(props: any) {
           },
           body: JSON.stringify({
             userRequestingId: requestingUserId,
-            userPendingId: user.id,
-            isRequested: false,
+            userReceivingId: user.id,
+            isPending: false,
             isAccepted: true,
             isBlocked: false,
           }),
@@ -65,8 +65,8 @@ export default function PendingRequests(props: any) {
       },
       body: JSON.stringify({
         userRequestingId: requestingUserId,
-        userPendingId: user.id,
-        isRequested: false,
+        userReceivingId: user.id,
+        isPending: false,
         isAccepted: false,
         isBlocked: false,
       }),
@@ -93,8 +93,8 @@ export default function PendingRequests(props: any) {
       },
       body: JSON.stringify({
         userRequestingId: requestingUserId,
-        userPendingId: user.id,
-        isRequested: false,
+        userReceivingId: user.id,
+        isPending: false,
         isAccepted: false,
         isBlocked: true,
       }),

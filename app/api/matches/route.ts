@@ -4,9 +4,10 @@ import { addMatch } from '../../../database/matches';
 
 const userSchma = z.object({
   userRequestingId: z.number(),
-  userPendingId: z.number(),
-  isRequested: z.boolean(),
+  userReceivingId: z.number(),
+  isPending: z.boolean(),
   isAccepted: z.boolean(),
+  isDenied: z.boolean(),
   isBlocked: z.boolean(),
 });
 
@@ -17,13 +18,15 @@ export type RegisterResponseBodyPost =
   | {
       match: {
         userRequestingId: string;
-        userPendingId: string;
-        isRequested: boolean;
+        userReceivingId: string;
+        isPending: boolean;
         isAccepted: boolean;
+        isDenied: boolean;
         isBlocked: boolean;
       };
     };
 
+// upload
 export const POST = async (request: NextRequest) => {
   // Validating the data
   const body = await request.json();
@@ -36,9 +39,10 @@ export const POST = async (request: NextRequest) => {
   // create the match
   const newMatch = await addMatch(
     result.data.userRequestingId,
-    result.data.userPendingId,
-    result.data.isRequested,
+    result.data.userReceivingId,
+    result.data.isPending,
     result.data.isAccepted,
+    result.data.isDenied,
     result.data.isBlocked,
   );
   // return the new username

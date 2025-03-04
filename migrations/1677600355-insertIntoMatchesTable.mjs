@@ -2,9 +2,10 @@ const matches = [
   {
     id: 1,
     user_requesting_id: 1,
-    user_pending_id: 1,
+    user_receiving_id: 1,
     is_pending: false,
     is_accepted: true,
+    is_denied: false,
     is_blocked: false,
   },
 ];
@@ -14,9 +15,10 @@ export async function up(sql) {
     INSERT INTO matches ${sql(
       matches,
       'user_requesting_id',
-      'user_pending_id',
+      'user_receiving_id',
       'is_pending',
       'is_accepted',
+      'is_denied',
       'is_blocked',
     )}
   `;
