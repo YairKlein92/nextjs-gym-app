@@ -23,7 +23,6 @@ export type Props = {
 export default function ProfilePage(props: Props) {
   const { user, users, favouriteGym, matchCount, pendingRequests, matchArray } =
     props;
-  console.log('profile page user', user);
   const pendingRequestsArray = [pendingRequests];
   console.log('Profil page pendingRequestsArray', pendingRequestsArray);
   const [isShredding, setIsShredding] = useState(false);

@@ -14,16 +14,17 @@ import ProfilePage from './ProfilePage';
 // type Props = { params: { username: string } };
 
 export default async function Profile({ params }) {
-  const user = await getUserByUsername(params.username);
+  console.log('Function is running!'); // Should appear in the terminal
+
+  const { username } = await params;
+  const user = await getUserByUsername(username);
   if (!user) {
     notFound();
   }
   const favouriteGym = await getFavouriteGymByUserId(user.id);
   const users = await getUsers();
-  const matchObject = await getPositivelyAnsweredMatchRequestById(user.id);
-  const matchArray = [matchObject];
+  const matchArray = await getPositivelyAnsweredMatchRequestById(user.id);
 
-  console.log('matchArray', matchArray);
   const matchCount = matchArray.length;
 
   const pendingRequests = await getUnAnsweredMatchRequestById(user.id);

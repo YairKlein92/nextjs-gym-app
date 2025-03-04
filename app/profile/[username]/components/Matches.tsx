@@ -24,8 +24,6 @@ export default function Matches({
     ? pendingRequests
     : [pendingRequests];
 
-  console.log('user in Matches.tsx:', user);
-
   // Handle accept button action
   const acceptButtonHandler = async (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -137,7 +135,7 @@ export default function Matches({
   const showPendingRequestsHandler = () => {
     setIsPendingRequestVisible(!isPendingRequestVisible);
   };
-
+  console.log('matchArray for length', matchArray);
   return (
     <div className="space-y-4">
       {/* Matches Button */}

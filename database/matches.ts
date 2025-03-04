@@ -41,7 +41,7 @@ export const getMatchesIdByLoggedInUserId = cache(async (userId: number) => {
   const matches = await sql<Matches[]>`
     SELECT m.id, m.user_requesting_id, m.user_pending_id
     FROM matches m
-    WHERE m.user_requesting_id = ${userId};
+    WHERE m.user_requesting_id  = ${userId};
   `;
   return matches;
 });
@@ -157,7 +157,7 @@ WHERE
 export const getPositivelyAnsweredMatchRequestById = cache(
   async (userId: number) => {
     try {
-      const [matches] = await sql<Users[]>`
+      const result = await sql<Users[]>`
         SELECT
           matches.id,
           users.*
@@ -169,11 +169,17 @@ export const getPositivelyAnsweredMatchRequestById = cache(
           )
         WHERE
           (matches.user_pending_id = ${userId} OR matches.user_requesting_id = ${userId})
-          AND matches.is_pending = FALSE
           AND matches.is_accepted = TRUE
+          AND matches.is_blocked = FALSE
           AND users.id != ${userId};
       `;
-      console.log('Matches fetched:', matches);
+
+      console.log('Matches fetched in the database file:', result);
+
+      // If result is wrapped in an object, access the relevant array.
+      const matches = result.rows || result; // Use result.rows if it's wrapped in 'rows'
+
+      console.log('Matches:', matches);
       return matches;
     } catch (error) {
       console.error('Error fetching matches:', error);
@@ -319,16 +325,28 @@ export const acceptMatchInDatabase = cache(
 //   return query;
 // }
 export const denyMatchInDatabase = cache(
-  async (userRequestingId: number, userPendingingId: number) => {
+  async (userRequestingId: number, userPendingId: number) => {
     const [query] = await sql<Query[]>`
     UPDATE matches
     SET is_pending = FALSE, is_accepted = FALSE, is_blocked = FALSE
-    WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingingId}
+    WHERE user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingId}
   `;
     return query;
   },
 );
-
+export const deleteMatchInDatabase = cache(
+  async (userRequestingId: number, userPendingId: number) => {
+    const [query] = await sql<Query[]>`
+    UPDATE matches
+    SET is_pending = FALSE, is_accepted = FALSE, is_blocked = FALSE
+    WHERE
+     (user_requesting_id = ${userRequestingId} AND user_pending_id = ${userPendingId})
+     OR
+      (user_requesting_id = ${userPendingId} AND user_pending_id = ${userRequestingId})
+  `;
+    return query;
+  },
+);
 // export async function blockMatchInDatabase(
 //   userRequestingId: number,
 //   userPendingingId: number,

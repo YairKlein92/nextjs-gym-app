@@ -2,7 +2,7 @@
 const nextConfig = {
   experimental: {}, // Remove 'appDir' from here
   compiler: {
-    removeConsole: true,
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   reactStrictMode: true,
 };

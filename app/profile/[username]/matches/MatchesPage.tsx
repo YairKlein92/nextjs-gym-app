@@ -23,19 +23,22 @@ export default function MatchesPage(props: Props) {
     requestingUserId: number,
   ) => {
     event.preventDefault();
-    const response = await fetch(`/api/matches/user/${user.id}/actions/deny`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `/api/matches/user/${user.id}/actions/delete`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userRequestingId: requestingUserId,
+          userPendingId: user.id,
+          isRequested: false,
+          isAccepted: false,
+          isBlocked: false,
+        }),
       },
-      body: JSON.stringify({
-        userRequestingId: requestingUserId,
-        userPendingId: user.id,
-        isRequested: false,
-        isAccepted: false,
-        isBlocked: false,
-      }),
-    });
+    );
 
     if (response.ok) {
       console.log('Request denied');

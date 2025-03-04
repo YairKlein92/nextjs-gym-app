@@ -8,7 +8,7 @@ export default async function Matches({ params }) {
     return notFound();
   }
 
-  const { username } = params;
+  const { username } = await params;
   const user = await getUserByUsername(username);
 
   if (!user) {

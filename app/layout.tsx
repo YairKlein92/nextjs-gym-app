@@ -20,7 +20,7 @@ export type Props = {
 export const dynamic = 'force-dynamic';
 export default async function RootLayout(props: Props) {
   // 1. get the session token from the cookie
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); //
   const sessionToken = cookieStore.get('sessionToken');
 
   // 2. validate that session
