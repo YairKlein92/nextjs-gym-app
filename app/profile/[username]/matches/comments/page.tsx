@@ -4,7 +4,7 @@ import CommentsPage from './Comments';
 
 export type Props = any;
 export default async function Comments(props: Props) {
-  const matchUsername = props.searchParams.username;
+  const matchUsername = props.params.username;
   const username = props.params.username;
   const match = await getUserByUsername(matchUsername);
   if (!match) {
@@ -14,8 +14,10 @@ export default async function Comments(props: Props) {
   if (!user) {
     return null;
   }
-  const comments = await getUserCommentsByMatchId(user.id, match.id);
+  console.log('match in commetns', match);
 
+  const comments = await getUserCommentsByMatchId(user.id, match.id);
+  console.log('user on comment page', user);
   // const visibleComments = comments.filter((comment) => {
   //   return comment.isVisible === true;
   // });

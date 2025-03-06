@@ -27,6 +27,7 @@ export type CommentResponseBodyPost =
 export const PUT = async (request: NextRequest) => {
   // Validating the data
   const body = await request.json();
+  console.log('body of comments', body);
   const result = commentSchma.safeParse(body);
   if (!result.success) {
     // inside the if statement, result.error.issues there is more information about what is allowing you to create more specific error messages

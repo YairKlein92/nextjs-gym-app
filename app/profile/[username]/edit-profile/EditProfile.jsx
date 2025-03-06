@@ -1,45 +1,14 @@
 'use client';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-// import { getUserByUsername } from '../../../../database/users';
 import { getSafeReturnToPath } from '../../../../utils/validation';
-// import { UpdateProfileResponseBodyPost } from '../../../api/users/[userId]/route';
-import styles from './page.module.scss';
 
-// export type Props = {
-//   favouriteGym: {
-//     id: number;
-//     gymName: string;
-//     gymAddress: string;
-//     gymPostalCode: string;
-//     gymLink: string;
-//   };
-//   gyms: {
-//     id: number;
-//     gymName: string;
-//     gymAddress: string;
-//     gymPostalCode: string;
-//     gymLink: string;
-//   };
-//   user: {
-//     id: number;
-//     username: string;
-//     mail: string;
-//     age: number;
-//     mobile: string;
-//     isShredding: boolean;
-//     isBulking: boolean;
-//     isExperienced: boolean;
-//     profilePicture: string;
-//   };
-//   returnTo: string;
-// };
 export default function EditProfile(props) {
   const user = props.user;
   const gyms = props.gyms;
   const gym = props.favouriteGym;
-  console.log('gym:', gym);
 
   const [username, setUsername] = useState(user.username);
   const [mail, setMail] = useState(user.mail);
@@ -50,11 +19,11 @@ export default function EditProfile(props) {
   const [isExperienced, setIsExperienced] = useState(
     Boolean(user.isExperienced),
   );
+  const [favouriteGym, setFavouriteGym] = useState(gym.gymName);
   const profilePicture = user.profilePicture;
-  console.log('User profile picture', user.profilePicture);
   const [errors, setErrors] = useState([{ message: 'Something went wrong!' }]);
   const router = useRouter();
-  const [favouriteGym, setFavouriteGym] = useState(gyms.gymName);
+
   const handleShreddingChange = () => {
     setIsShredding(!isShredding);
     setIsBulking(false);
@@ -75,167 +44,219 @@ export default function EditProfile(props) {
   };
 
   const userData = {
-    username: username,
-    mail: mail,
-    age: age,
-    mobile: mobile,
-    favouriteGym: favouriteGym,
-    isShredding: isShredding,
-    isBulking: isBulking,
-    isExperienced: isExperienced,
-    profilePicure: profilePicture,
+    username,
+    mail,
+    age,
+    mobile,
+    favouriteGym,
+    isShredding,
+    isBulking,
+    isExperienced,
+    profilePicture,
   };
+
   return (
-    <div className={styles.mainDiv}>
-      <form
-        className={styles.form}
-        onSubmit={async (event) => {
-          event.preventDefault();
-
-          if (!isFormValid()) {
-            return;
-          }
-
-          await fetch(`/api/users/${user.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error('Response was not ok');
-              }
-              return response.json();
-            })
-            .then((data) => {
-              if ('errors' in data) {
-                console.error(errors);
-                setErrors(data.errors);
-                return;
-              }
-              const returnTo = getSafeReturnToPath(props.returnTo);
-              if (returnTo) {
-                router.push(returnTo);
-                return;
-              }
-
-              router.replace(`/profile/${data.user.username}`);
-              router.refresh();
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-        }}
-      >
-        <div className={styles.registerTextDiv}>Update Profile</div>
-        <label htmlFor="username">
-          <input
-            placeholder="Username"
-            onChange={(event) => {
-              setUsername(event.currentTarget.value);
-            }}
-          />
-        </label>
-        <label htmlFor="mail">
-          <input
-            placeholder="Email"
-            onChange={(event) => {
-              setMail(event.currentTarget.value);
-            }}
-          />
-        </label>
-        <label htmlFor="age">
-          <input
-            placeholder="Age"
-            onChange={(event) => {
-              setAge(Number(event.currentTarget.value));
-            }}
-          />
-        </label>
-        <label htmlFor="mobile">
-          <input
-            placeholder="Phone number"
-            onChange={(event) => {
-              setMobile(event.currentTarget.value);
-            }}
-          />
-        </label>
-        <select
-          title="favourite-gym"
-          id="favourite-gym"
-          value={favouriteGym}
-          onChange={(event) => setFavouriteGym(event.currentTarget.value)}
-        >
-          {gyms.map((g) => (
-            <option key={`user-${g.id}`} value={g.id}>
-              {g.gymName}
-            </option>
-          ))}
-        </select>
-        <div className={styles.goalDiv}>
-          <label
-            htmlFor="shredding"
-            className={`${styles.checkboxLabel} ${
-              isShredding ? styles.checked : ''
-            }`}
-          >
-            shredding
-          </label>
-          <input
-            checked={isShredding}
-            className={styles.checkbox}
-            id="shredding"
-            onChange={handleShreddingChange}
-            type="checkbox"
-          />
-          <label
-            htmlFor="bulking"
-            className={`${styles.checkboxLabel} ${
-              isBulking ? styles.checked : ''
-            }`}
-          >
-            bulking
-          </label>
-          <input
-            checked={isBulking}
-            className={styles.checkbox}
-            id="bulking"
-            onChange={handleBulkingChange}
-            type="checkbox"
-          />
+    <div className="bg-gradient-to-r from-[#111827] to-[#1F2937] text-white flex min-h-screen flex-col items-center justify-center">
+      <div className="w-full max-w-md p-12 flex flex-col rounded-lg shadow-xl space-y-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl text-sky-400 font-bold">Update Profile</h2>
+          <p className="mt-4 text-lg text-gray-400">
+            Update your information to keep your profile up to date!
+          </p>
         </div>
-        <label
-          htmlFor="experienced"
-          className={`${styles.checkboxLabel} ${
-            isExperienced ? styles.checked : ''
-          }`}
-        >
-          experienced
-        </label>{' '}
-        <input
-          checked={isExperienced}
-          className={styles.checkbox}
-          id="experienced"
-          onChange={() => {
-            setIsExperienced(Boolean(!isExperienced));
+
+        {/* Error Handling */}
+        {errors.length > 0 && (
+          <div className="text-red-500 text-center">
+            {errors.map((error) => (
+              <div key={`error-${error.message}`}>Error: {error.message}</div>
+            ))}
+          </div>
+        )}
+
+        {/* Update Form */}
+        <form
+          className="flex flex-col items-center gap-4 w-full"
+          onSubmit={async (event) => {
+            event.preventDefault();
+
+            if (!isFormValid()) {
+              return;
+            }
+
+            await fetch(`/api/users/${user.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(userData),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error('Response was not ok');
+                }
+                return response.json();
+              })
+              .then((data) => {
+                if ('errors' in data) {
+                  setErrors(data.errors);
+                  return;
+                }
+                const returnTo = getSafeReturnToPath(props.returnTo);
+                if (returnTo) {
+                  router.push(returnTo);
+                  return;
+                }
+
+                router.replace(`/profile/${data.user.username}`);
+                router.refresh();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
           }}
-          type="checkbox"
-        />
-        <button className={`${styles.button} ${styles.buttonReg}`}>
-          Update
-        </button>
-        <div>
-          Need a new password? Reset it <a href="/picture">here</a>{' '}
+        >
+          {/* Username Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Username
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.currentTarget.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                />
+              </div>
+            </label>
+          </div>
+
+          {/* Email Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Email
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={mail}
+                  onChange={(e) => setMail(e.currentTarget.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                />
+              </div>
+            </label>
+          </div>
+
+          {/* Age Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Age
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  value={age}
+                  onChange={(e) => setAge(Number(e.currentTarget.value))}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                  min="14"
+                  required
+                  placeholder="Age"
+                />
+              </div>
+            </label>
+          </div>
+
+          {/* Phone Number Input */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Phone number
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <input
+                  type="tel"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.currentTarget.value)}
+                  className="w-full bg-transparent text-white border-0 focus:outline-none text-sm h-8"
+                  placeholder="Phone number"
+                />
+              </div>
+            </label>
+          </div>
+
+          {/* Gym Select */}
+          <div className="w-60">
+            <label className="text-xs font-medium text-gray-400">
+              Favourite Gym
+              <div className="group relative mt-1 rounded-lg border px-4 py-3 focus-within:border-sky-300 focus-within:ring focus-within:ring-sky-400/50 transition">
+                <select
+                  value={favouriteGym}
+                  onChange={(event) =>
+                    setFavouriteGym(event.currentTarget.value)
+                  }
+                  className="w-full bg-transparent text-gray-400 border-0 focus:outline-none text-sm h-8"
+                >
+                  {gyms.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.gymName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </label>
+          </div>
+
+          {/* Goal Options */}
+          <div className="flex gap-4 justify-around w-full mt-4">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="rounded-sm border border-gray-600 bg-transparent focus:ring-green-400"
+                checked={isShredding}
+                onChange={handleShreddingChange}
+              />
+              Shredding
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="rounded-sm border border-gray-600 bg-transparent focus:ring-green-400"
+                checked={isBulking}
+                onChange={handleBulkingChange}
+              />
+              Bulking
+            </label>
+          </div>
+
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="rounded-sm border border-gray-600 bg-transparent focus:ring-green-400"
+              checked={isExperienced}
+              onChange={() => setIsExperienced(!isExperienced)}
+            />
+            Experienced
+          </label>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="mt-6 bg-blue-500 text-white py-2 px-6 rounded-lg"
+          >
+            Update
+          </button>
+        </form>
+
+        {/* Profile Picture Link */}
+        <div className="mt-6 text-center">
+          <div>
+            Upload/Change a profile picture{' '}
+            <Link
+              href={`/profile/${user.username}/edit-profile/picture`}
+              className="text-sky-400"
+            >
+              here
+            </Link>
+          </div>
         </div>
-        <div>
-          Upload/Change a profile picture{' '}
-          <Link href={`/profile/${user.username}/edit-profile/picture`}>
-            here
-          </Link>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

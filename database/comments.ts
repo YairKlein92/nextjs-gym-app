@@ -24,7 +24,7 @@ export const addComment = cache(
   },
 );
 export const removeComment = cache(async (commentId: number) => {
-  const [comment] = await sql<Comment[]>`
+  const comment = await sql<Comment[]>`
 UPDATE
 comments
 SET
